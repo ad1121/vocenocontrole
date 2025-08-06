@@ -1,0 +1,824 @@
+       
+        </section><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livre dos Jogos - Plataforma de Apoio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            margin: 6rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: white;
+        }
+
+        .hero {
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #FFD700;
+        }
+
+        .hero-text {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+            display: block;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .blocked-sites {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .testimonials {
+            margin: 2rem 0;
+        }
+
+        .testimonial {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #FFD700;
+        }
+
+        .quote-rotation {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 2rem 0;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        .emergency-section {
+            background: rgba(255, 0, 0, 0.2) !important;
+            border: 2px solid #ff4444 !important;
+            animation: gentle-pulse 3s infinite;
+        }
+
+        @keyframes gentle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .resources-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .resources-list li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .progress-tracker {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+                margin: 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">🛡️ Livre dos Jogos</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#ferramentas">Ferramentas</a></li>
+                <li><a href="#chat-apoio">Chat</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#emergencia">Emergência</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="inicio" class="section hero">
+            <h1>🌟 Você Não Está Sozinho</h1>
+            <p class="hero-text">
+                Esta é uma plataforma de apoio para pessoas que querem se livrar do vício em jogos e apostas. 
+                Aqui você encontra ferramentas, motivação e uma comunidade que entende sua luta.
+            </p>
+            
+
+            <div class="quote-rotation">
+                <p id="rotating-quote">"A força não vem da capacidade física. Vem de uma vontade indomável." - Mahatma Gandhi</p>
+            </div>
+        </section>
+
+        <section id="ferramentas" class="section">
+            <h2>🛠️ Ferramentas de Proteção</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>🚫 Bloqueadores Recomendados</h3>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1.5rem;">💻 Desktop/Navegador:</h4>
+                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                        <li><strong>Cold Turkey Blocker</strong> - Windows/Mac (gratuito)</li>
+                        <li><strong>BlockSite</strong> - Chrome/Firefox (gratuito)</li>
+                        <li><strong>Freedom</strong> - Windows/Mac/iOS/Android</li>
+                        <li><strong>FocusMe</strong> - Windows (muito robusto)</li>
+                    </ul>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1.5rem;">📱 Android:</h4>
+                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                        <li><strong>BlockSite</strong> - Bloqueio de apps e sites</li>
+                        <li><strong>Cold Turkey Blocker</strong> - Versão mobile</li>
+                        <li><strong>AppBlock</strong> - Bloqueio de aplicativos</li>
+                        <li><strong>Freedom</strong> - Multiplataforma</li>
+                        <li><strong>Stay Focused</strong> - Controle de tempo</li>
+                    </ul>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1.5rem;">🍎 iOS:</h4>
+                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                        <li><strong>Configurações > Tempo de Uso</strong> - Nativo do iOS</li>
+                        <li><strong>Freedom</strong> - Bloqueio multiplataforma</li>
+                        <li><strong>Focus</strong> - Bloqueio e produtividade</li>
+                        <li><strong>Moment</strong> - Controle de uso</li>
+                    </ul>
+                    
+                    <div style="margin-top: 1.5rem;">
+                        <a href="https://getcoldturkey.com/" class="btn" target="_blank">Cold Turkey</a>
+                        <a href="https://blocksite.co/" class="btn btn-secondary" target="_blank">BlockSite</a>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>🎯 Seu Progresso Pessoal</h3>
+                    <div class="progress-tracker">
+                        <p>Bloqueios hoje: <strong id="personal-blocks">0</strong></p>
+                        <p>Dias limpo: <strong id="clean-days">1</strong></p>
+                        <p>Economia estimada: <strong id="personal-savings">R$ 0,00</strong></p>
+                        
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 10%;"></div>
+                        </div>
+                        <p><small>Meta: 30 dias livres</small></p>
+                        
+                        <button class="btn" onclick="addBlock()">Registrar Bloqueio</button>
+                        <button class="btn btn-secondary" onclick="resetProgress()">Recomeçar Contagem</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h3>📋 Sites Mais Bloqueados</h3>
+                <div class="blocked-sites" id="blocked-sites-list">
+                    bet365.com • betano.com • sportingbet.com • betfair.com<br>
+                    rivalo.com • 1xbet.com • pixbet.com • blaze.com<br>
+                    stake.com • parimatch.com • betway.com • betnacional.com<br>
+                    bet777.com • betboo.com • betmotion.com • betwinner.com<br>
+                    casino.com • pokerstars.com • 888casino.com • spin.com<br>
+                    betsson.com • leovegas.com • royal-panda.com • mr-green.com
+                </div>
+                <p><small>💡 Use esta lista em seus bloqueadores</small></p>
+            </div>
+        </section>
+
+        <section id="chat-apoio" class="section">
+            <h2>💬 Chat de Apoio Comunitário</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>🗨️ Opções de Chat e Comunidade</h3>
+                    <p>Conecte-se com outras pessoas na mesma jornada:</p>
+                    
+                    <div style="margin: 1.5rem 0;">
+                        <a href="https://discord.gg/apoiovicio" class="btn" target="_blank" onclick="showDiscordInfo()">
+                            💬 Entrar no Discord
+                        </a>
+                        <a href="https://t.me/livredosjogos" class="btn btn-secondary" target="_blank" onclick="showTelegramInfo()">
+                            📱 Grupo Telegram
+                        </a>
+                    </div>
+                    
+                    <div id="chat-info" style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-top: 1rem; display: none;">
+                        <p><strong>📌 Regras da Comunidade:</strong></p>
+                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
+                            <li>Respeito mútuo sempre</li>
+                            <li>Não compartilhar links de apostas</li>
+                            <li>Apoiar, não julgar</li>
+                            <li>Privacidade: use apelidos se preferir</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>🆘 Chat de Emergência 24h</h3>
+                    <p>Para momentos de crise, fale com alguém agora:</p>
+                    
+                    <div style="margin: 1.5rem 0;">
+                        <a href="https://www.cvv.org.br/chat/" class="btn btn-danger" target="_blank">
+                            🆘 CVV Chat Online
+                        </a>
+                        <a href="tel:188" class="btn btn-danger">
+                            📞 CVV Telefone (188)
+                        </a>
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; opacity: 0.8;">
+                        O CVV oferece apoio 24h por telefone, chat e e-mail de forma gratuita e sigilosa.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Widget de chat temporário -->
+            <div class="tool-card" style="margin-top: 2rem;">
+                <h3>💭 Mensagem Rápida da Comunidade</h3>
+                <div id="community-chat" style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 1rem; height: 200px; overflow-y: auto; margin: 1rem 0;">
+                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                        <strong>João123:</strong> Hoje completo 15 dias sem apostar! 💪
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                        <strong>Maria_Força:</strong> Parabéns João! Você é inspiração para mim 🌟
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                        <strong>Carlos2024:</strong> Pessoal, estou com vontade de apostar... alguém pode conversar?
+                    </div>
+                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
+                        <strong>Ana_Guerreira:</strong> @Carlos2024 já passei por isso! Vamos fazer uma atividade juntos? Que tal uma caminhada virtual? 🚶‍♂️
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." 
+                           style="flex: 1; padding: 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                    <button class="btn" onclick="sendMessage()" style="padding: 10px 20px;">Enviar</button>
+                </div>
+                
+                <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;">
+                    💡 Este é um chat simulado para demonstração. Para chat real, use Discord ou Telegram acima.
+                </p>
+            </div>
+        </section>
+             <section id="apoio" class="section">
+            <h2>🤝 Apoio e Motivação</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>🎯 Atividades Alternativas</h3>
+                    <p>Quando sentir vontade de apostar, experimente:</p>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1rem;">🧘 Relaxamento:</h4>
+                    <div style="margin: 1rem 0;">
+                        <a href="https://www.youtube.com/results?search_query=meditação+guiada+ansiedade" class="btn" target="_blank">🧘 Meditar</a>
+                        <a href="https://www.youtube.com/results?search_query=música+relaxante+natureza" class="btn" target="_blank">🎵 Música Relaxante</a>
+                    </div>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1rem;">🏃 Atividade Física:</h4>
+                    <div style="margin: 1rem 0;">
+                        <a href="https://www.youtube.com/results?search_query=exercícios+casa+iniciante" class="btn btn-secondary" target="_blank">🏃 Exercitar</a>
+                        <a href="https://www.youtube.com/results?search_query=yoga+iniciante" class="btn btn-secondary" target="_blank">🧘‍♀️ Yoga</a>
+                    </div>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1rem;">🎯 Desenvolvimento:</h4>
+                    <div style="margin: 1rem 0;">
+                        <a href="https://www.duolingo.com" class="btn" target="_blank">📚 Aprender Idioma</a>
+                        <a href="https://www.coursera.org" class="btn" target="_blank">🎓 Curso Online</a>
+                    </div>
+                    
+                    <h4 style="color: #FFD700; margin-top: 1rem;">🎬 Entretenimento:</h4>
+                    <div style="margin: 1rem 0;">
+                        <a href="https://www.netflix.com" class="btn" target="_blank">🎬 Netflix</a>
+                        <a href="https://www.youtube.com/results?search_query=documentário+motivacional" class="btn" target="_blank">📺 Documentários</a>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>💭 Depoimentos Reais</h3>
+                    <div class="testimonials">
+                        <div class="testimonial">
+                            <p>"Depois de 3 meses usando bloqueadores, consegui controlar completamente minha compulsão. A chave foi ter alternativas saudáveis preparadas para os momentos difíceis." - <em>João, 34 anos, limpo há 8 meses</em></p>
+                        </div>
+                        <div class="testimonial">
+                            <p>"Esta plataforma me ajudou a perceber que não estava sozinha. Ver o progresso dos outros e poder compartilhar minhas dificuldades me motivou a continuar lutando." - <em>Maria, 28 anos, 4 meses limpa</em></p>
+                        </div>
+                        <div class="testimonial">
+                            <p>"Já economizei mais de R$ 15.000 em 1 ano. Comprei um carro à vista com o dinheiro que gastava apostando. Minha família voltou a confiar em mim." - <em>Carlos, 41 anos, 1 ano limpo</em></p>
+                        </div>
+                        <div class="testimonial">
+                            <p>"O aplicativo no celular foi fundamental. Toda vez que eu tentava abrir um site de aposta, via a página motivacional e lembrava dos meus objetivos." - <em>Ana, 25 anos, 6 meses limpa</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        
+        <h2>🤝 Apoio e Motivação</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3>🎯 Atividades Alternativas</h3>
+                    <p>Quando sentir vontade de apostar, experimente:</p>
+                    <div style="margin: 1rem 0;">
+                        <a href="https://www.youtube.com/results?search_query=meditação+guiada+ansiedade" class="btn" target="_blank">🧘 Meditar</a>
+                        <a href="https://www.youtube.com/results?search_query=exercícios+casa+iniciante" class="btn btn-secondary" target="_blank">🏃 Exercitar</a>
+                        <a href="https://www.netflix.com" class="btn" target="_blank">🎬 Assistir</a>
+                        <a href="https://www.duolingo.com" class="btn" target="_blank">📚 Aprender</a>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <h3>💭 Depoimentos Reais</h3>
+                    <div class="testimonials">
+                        <div class="testimonial">
+                            <p>"Depois de 3 meses usando bloqueadores, consegui controlar completamente minha compulsão. A chave foi ter alternativas saudáveis." - <em>João, 34 anos</em></p>
+                        </div>
+                        <div class="testimonial">
+                            <p>"Esta plataforma me ajudou a perceber que não estava sozinha. Ver o progresso dos outros me motivou a continuar." - <em>Maria, 28 anos</em></p>
+                        </div>
+                        <div class="testimonial">
+                            <p>"Já economizei mais de R$ 5.000 em 6 meses. Uso o dinheiro para viajar com minha família agora." - <em>Carlos, 41 anos</em></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recursos" class="section">
+            <h2>📞 Recursos Profissionais</h2>
+            
+            <ul class="resources-list">
+                <li>
+                    <strong>🏥 CAPS - Centro de Atenção Psicossocial</strong><br>
+                    Atendimento gratuito pelo SUS. Procure o CAPS da sua região.
+                </li>
+                <li>
+                    <strong>📞 CVV - Centro de Valorização da Vida</strong><br>
+                    Telefone: 188 (24h, gratuito)<br>
+                    Chat online: <a href="https://www.cvv.org.br" target="_blank">cvv.org.br</a>
+                </li>
+                <li>
+                    <strong>🎲 Jogadores Anônimos</strong><br>
+                    Grupos de apoio gratuitos<br>
+                    Site: <a href="https://www.jogadoresanonimos.org.br" target="_blank">jogadoresanonimos.org.br</a>
+                </li>
+                <li>
+                    <strong>🧠 Terapia Online</strong><br>
+                    Plataformas: Zenklub, Psicologia Viva, Telavita<br>
+                    Muitas oferecem primeira consulta gratuita
+                </li>
+            </ul>
+        </section>
+
+        <section id="emergencia" class="section emergency-section">
+            <h2>🚨 Em Crise? Ação Imediata!</h2>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <p style="font-size: 1.3rem; margin-bottom: 2rem;">
+                    Se você está com uma vontade intensa de apostar AGORA:
+                </p>
+                
+                <div style="margin: 2rem 0;">
+                    <a href="tel:188" class="btn btn-danger" style="font-size: 1.2rem;">📞 Ligar CVV (188)</a>
+                    <button class="btn btn-danger" onclick="emergencyBreathing()">🫁 Respirar 4-7-8</button>
+                </div>
+                
+                <div id="breathing-exercise" style="display: none; margin: 2rem 0; font-size: 1.5rem;">
+                    <p id="breathing-instruction">Prepare-se...</p>
+                    <div style="font-size: 3rem; color: #FFD700;" id="breathing-counter"></div>
+                </div>
+                
+                <p style="margin-top: 2rem;">
+                    <strong>Lembre-se:</strong> Esta sensação vai passar. Você já resistiu antes e pode resistir agora.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Livre dos Jogos - Plataforma de apoio voluntária</p>
+            <p>Criado com ❤️ para ajudar pessoas a reconquistarem suas vidas</p>
+            <p><small>Esta não é uma plataforma médica. Procure ajuda profissional quando necessário.</small></p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados persistentes
+        let personalData = {
+            blocks: parseInt(localStorage.getItem('personalBlocks') || '0'),
+            cleanDays: parseInt(localStorage.getItem('cleanDays') || '1'),
+            savings: parseFloat(localStorage.getItem('personalSavings') || '0'),
+            startDate: localStorage.getItem('startDate') || new Date().toDateString(),
+            lastDate: localStorage.getItem('lastDate') || new Date().toDateString()
+        };
+
+        // Frases motivacionais
+        const motivationalQuotes = [
+            '"A força não vem da capacidade física. Vem de uma vontade indomável." - Mahatma Gandhi',
+            '"O sucesso é a soma de pequenos esforços repetidos dia após dia." - Robert Collier',
+            '"Você é mais forte do que pensa e mais capaz do que imagina."',
+            '"Cada dia sem apostar é um investimento no seu futuro."',
+            '"A verdadeira riqueza está na liberdade de escolha."',
+            '"Sua força de vontade é seu maior patrimônio."',
+            '"Não é sobre quantas vezes você cai, mas quantas você se levanta."',
+            '"O primeiro passo para sair do buraco é parar de cavar."',
+            '"Você não precisa ser perfeito, só precisa começar."',
+            '"Cada pequena vitória conta para a grande conquista."'
+        ];
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePersonalStats();
+            updateCommunityStats();
+            rotateQuote();
+            checkNewDay();
+            
+            // Rotacionar frases a cada 15 segundos
+            setInterval(rotateQuote, 15000);
+            
+            // Atualizar stats da comunidade a cada 30 segundos
+            setInterval(updateCommunityStats, 30000);
+        });
+
+        function updatePersonalStats() {
+            document.getElementById('personal-blocks').textContent = personalData.blocks;
+            document.getElementById('clean-days').textContent = personalData.cleanDays;
+            document.getElementById('personal-savings').textContent = `R$ ${personalData.savings.toFixed(2)}`;
+            
+            // Atualizar barra de progresso
+            const progress = Math.min((personalData.cleanDays / 30) * 100, 100);
+            document.getElementById('progress-fill').style.width = progress + '%';
+            
+            // Salvar dados
+            localStorage.setItem('personalBlocks', personalData.blocks.toString());
+            localStorage.setItem('cleanDays', personalData.cleanDays.toString());
+            localStorage.setItem('personalSavings', personalData.savings.toString());
+        }
+
+        function updateCommunityStats() {
+            // Simular stats da comunidade (em uma implementação real, viria de uma API)
+            const baseBlocks = 2847;
+            const baseSavings = 142350;
+            const baseStories = 156;
+            
+            // Adicionar variação aleatória para simular atividade
+            document.getElementById('community-blocks').textContent = 
+                (baseBlocks + Math.floor(Math.random() * 100)).toLocaleString();
+            document.getElementById('community-savings').textContent = 
+                'R$ ' + (baseSavings + Math.floor(Math.random() * 5000)).toLocaleString();
+            document.getElementById('success-stories').textContent = 
+                (baseStories + Math.floor(Math.random() * 10)).toString();
+        }
+
+        function rotateQuote() {
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            document.getElementById('rotating-quote').textContent = randomQuote;
+        }
+
+        function addBlock() {
+            personalData.blocks++;
+            personalData.savings += 50; // Economia estimada por bloqueio
+            updatePersonalStats();
+            
+            // Feedback visual
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Registrado!';
+            btn.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+            }, 2000);
+        }
+
+        function resetProgress() {
+            if (confirm('⚠️ Você teve uma recaída e quer recomeçar a contagem?\n\nIsso é normal e faz parte do processo de recuperação. O importante é não desistir!')) {
+                personalData.blocks = 0;
+                personalData.cleanDays = 1;
+                personalData.savings = 0;
+                personalData.startDate = new Date().toDateString();
+                updatePersonalStats();
+                
+                // Mensagem motivacional
+                alert('💪 Contagem reiniciada! Cada recomeço é uma nova oportunidade de vencer. Você não está sozinho nessa jornada!');
+            }
+        }
+
+        function showDiscordInfo() {
+            document.getElementById('chat-info').style.display = 'block';
+            // Em uma implementação real, você criaria um servidor Discord e colocaria o link real
+            alert('💡 Para usar o Discord:\n\n1. Crie uma conta em discord.com\n2. Entre no servidor da comunidade\n3. Apresente-se no canal #apresentações\n4. Participe das conversas de apoio\n\n(Link real seria configurado quando o servidor fosse criado)');
+        }
+
+        function showTelegramInfo() {
+            document.getElementById('chat-info').style.display = 'block';
+            alert('💡 Para usar o Telegram:\n\n1. Baixe o app Telegram\n2. Entre no grupo da comunidade\n3. Leia as regras fixadas\n4. Participe respeitosamente\n\n(Link real seria configurado quando o grupo fosse criado)');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const chatDiv = document.getElementById('community-chat');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Adicionar mensagem simulada
+                const messageDiv = document.createElement('div');
+                messageDiv.style.cssText = 'margin-bottom: 1rem; padding: 0.5rem; background: rgba(76, 175, 80, 0.3); border-radius: 5px; border-left: 3px solid #4CAF50;';
+                messageDiv.innerHTML = `<strong>Você:</strong> ${message}`;
+                chatDiv.appendChild(messageDiv);
+                
+                // Limpar input
+                input.value = '';
+                
+                // Scroll para baixo
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+                
+                // Resposta automática simulada
+                setTimeout(() => {
+                    const responseDiv = document.createElement('div');
+                    responseDiv.style.cssText = 'margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;';
+                    responseDiv.innerHTML = `<strong>Comunidade_Bot:</strong> Obrigado por compartilhar! 💙 Para chat real com pessoas, use Discord ou Telegram acima. Esta é apenas uma demonstração.`;
+                    chatDiv.appendChild(responseDiv);
+                    chatDiv.scrollTop = chatDiv.scrollHeight;
+                }, 2000);
+            }
+        }
+
+        // Enter para enviar mensagem
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendMessage();
+                    }
+                });
+            }
+        });
+
+        function checkNewDay() {
+            const today = new Date().toDateString();
+            if (personalData.lastDate !== today) {
+                personalData.cleanDays++;
+                personalData.blocks = 0; // Reset diário dos bloqueios
+                personalData.lastDate = today;
+                localStorage.setItem('lastDate', today);
+                updatePersonalStats();
+            }
+        }
+
+        function emergencyBreathing() {
+            const exerciseDiv = document.getElementById('breathing-exercise');
+            const instruction = document.getElementById('breathing-instruction');
+            const counter = document.getElementById('breathing-counter');
+            
+            exerciseDiv.style.display = 'block';
+            
+            // Exercício 4-7-8
+            let phase = 0; // 0: inspire, 1: segure, 2: expire
+            let count = 0;
+            const phases = [4, 7, 8];
+            const phaseNames = ['Inspire pelo nariz', 'Segure a respiração', 'Expire pela boca'];
+            
+            function breathingCycle() {
+                if (phase < 3) {
+                    instruction.textContent = phaseNames[phase];
+                    count = phases[phase];
+                    
+                    const interval = setInterval(() => {
+                        counter.textContent = count;
+                        count--;
+                        
+                        if (count < 0) {
+                            clearInterval(interval);
+                            phase++;
+                            if (phase < 3) {
+                                setTimeout(breathingCycle, 500);
+                            } else {
+                                instruction.textContent = 'Muito bem! Como se sente?';
+                                counter.textContent = '😌';
+                                setTimeout(() => {
+                                    exerciseDiv.style.display = 'none';
+                                    phase = 0;
+                                }, 3000);
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+            
+            breathingCycle();
+        }
+
+        // Smooth scrolling para os links de navegação
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
