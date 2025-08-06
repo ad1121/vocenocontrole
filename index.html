@@ -318,7 +318,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 12px;
+            padding: 10px 15px;
             border-bottom: 1px solid #e3f2fd;
             transition: all 0.3s ease;
         }
@@ -334,19 +334,19 @@
         .transaction-name {
             font-weight: 600;
             color: #263238;
-            margin-bottom: 2px;
-            font-size: 0.85rem;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
         }
 
         .transaction-date {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #78909c;
         }
 
         .transaction-value {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            margin-right: 8px;
+            margin-right: 10px;
         }
 
         .transaction-value.income {
@@ -359,12 +359,12 @@
 
         .transaction-actions {
             display: flex;
-            gap: 3px;
+            gap: 5px;
         }
 
         .btn-sm {
-            padding: 3px 6px;
-            font-size: 10px;
+            padding: 4px 8px;
+            font-size: 11px;
             min-width: auto;
         }
 
@@ -540,7 +540,7 @@
                             <label for="transactionDate">Data:</label>
                             <input type="date" id="transactionDate" required>
                         </div>
-                        <button type="submit" class="btn" id="submitBtn">Escolha o tipo acima</button>
+                        <button type="submit" class="btn" id="submitBtn">Adicionar</button>
                     </form>
                 </div>
             </div>
@@ -678,7 +678,7 @@
                 });
                 document.getElementById('transactionForm').reset();
                 document.getElementById('modalTitle').textContent = 'Nova Transação';
-                document.getElementById('submitBtn').textContent = 'Escolha o tipo acima';
+                document.getElementById('submitBtn').textContent = 'Adicionar';
             }
 
             selectType(type) {
