@@ -1,10 +1,9 @@
-       
-        </section><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livre dos Jogos - Plataforma de Apoio</title>
+    <title>Controle Financeiro</title>
     <style>
         * {
             margin: 0;
@@ -14,811 +13,841 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             min-height: 100vh;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: opacity 0.3s;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.8;
+            color: #263238;
+            font-size: 14px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 0 2rem;
+            padding: 10px;
         }
 
-        .section {
-            margin: 6rem 0;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+        .header {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
             color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
         }
 
-        .hero {
-            text-align: center;
-            margin-top: 6rem;
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        h3 {
+        .header h1 {
             font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #FFD700;
-        }
-
-        .hero-text {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 2rem;
-            border-radius: 15px;
+            margin-bottom: 10px;
             text-align: center;
-            transition: transform 0.3s ease;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
+        .balance-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 15px;
         }
 
-        .stat-number {
-            font-size: 2.5rem;
+        .balance-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            flex: 1;
+            text-align: center;
+        }
+
+        .balance-card h3 {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-bottom: 3px;
+        }
+
+        .balance-value {
+            font-size: 0.9rem;
             font-weight: bold;
-            color: #FFD700;
+        }
+
+        .month-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            gap: 20px;
+        }
+
+        .month-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .month-arrow {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .month-arrow:hover {
+            transform: scale(1.1);
+        }
+
+        .month-display {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0d47a1;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            padding: 15px 20px;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 15px 10px;
+            border: 2px solid #e3f2fd;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .type-option:hover {
+            border-color: #2196f3;
+            background: #f0f8ff;
+        }
+
+        .type-option.selected {
+            border-color: #2196f3;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .type-option .icon {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .type-option .label {
+            font-weight: 600;
+            color: #1976d2;
+            font-size: 0.9rem;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
             display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #455a64;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e3f2fd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #2196f3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
         }
 
         .btn {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
             color: white;
-            padding: 15px 30px;
+            padding: 10px 20px;
             border: none;
-            border-radius: 25px;
-            font-size: 1.1rem;
+            border-radius: 6px;
             cursor: pointer;
-            margin: 10px;
+            font-size: 14px;
+            font-weight: 600;
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            width: 100%;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(45deg, #2196F3, #1976D2);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(33, 150, 243, 0.4);
         }
 
         .btn-danger {
-            background: linear-gradient(45deg, #f44336, #d32f2f);
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
         }
 
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
+        .btn-success {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
         }
 
-        .tool-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .blocked-sites {
-            background: rgba(0, 0, 0, 0.3);
+        .transactions-section {
+            background: white;
             border-radius: 10px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            font-family: monospace;
-            font-size: 0.9rem;
-            max-height: 200px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            padding: 12px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .transactions-list {
+            max-height: 300px;
             overflow-y: auto;
         }
 
-        .testimonials {
-            margin: 2rem 0;
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e3f2fd;
+            transition: all 0.3s ease;
         }
 
-        .testimonial {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #FFD700;
+        .transaction-item:hover {
+            background: #f8fbff;
         }
 
-        .quote-rotation {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-name {
+            font-weight: 600;
+            color: #263238;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
+        }
+
+        .transaction-date {
+            font-size: 0.75rem;
+            color: #78909c;
+        }
+
+        .transaction-value {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .transaction-value.income {
+            color: #4caf50;
+        }
+
+        .transaction-value.expense {
+            color: #f44336;
+        }
+
+        .transaction-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 11px;
+            min-width: auto;
+        }
+
+        .empty-state {
             text-align: center;
-            margin: 2rem 0;
-            font-style: italic;
-            font-size: 1.2rem;
+            padding: 30px 15px;
+            color: #78909c;
         }
 
-        .emergency-section {
-            background: rgba(255, 0, 0, 0.2) !important;
-            border: 2px solid #ff4444 !important;
-            animation: gentle-pulse 3s infinite;
+        .empty-state i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.5;
         }
 
-        @keyframes gentle-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        .empty-state p {
+            font-size: 0.9rem;
         }
 
-        .resources-list {
-            list-style: none;
-            padding: 0;
-        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 5px;
+            }
+            
+            .header {
+                padding: 12px;
+                margin-bottom: 10px;
+            }
 
-        .resources-list li {
-            background: rgba(255, 255, 255, 0.1);
-            margin: 1rem 0;
-            padding: 1rem;
-            border-radius: 10px;
-            border-left: 4px solid #4CAF50;
-        }
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .balance-card {
+                padding: 6px 8px;
+            }
 
-        .progress-tracker {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-        }
+            .balance-card h3 {
+                font-size: 0.65rem;
+            }
 
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
+            .balance-value {
+                font-size: 0.8rem;
+            }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
+            .month-controls {
+                margin: 15px 0;
+                gap: 15px;
+            }
 
-        .footer {
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
+            .month-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
 
-        @media (max-width: 768px) {
-            .nav {
+            .month-display {
+                font-size: 1rem;
+                min-width: 100px;
+            }
+
+            .add-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .transaction-item {
                 flex-direction: column;
-                gap: 1rem;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 8px 10px;
+            }
+
+            .transaction-value {
+                align-self: flex-end;
+                margin-right: 0;
             }
             
-            .nav-links {
-                flex-direction: column;
-                gap: 1rem;
+            .transaction-actions {
+                width: 100%;
+                justify-content: flex-end;
             }
-            
-            h1 {
-                font-size: 2rem;
+
+            .modal-content {
+                width: 98%;
+                margin: 5% auto;
             }
-            
-            .section {
-                padding: 1.5rem;
-                margin: 3rem 0;
+
+            .modal-body {
+                padding: 15px;
             }
+
+            .type-selector {
+                gap: 8px;
+            }
+
+            .type-option {
+                padding: 12px 8px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">🛡️ Livre dos Jogos</div>
-            <ul class="nav-links">
-                <li><a href="#inicio">Início</a></li>
-                <li><a href="#ferramentas">Ferramentas</a></li>
-                <li><a href="#chat-apoio">Chat</a></li>
-                <li><a href="#recursos">Recursos</a></li>
-                <li><a href="#emergencia">Emergência</a></li>
-            </ul>
-        </nav>
-    </header>
-
     <div class="container">
-        <section id="inicio" class="section hero">
-            <h1>🌟 Você Não Está Sozinho</h1>
-            <p class="hero-text">
-                Esta é uma plataforma de apoio para pessoas que querem se livrar do vício em jogos e apostas. 
-                Aqui você encontra ferramentas, motivação e uma comunidade que entende sua luta.
-            </p>
-            
-
-            <div class="quote-rotation">
-                <p id="rotating-quote">"A força não vem da capacidade física. Vem de uma vontade indomável." - Mahatma Gandhi</p>
-            </div>
-        </section>
-
-        <section id="ferramentas" class="section">
-            <h2>🛠️ Ferramentas de Proteção</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>🚫 Bloqueadores Recomendados</h3>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1.5rem;">💻 Desktop/Navegador:</h4>
-                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-                        <li><strong>Cold Turkey Blocker</strong> - Windows/Mac (gratuito)</li>
-                        <li><strong>BlockSite</strong> - Chrome/Firefox (gratuito)</li>
-                        <li><strong>Freedom</strong> - Windows/Mac/iOS/Android</li>
-                        <li><strong>FocusMe</strong> - Windows (muito robusto)</li>
-                    </ul>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1.5rem;">📱 Android:</h4>
-                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-                        <li><strong>BlockSite</strong> - Bloqueio de apps e sites</li>
-                        <li><strong>Cold Turkey Blocker</strong> - Versão mobile</li>
-                        <li><strong>AppBlock</strong> - Bloqueio de aplicativos</li>
-                        <li><strong>Freedom</strong> - Multiplataforma</li>
-                        <li><strong>Stay Focused</strong> - Controle de tempo</li>
-                    </ul>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1.5rem;">🍎 iOS:</h4>
-                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-                        <li><strong>Configurações > Tempo de Uso</strong> - Nativo do iOS</li>
-                        <li><strong>Freedom</strong> - Bloqueio multiplataforma</li>
-                        <li><strong>Focus</strong> - Bloqueio e produtividade</li>
-                        <li><strong>Moment</strong> - Controle de uso</li>
-                    </ul>
-                    
-                    <div style="margin-top: 1.5rem;">
-                        <a href="https://getcoldturkey.com/" class="btn" target="_blank">Cold Turkey</a>
-                        <a href="https://blocksite.co/" class="btn btn-secondary" target="_blank">BlockSite</a>
-                    </div>
+        <div class="header">
+            <h1>💰 Controle Financeiro</h1>
+            <div class="balance-info">
+                <div class="balance-card">
+                    <h3>Receitas</h3>
+                    <div class="balance-value" id="totalIncome">R$ 0,00</div>
                 </div>
-
-                <div class="tool-card">
-                    <h3>🎯 Seu Progresso Pessoal</h3>
-                    <div class="progress-tracker">
-                        <p>Bloqueios hoje: <strong id="personal-blocks">0</strong></p>
-                        <p>Dias limpo: <strong id="clean-days">1</strong></p>
-                        <p>Economia estimada: <strong id="personal-savings">R$ 0,00</strong></p>
-                        
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 10%;"></div>
-                        </div>
-                        <p><small>Meta: 30 dias livres</small></p>
-                        
-                        <button class="btn" onclick="addBlock()">Registrar Bloqueio</button>
-                        <button class="btn btn-secondary" onclick="resetProgress()">Recomeçar Contagem</button>
-                    </div>
+                <div class="balance-card">
+                    <h3>Despesas</h3>
+                    <div class="balance-value" id="totalExpenses">R$ 0,00</div>
+                </div>
+                <div class="balance-card">
+                    <h3>Saldo</h3>
+                    <div class="balance-value" id="currentBalance">R$ 0,00</div>
                 </div>
             </div>
+        </div>
 
-            <div class="tool-card">
-                <h3>📋 Sites Mais Bloqueados</h3>
-                <div class="blocked-sites" id="blocked-sites-list">
-                    bet365.com • betano.com • sportingbet.com • betfair.com<br>
-                    rivalo.com • 1xbet.com • pixbet.com • blaze.com<br>
-                    stake.com • parimatch.com • betway.com • betnacional.com<br>
-                    bet777.com • betboo.com • betmotion.com • betwinner.com<br>
-                    casino.com • pokerstars.com • 888casino.com • spin.com<br>
-                    betsson.com • leovegas.com • royal-panda.com • mr-green.com
-                </div>
-                <p><small>💡 Use esta lista em seus bloqueadores</small></p>
+        <div class="month-controls">
+            <div class="month-nav">
+                <button class="month-arrow" id="prevMonth">‹</button>
+                <div class="month-display" id="monthDisplay">Carregando...</div>
+                <button class="month-arrow" id="nextMonth">›</button>
             </div>
-        </section>
+            <button class="add-btn" id="addTransactionBtn">
+                <span class="icon">+</span>
+            </button>
+        </div>
 
-        <section id="chat-apoio" class="section">
-            <h2>💬 Chat de Apoio Comunitário</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>🗨️ Opções de Chat e Comunidade</h3>
-                    <p>Conecte-se com outras pessoas na mesma jornada:</p>
-                    
-                    <div style="margin: 1.5rem 0;">
-                        <a href="https://discord.gg/apoiovicio" class="btn" target="_blank" onclick="showDiscordInfo()">
-                            💬 Entrar no Discord
-                        </a>
-                        <a href="https://t.me/livredosjogos" class="btn btn-secondary" target="_blank" onclick="showTelegramInfo()">
-                            📱 Grupo Telegram
-                        </a>
-                    </div>
-                    
-                    <div id="chat-info" style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 10px; margin-top: 1rem; display: none;">
-                        <p><strong>📌 Regras da Comunidade:</strong></p>
-                        <ul style="margin: 0.5rem 0; padding-left: 1.5rem; font-size: 0.9rem;">
-                            <li>Respeito mútuo sempre</li>
-                            <li>Não compartilhar links de apostas</li>
-                            <li>Apoiar, não julgar</li>
-                            <li>Privacidade: use apelidos se preferir</li>
-                        </ul>
-                    </div>
+        <!-- Modal -->
+        <div id="transactionModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Nova Transação</h2>
+                    <span class="close" id="closeModal">&times;</span>
                 </div>
-
-                <div class="tool-card">
-                    <h3>🆘 Chat de Emergência 24h</h3>
-                    <p>Para momentos de crise, fale com alguém agora:</p>
-                    
-                    <div style="margin: 1.5rem 0;">
-                        <a href="https://www.cvv.org.br/chat/" class="btn btn-danger" target="_blank">
-                            🆘 CVV Chat Online
-                        </a>
-                        <a href="tel:188" class="btn btn-danger">
-                            📞 CVV Telefone (188)
-                        </a>
+                <div class="modal-body">
+                    <div class="type-selector">
+                        <div class="type-option" data-type="income">
+                            <div class="icon">📈</div>
+                            <div class="label">Receita</div>
+                        </div>
+                        <div class="type-option" data-type="expense">
+                            <div class="icon">📉</div>
+                            <div class="label">Despesa</div>
+                        </div>
                     </div>
-                    
-                    <p style="font-size: 0.9rem; opacity: 0.8;">
-                        O CVV oferece apoio 24h por telefone, chat e e-mail de forma gratuita e sigilosa.
-                    </p>
+
+                    <form id="transactionForm" class="form-card">
+                        <div class="form-group">
+                            <label for="transactionName">Descrição:</label>
+                            <input type="text" id="transactionName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionValue">Valor:</label>
+                            <input type="number" id="transactionValue" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transactionDate">Data:</label>
+                            <input type="date" id="transactionDate" required>
+                        </div>
+                        <button type="submit" class="btn" id="submitBtn">Adicionar</button>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Widget de chat temporário -->
-            <div class="tool-card" style="margin-top: 2rem;">
-                <h3>💭 Mensagem Rápida da Comunidade</h3>
-                <div id="community-chat" style="background: rgba(0,0,0,0.2); border-radius: 10px; padding: 1rem; height: 200px; overflow-y: auto; margin: 1rem 0;">
-                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                        <strong>João123:</strong> Hoje completo 15 dias sem apostar! 💪
-                    </div>
-                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                        <strong>Maria_Força:</strong> Parabéns João! Você é inspiração para mim 🌟
-                    </div>
-                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                        <strong>Carlos2024:</strong> Pessoal, estou com vontade de apostar... alguém pode conversar?
-                    </div>
-                    <div style="margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;">
-                        <strong>Ana_Guerreira:</strong> @Carlos2024 já passei por isso! Vamos fazer uma atividade juntos? Que tal uma caminhada virtual? 🚶‍♂️
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." 
-                           style="flex: 1; padding: 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
-                    <button class="btn" onclick="sendMessage()" style="padding: 10px 20px;">Enviar</button>
-                </div>
-                
-                <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 1rem;">
-                    💡 Este é um chat simulado para demonstração. Para chat real, use Discord ou Telegram acima.
-                </p>
+        <div class="transactions-section fade-in" style="margin-bottom: 15px;">
+            <div class="section-header">
+                <div>❌ Contas Pendentes</div>
             </div>
-        </section>
-             <section id="apoio" class="section">
-            <h2>🤝 Apoio e Motivação</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>🎯 Atividades Alternativas</h3>
-                    <p>Quando sentir vontade de apostar, experimente:</p>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1rem;">🧘 Relaxamento:</h4>
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.youtube.com/results?search_query=meditação+guiada+ansiedade" class="btn" target="_blank">🧘 Meditar</a>
-                        <a href="https://www.youtube.com/results?search_query=música+relaxante+natureza" class="btn" target="_blank">🎵 Música Relaxante</a>
-                    </div>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1rem;">🏃 Atividade Física:</h4>
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.youtube.com/results?search_query=exercícios+casa+iniciante" class="btn btn-secondary" target="_blank">🏃 Exercitar</a>
-                        <a href="https://www.youtube.com/results?search_query=yoga+iniciante" class="btn btn-secondary" target="_blank">🧘‍♀️ Yoga</a>
-                    </div>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1rem;">🎯 Desenvolvimento:</h4>
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.duolingo.com" class="btn" target="_blank">📚 Aprender Idioma</a>
-                        <a href="https://www.coursera.org" class="btn" target="_blank">🎓 Curso Online</a>
-                    </div>
-                    
-                    <h4 style="color: #FFD700; margin-top: 1rem;">🎬 Entretenimento:</h4>
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.netflix.com" class="btn" target="_blank">🎬 Netflix</a>
-                        <a href="https://www.youtube.com/results?search_query=documentário+motivacional" class="btn" target="_blank">📺 Documentários</a>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <h3>💭 Depoimentos Reais</h3>
-                    <div class="testimonials">
-                        <div class="testimonial">
-                            <p>"Depois de 3 meses usando bloqueadores, consegui controlar completamente minha compulsão. A chave foi ter alternativas saudáveis preparadas para os momentos difíceis." - <em>João, 34 anos, limpo há 8 meses</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"Esta plataforma me ajudou a perceber que não estava sozinha. Ver o progresso dos outros e poder compartilhar minhas dificuldades me motivou a continuar lutando." - <em>Maria, 28 anos, 4 meses limpa</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"Já economizei mais de R$ 15.000 em 1 ano. Comprei um carro à vista com o dinheiro que gastava apostando. Minha família voltou a confiar em mim." - <em>Carlos, 41 anos, 1 ano limpo</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"O aplicativo no celular foi fundamental. Toda vez que eu tentava abrir um site de aposta, via a página motivacional e lembrava dos meus objetivos." - <em>Ana, 25 anos, 6 meses limpa</em></p>
-                        </div>
-                    </div>
-                </div>
-            </div>    
-        
-        <h2>🤝 Apoio e Motivação</h2>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <h3>🎯 Atividades Alternativas</h3>
-                    <p>Quando sentir vontade de apostar, experimente:</p>
-                    <div style="margin: 1rem 0;">
-                        <a href="https://www.youtube.com/results?search_query=meditação+guiada+ansiedade" class="btn" target="_blank">🧘 Meditar</a>
-                        <a href="https://www.youtube.com/results?search_query=exercícios+casa+iniciante" class="btn btn-secondary" target="_blank">🏃 Exercitar</a>
-                        <a href="https://www.netflix.com" class="btn" target="_blank">🎬 Assistir</a>
-                        <a href="https://www.duolingo.com" class="btn" target="_blank">📚 Aprender</a>
-                    </div>
-                </div>
-
-                <div class="tool-card">
-                    <h3>💭 Depoimentos Reais</h3>
-                    <div class="testimonials">
-                        <div class="testimonial">
-                            <p>"Depois de 3 meses usando bloqueadores, consegui controlar completamente minha compulsão. A chave foi ter alternativas saudáveis." - <em>João, 34 anos</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"Esta plataforma me ajudou a perceber que não estava sozinha. Ver o progresso dos outros me motivou a continuar." - <em>Maria, 28 anos</em></p>
-                        </div>
-                        <div class="testimonial">
-                            <p>"Já economizei mais de R$ 5.000 em 6 meses. Uso o dinheiro para viajar com minha família agora." - <em>Carlos, 41 anos</em></p>
-                        </div>
-                    </div>
+            <div class="transactions-list" id="pendingTransactions">
+                <div class="empty-state">
+                    <div>📋</div>
+                    <p>Nenhuma conta pendente</p>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="recursos" class="section">
-            <h2>📞 Recursos Profissionais</h2>
-            
-            <ul class="resources-list">
-                <li>
-                    <strong>🏥 CAPS - Centro de Atenção Psicossocial</strong><br>
-                    Atendimento gratuito pelo SUS. Procure o CAPS da sua região.
-                </li>
-                <li>
-                    <strong>📞 CVV - Centro de Valorização da Vida</strong><br>
-                    Telefone: 188 (24h, gratuito)<br>
-                    Chat online: <a href="https://www.cvv.org.br" target="_blank">cvv.org.br</a>
-                </li>
-                <li>
-                    <strong>🎲 Jogadores Anônimos</strong><br>
-                    Grupos de apoio gratuitos<br>
-                    Site: <a href="https://www.jogadoresanonimos.org.br" target="_blank">jogadoresanonimos.org.br</a>
-                </li>
-                <li>
-                    <strong>🧠 Terapia Online</strong><br>
-                    Plataformas: Zenklub, Psicologia Viva, Telavita<br>
-                    Muitas oferecem primeira consulta gratuita
-                </li>
-            </ul>
-        </section>
-
-        <section id="emergencia" class="section emergency-section">
-            <h2>🚨 Em Crise? Ação Imediata!</h2>
-            
-            <div style="text-align: center; margin: 2rem 0;">
-                <p style="font-size: 1.3rem; margin-bottom: 2rem;">
-                    Se você está com uma vontade intensa de apostar AGORA:
-                </p>
-                
-                <div style="margin: 2rem 0;">
-                    <a href="tel:188" class="btn btn-danger" style="font-size: 1.2rem;">📞 Ligar CVV (188)</a>
-                    <button class="btn btn-danger" onclick="emergencyBreathing()">🫁 Respirar 4-7-8</button>
-                </div>
-                
-                <div id="breathing-exercise" style="display: none; margin: 2rem 0; font-size: 1.5rem;">
-                    <p id="breathing-instruction">Prepare-se...</p>
-                    <div style="font-size: 3rem; color: #FFD700;" id="breathing-counter"></div>
-                </div>
-                
-                <p style="margin-top: 2rem;">
-                    <strong>Lembre-se:</strong> Esta sensação vai passar. Você já resistiu antes e pode resistir agora.
-                </p>
+        <div class="transactions-section fade-in">
+            <div class="section-header">
+                <div>✅ Contas Pagas</div>
             </div>
-        </section>
+            <div class="transactions-list" id="paidTransactions">
+                <div class="empty-state">
+                    <div>💰</div>
+                    <p>Nenhuma conta paga</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Livre dos Jogos - Plataforma de apoio voluntária</p>
-            <p>Criado com ❤️ para ajudar pessoas a reconquistarem suas vidas</p>
-            <p><small>Esta não é uma plataforma médica. Procure ajuda profissional quando necessário.</small></p>
-        </div>
-    </footer>
-
     <script>
-        // Dados persistentes
-        let personalData = {
-            blocks: parseInt(localStorage.getItem('personalBlocks') || '0'),
-            cleanDays: parseInt(localStorage.getItem('cleanDays') || '1'),
-            savings: parseFloat(localStorage.getItem('personalSavings') || '0'),
-            startDate: localStorage.getItem('startDate') || new Date().toDateString(),
-            lastDate: localStorage.getItem('lastDate') || new Date().toDateString()
-        };
-
-        // Frases motivacionais
-        const motivationalQuotes = [
-            '"A força não vem da capacidade física. Vem de uma vontade indomável." - Mahatma Gandhi',
-            '"O sucesso é a soma de pequenos esforços repetidos dia após dia." - Robert Collier',
-            '"Você é mais forte do que pensa e mais capaz do que imagina."',
-            '"Cada dia sem apostar é um investimento no seu futuro."',
-            '"A verdadeira riqueza está na liberdade de escolha."',
-            '"Sua força de vontade é seu maior patrimônio."',
-            '"Não é sobre quantas vezes você cai, mas quantas você se levanta."',
-            '"O primeiro passo para sair do buraco é parar de cavar."',
-            '"Você não precisa ser perfeito, só precisa começar."',
-            '"Cada pequena vitória conta para a grande conquista."'
-        ];
-
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            updatePersonalStats();
-            updateCommunityStats();
-            rotateQuote();
-            checkNewDay();
-            
-            // Rotacionar frases a cada 15 segundos
-            setInterval(rotateQuote, 15000);
-            
-            // Atualizar stats da comunidade a cada 30 segundos
-            setInterval(updateCommunityStats, 30000);
-        });
-
-        function updatePersonalStats() {
-            document.getElementById('personal-blocks').textContent = personalData.blocks;
-            document.getElementById('clean-days').textContent = personalData.cleanDays;
-            document.getElementById('personal-savings').textContent = `R$ ${personalData.savings.toFixed(2)}`;
-            
-            // Atualizar barra de progresso
-            const progress = Math.min((personalData.cleanDays / 30) * 100, 100);
-            document.getElementById('progress-fill').style.width = progress + '%';
-            
-            // Salvar dados
-            localStorage.setItem('personalBlocks', personalData.blocks.toString());
-            localStorage.setItem('cleanDays', personalData.cleanDays.toString());
-            localStorage.setItem('personalSavings', personalData.savings.toString());
-        }
-
-        function updateCommunityStats() {
-            // Simular stats da comunidade (em uma implementação real, viria de uma API)
-            const baseBlocks = 2847;
-            const baseSavings = 142350;
-            const baseStories = 156;
-            
-            // Adicionar variação aleatória para simular atividade
-            document.getElementById('community-blocks').textContent = 
-                (baseBlocks + Math.floor(Math.random() * 100)).toLocaleString();
-            document.getElementById('community-savings').textContent = 
-                'R$ ' + (baseSavings + Math.floor(Math.random() * 5000)).toLocaleString();
-            document.getElementById('success-stories').textContent = 
-                (baseStories + Math.floor(Math.random() * 10)).toString();
-        }
-
-        function rotateQuote() {
-            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-            document.getElementById('rotating-quote').textContent = randomQuote;
-        }
-
-        function addBlock() {
-            personalData.blocks++;
-            personalData.savings += 50; // Economia estimada por bloqueio
-            updatePersonalStats();
-            
-            // Feedback visual
-            const btn = event.target;
-            const originalText = btn.textContent;
-            btn.textContent = '✅ Registrado!';
-            btn.style.background = '#4CAF50';
-            
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
-            }, 2000);
-        }
-
-        function resetProgress() {
-            if (confirm('⚠️ Você teve uma recaída e quer recomeçar a contagem?\n\nIsso é normal e faz parte do processo de recuperação. O importante é não desistir!')) {
-                personalData.blocks = 0;
-                personalData.cleanDays = 1;
-                personalData.savings = 0;
-                personalData.startDate = new Date().toDateString();
-                updatePersonalStats();
-                
-                // Mensagem motivacional
-                alert('💪 Contagem reiniciada! Cada recomeço é uma nova oportunidade de vencer. Você não está sozinho nessa jornada!');
+        class FinancialController {
+            constructor() {
+                this.data = this.loadData();
+                // Sempre inicializar com o mês atual (agosto 2025)
+                const now = new Date();
+                this.currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+                console.log('Mês atual:', this.currentMonth); // Debug
+                this.selectedType = null;
+                this.init();
             }
-        }
 
-        function showDiscordInfo() {
-            document.getElementById('chat-info').style.display = 'block';
-            // Em uma implementação real, você criaria um servidor Discord e colocaria o link real
-            alert('💡 Para usar o Discord:\n\n1. Crie uma conta em discord.com\n2. Entre no servidor da comunidade\n3. Apresente-se no canal #apresentações\n4. Participe das conversas de apoio\n\n(Link real seria configurado quando o servidor fosse criado)');
-        }
-
-        function showTelegramInfo() {
-            document.getElementById('chat-info').style.display = 'block';
-            alert('💡 Para usar o Telegram:\n\n1. Baixe o app Telegram\n2. Entre no grupo da comunidade\n3. Leia as regras fixadas\n4. Participe respeitosamente\n\n(Link real seria configurado quando o grupo fosse criado)');
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const chatDiv = document.getElementById('community-chat');
-            const message = input.value.trim();
-            
-            if (message) {
-                // Adicionar mensagem simulada
-                const messageDiv = document.createElement('div');
-                messageDiv.style.cssText = 'margin-bottom: 1rem; padding: 0.5rem; background: rgba(76, 175, 80, 0.3); border-radius: 5px; border-left: 3px solid #4CAF50;';
-                messageDiv.innerHTML = `<strong>Você:</strong> ${message}`;
-                chatDiv.appendChild(messageDiv);
-                
-                // Limpar input
-                input.value = '';
-                
-                // Scroll para baixo
-                chatDiv.scrollTop = chatDiv.scrollHeight;
-                
-                // Resposta automática simulada
-                setTimeout(() => {
-                    const responseDiv = document.createElement('div');
-                    responseDiv.style.cssText = 'margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,255,255,0.1); border-radius: 5px;';
-                    responseDiv.innerHTML = `<strong>Comunidade_Bot:</strong> Obrigado por compartilhar! 💙 Para chat real com pessoas, use Discord ou Telegram acima. Esta é apenas uma demonstração.`;
-                    chatDiv.appendChild(responseDiv);
-                    chatDiv.scrollTop = chatDiv.scrollHeight;
-                }, 2000);
+            init() {
+                this.setupEventListeners();
+                this.updateMonthDisplay();
+                this.setCurrentDate();
+                this.updateDisplay();
             }
-        }
 
-        // Enter para enviar mensagem
-        document.addEventListener('DOMContentLoaded', function() {
-            const chatInput = document.getElementById('chat-input');
-            if (chatInput) {
-                chatInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        sendMessage();
+            setupEventListeners() {
+                // Modal controls
+                document.getElementById('addTransactionBtn').addEventListener('click', () => {
+                    this.openModal();
+                });
+
+                document.getElementById('closeModal').addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                window.addEventListener('click', (e) => {
+                    const modal = document.getElementById('transactionModal');
+                    if (e.target === modal) {
+                        this.closeModal();
+                    }
+                });
+
+                // Month navigation
+                document.getElementById('prevMonth').addEventListener('click', () => {
+                    this.changeMonth(-1);
+                });
+
+                document.getElementById('nextMonth').addEventListener('click', () => {
+                    this.changeMonth(1);
+                });
+
+                // Type selection
+                document.querySelectorAll('.type-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        this.selectType(option.dataset.type);
+                    });
+                });
+
+                // Form submission
+                document.getElementById('transactionForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (this.selectedType) {
+                        this.addTransaction(this.selectedType);
                     }
                 });
             }
-        });
 
-        function checkNewDay() {
-            const today = new Date().toDateString();
-            if (personalData.lastDate !== today) {
-                personalData.cleanDays++;
-                personalData.blocks = 0; // Reset diário dos bloqueios
-                personalData.lastDate = today;
-                localStorage.setItem('lastDate', today);
-                updatePersonalStats();
+            changeMonth(direction) {
+                const [year, month] = this.currentMonth.split('-').map(Number);
+                const currentDate = new Date(year, month - 1, 1); // month - 1 porque Date usa 0-11
+                currentDate.setMonth(currentDate.getMonth() + direction);
+                
+                const newYear = currentDate.getFullYear();
+                const newMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+                this.currentMonth = newYear + '-' + newMonth;
+                
+                console.log('Novo mês:', this.currentMonth); // Debug
+                this.updateMonthDisplay();
+                this.updateDisplay();
             }
-        }
 
-        function emergencyBreathing() {
-            const exerciseDiv = document.getElementById('breathing-exercise');
-            const instruction = document.getElementById('breathing-instruction');
-            const counter = document.getElementById('breathing-counter');
-            
-            exerciseDiv.style.display = 'block';
-            
-            // Exercício 4-7-8
-            let phase = 0; // 0: inspire, 1: segure, 2: expire
-            let count = 0;
-            const phases = [4, 7, 8];
-            const phaseNames = ['Inspire pelo nariz', 'Segure a respiração', 'Expire pela boca'];
-            
-            function breathingCycle() {
-                if (phase < 3) {
-                    instruction.textContent = phaseNames[phase];
-                    count = phases[phase];
-                    
-                    const interval = setInterval(() => {
-                        counter.textContent = count;
-                        count--;
-                        
-                        if (count < 0) {
-                            clearInterval(interval);
-                            phase++;
-                            if (phase < 3) {
-                                setTimeout(breathingCycle, 500);
-                            } else {
-                                instruction.textContent = 'Muito bem! Como se sente?';
-                                counter.textContent = '😌';
-                                setTimeout(() => {
-                                    exerciseDiv.style.display = 'none';
-                                    phase = 0;
-                                }, 3000);
-                            }
-                        }
-                    }, 1000);
+            updateMonthDisplay() {
+                const date = new Date(this.currentMonth + '-01');
+                const monthText = date.toLocaleDateString('pt-BR', { 
+                    month: 'long', 
+                    year: 'numeric',
+                    timeZone: 'UTC'
+                });
+                const displayText = monthText.charAt(0).toUpperCase() + monthText.slice(1);
+                document.getElementById('monthDisplay').textContent = displayText;
+                console.log('Exibindo mês:', displayText); // Debug
+            }
+
+            openModal() {
+                const modal = document.getElementById('transactionModal');
+                modal.style.display = 'block';
+                this.resetModal();
+                this.setCurrentDate();
+            }
+
+            closeModal() {
+                const modal = document.getElementById('transactionModal');
+                modal.style.display = 'none';
+                this.resetModal();
+            }
+
+            resetModal() {
+                this.selectedType = null;
+                document.querySelectorAll('.type-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.getElementById('transactionForm').reset();
+                document.getElementById('modalTitle').textContent = 'Nova Transação';
+                document.getElementById('submitBtn').textContent = 'Adicionar';
+            }
+
+            selectType(type) {
+                this.selectedType = type;
+                
+                // Update visual selection
+                document.querySelectorAll('.type-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+
+                // Update modal title and button
+                const title = type === 'income' ? 'Nova Receita' : 'Nova Despesa';
+                const buttonText = type === 'income' ? 'Adicionar Receita' : 'Adicionar Despesa';
+                
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('submitBtn').textContent = buttonText;
+            }
+
+            setCurrentDate() {
+                // Sempre usar a data atual
+                const now = new Date();
+                const today = now.getFullYear() + '-' + 
+                             String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                             String(now.getDate()).padStart(2, '0');
+                document.getElementById('transactionDate').value = today;
+            }
+
+            addTransaction(type) {
+                const name = document.getElementById('transactionName').value;
+                const value = parseFloat(document.getElementById('transactionValue').value);
+                const date = document.getElementById('transactionDate').value;
+
+                if (!name || !value || !date) return;
+
+                const month = date.slice(0, 7);
+                
+                if (!this.data[month]) {
+                    this.data[month] = { 
+                        transactions: []
+                    };
+                }
+
+                const transaction = {
+                    id: Date.now(),
+                    name,
+                    value,
+                    date,
+                    type,
+                    paid: false
+                };
+
+                this.data[month].transactions.push(transaction);
+                this.saveData();
+                this.updateDisplay();
+                this.closeModal();
+            }
+
+            togglePaid(month, transactionId) {
+                if (!this.data[month]) return;
+
+                const transaction = this.data[month].transactions.find(t => t.id === transactionId);
+                if (transaction) {
+                    transaction.paid = !transaction.paid;
+                    this.saveData();
+                    this.updateDisplay();
                 }
             }
-            
-            breathingCycle();
+
+            deleteTransaction(month, transactionId) {
+                if (!this.data[month]) return;
+
+                this.data[month].transactions = this.data[month].transactions.filter(t => t.id !== transactionId);
+                this.saveData();
+                this.updateDisplay();
+            }
+
+            getCurrentMonthData() {
+                return this.data[this.currentMonth] || { transactions: [] };
+            }
+
+            updateDisplay() {
+                const monthData = this.getCurrentMonthData();
+                const transactions = monthData.transactions || [];
+
+                const pendingTransactions = transactions.filter(t => !t.paid);
+                const paidTransactions = transactions.filter(t => t.paid);
+
+                const totalIncome = paidTransactions
+                    .filter(t => t.type === 'income')
+                    .reduce((sum, t) => sum + t.value, 0);
+
+                const totalExpenses = paidTransactions
+                    .filter(t => t.type === 'expense')
+                    .reduce((sum, t) => sum + t.value, 0);
+
+                const currentBalance = totalIncome - totalExpenses;
+
+                // Atualizar cards de saldo
+                document.getElementById('totalIncome').textContent = this.formatCurrency(totalIncome);
+                document.getElementById('totalExpenses').textContent = this.formatCurrency(totalExpenses);
+                document.getElementById('currentBalance').textContent = this.formatCurrency(currentBalance);
+
+                // Atualizar listas de transações
+                this.renderTransactions('pendingTransactions', pendingTransactions);
+                this.renderTransactions('paidTransactions', paidTransactions);
+            }
+
+            renderTransactions(containerId, transactions) {
+                const container = document.getElementById(containerId);
+                
+                if (transactions.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div>${containerId === 'pendingTransactions' ? '📋' : '💰'}</div>
+                            <p>${containerId === 'pendingTransactions' ? 'Nenhuma conta pendente' : 'Nenhuma conta paga'}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = transactions.map(transaction => `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-name">${transaction.name}</div>
+                            <div class="transaction-date">${this.formatDate(transaction.date)}</div>
+                        </div>
+                        <div class="transaction-value ${transaction.type}">
+                            ${transaction.type === 'income' ? '+' : '-'} ${this.formatCurrency(transaction.value)}
+                        </div>
+                        <div class="transaction-actions">
+                            <button class="btn btn-sm ${transaction.paid ? 'btn-danger' : 'btn-success'}" 
+                                    onclick="controller.togglePaid('${this.currentMonth}', ${transaction.id})">
+                                ${transaction.paid ? 'Cancelar' : 'Pagar'}
+                            </button>
+                            <button class="btn btn-sm btn-danger" 
+                                    onclick="controller.deleteTransaction('${this.currentMonth}', ${transaction.id})">
+                                Excluir
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            formatCurrency(value) {
+                return new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }).format(value);
+            }
+
+            formatDate(dateString) {
+                return new Date(dateString + 'T00:00:00').toLocaleDateString('pt-BR');
+            }
+
+            saveData() {
+                // Não usar localStorage - armazenar apenas na sessão
+                const data = JSON.stringify(this.data);
+                this.sessionData = data;
+            }
+
+            loadData() {
+                // Inicializar com dados vazios
+                return {};
+            }
         }
 
-        // Smooth scrolling para os links de navegação
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+        // Inicializar o controlador
+        const controller = new FinancialController();
     </script>
 </body>
 </html>
