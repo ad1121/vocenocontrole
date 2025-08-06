@@ -318,7 +318,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
+            padding: 6px 12px;
             border-bottom: 1px solid #e3f2fd;
             transition: all 0.3s ease;
         }
@@ -334,19 +334,19 @@
         .transaction-name {
             font-weight: 600;
             color: #263238;
-            margin-bottom: 3px;
-            font-size: 0.9rem;
+            margin-bottom: 2px;
+            font-size: 0.85rem;
         }
 
         .transaction-date {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #78909c;
         }
 
         .transaction-value {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: bold;
-            margin-right: 10px;
+            margin-right: 8px;
         }
 
         .transaction-value.income {
@@ -359,12 +359,12 @@
 
         .transaction-actions {
             display: flex;
-            gap: 5px;
+            gap: 3px;
         }
 
         .btn-sm {
-            padding: 4px 8px;
-            font-size: 11px;
+            padding: 3px 6px;
+            font-size: 10px;
             min-width: auto;
         }
 
@@ -540,7 +540,7 @@
                             <label for="transactionDate">Data:</label>
                             <input type="date" id="transactionDate" required>
                         </div>
-                        <button type="submit" class="btn" id="submitBtn">Adicionar</button>
+                        <button type="submit" class="btn" id="submitBtn">Escolha o tipo acima</button>
                     </form>
                 </div>
             </div>
@@ -678,7 +678,7 @@
                 });
                 document.getElementById('transactionForm').reset();
                 document.getElementById('modalTitle').textContent = 'Nova Transação';
-                document.getElementById('submitBtn').textContent = 'Adicionar';
+                document.getElementById('submitBtn').textContent = 'Escolha o tipo acima';
             }
 
             selectType(type) {
