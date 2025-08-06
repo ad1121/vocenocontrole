@@ -728,7 +728,8 @@
                     value,
                     date,
                     type,
-                    paid: false
+                    // Receitas já são "pagas" por padrão, despesas começam pendentes
+                    paid: type === 'income' ? true : false
                 };
 
                 this.data[month].transactions.push(transaction);
@@ -764,17 +765,20 @@
                 const monthData = this.getCurrentMonthData();
                 const transactions = monthData.transactions || [];
 
-                const pendingTransactions = transactions.filter(t => !t.paid);
-                const paidTransactions = transactions.filter(t => t.paid);
+                // Filtrar apenas despesas para exibir nas listas
+                const expenseTransactions = transactions.filter(t => t.type === 'expense');
+                const pendingExpenses = expenseTransactions.filter(t => !t.paid);
+                const paidExpenses = expenseTransactions.filter(t => t.paid);
 
-                const totalIncome = paidTransactions
+                // Receitas: TODAS (receitas sempre contam no saldo)
+                const totalIncome = transactions
                     .filter(t => t.type === 'income')
                     .reduce((sum, t) => sum + t.value, 0);
 
-                const totalExpenses = paidTransactions
-                    .filter(t => t.type === 'expense')
-                    .reduce((sum, t) => sum + t.value, 0);
+                // Despesas: APENAS as pagas (só conta quando efetivamente paga)
+                const totalExpenses = paidExpenses.reduce((sum, t) => sum + t.value, 0);
 
+                // Saldo: Todas as receitas - Apenas despesas pagas
                 const currentBalance = totalIncome - totalExpenses;
 
                 // Atualizar cards de saldo
@@ -782,9 +786,9 @@
                 document.getElementById('totalExpenses').textContent = this.formatCurrency(totalExpenses);
                 document.getElementById('currentBalance').textContent = this.formatCurrency(currentBalance);
 
-                // Atualizar listas de transações
-                this.renderTransactions('pendingTransactions', pendingTransactions);
-                this.renderTransactions('paidTransactions', paidTransactions);
+                // Atualizar listas de transações (apenas despesas)
+                this.renderTransactions('pendingTransactions', pendingExpenses);
+                this.renderTransactions('paidTransactions', paidExpenses);
             }
 
             renderTransactions(containerId, transactions) {
@@ -835,14 +839,23 @@
             }
 
             saveData() {
-                // Não usar localStorage - armazenar apenas na sessão
-                const data = JSON.stringify(this.data);
-                this.sessionData = data;
+                // Usar localStorage para persistir dados permanentemente
+                try {
+                    localStorage.setItem('financialControlData', JSON.stringify(this.data));
+                } catch (e) {
+                    console.warn('Não foi possível salvar no localStorage:', e);
+                }
             }
 
             loadData() {
-                // Inicializar com dados vazios
-                return {};
+                // Carregar dados do localStorage
+                try {
+                    const savedData = localStorage.getItem('financialControlData');
+                    return savedData ? JSON.parse(savedData) : {};
+                } catch (e) {
+                    console.warn('Erro ao carregar dados do localStorage:', e);
+                    return {};
+                }
             }
         }
 
