@@ -69,17 +69,19 @@
       
       /* Otimizações para mobile */
       .container {
-        padding: 12px;
+        padding: 8px;
         gap: 12px;
         width: 100%;
         margin: 0;
         box-sizing: border-box;
+        max-width: 100vw;
       }
       
       .card {
         border-radius: 12px;
         width: 100%;
         box-sizing: border-box;
+        max-width: 100%;
       }
       
       .new-transaction-btn {
@@ -88,19 +90,28 @@
       }
       
       .stats {
-        gap: 8px;
-        grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+        gap: 6px;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
       }
       
       .pill {
-        padding: 8px 10px;
-        text-align: center; /* Centraliza em mobile */
+        padding: 6px 4px;
+        text-align: center;
+        min-width: 0;
+        flex: 1;
+      }
+      
+      .pill h4 {
+        font-size: 10px;
+        margin: 0 0 4px 0;
       }
       
       .pill .value {
-        font-size: 16px; /* Menor em mobile */
+        font-size: 12px;
         word-break: break-all;
         overflow-wrap: break-word;
+        line-height: 1.1;
       }
       
       /* Melhorar toque em mobile */
@@ -144,48 +155,79 @@
         margin-bottom: 8px;
       }
       
-      /* Tabela responsiva */
-      table {
-        font-size: 12px;
+      /* Tabela responsiva com scroll horizontal */
+      .card .content {
+        padding: 8px;
         overflow-x: auto;
-        display: block;
-        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      table {
+        font-size: 10px;
         width: 100%;
+        min-width: 600px; /* Força largura mínima para scroll */
+        border-collapse: collapse;
+        table-layout: auto;
       }
       
       thead, tbody {
-        display: table;
+        display: table-header-group;
         width: 100%;
       }
       
-      th, td {
-        padding: 6px 4px;
-        font-size: 12px;
-        max-width: 80px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      tbody {
+        display: table-row-group;
       }
       
+      th, td {
+        padding: 8px 4px;
+        font-size: 10px;
+        white-space: nowrap;
+        border-bottom: 1px solid var(--border);
+      }
+      
+      /* Colunas específicas */
+      th:nth-child(1), td:nth-child(1) { width: 70px; } /* Data */
+      th:nth-child(2), td:nth-child(2) { width: 120px; } /* Descrição */
+      th:nth-child(3), td:nth-child(3) { width: 60px; } /* Tipo */
+      th:nth-child(4), td:nth-child(4) { width: 50px; } /* Parcela */
+      th:nth-child(5), td:nth-child(5) { width: 80px; } /* Valor */
+      th:nth-child(6), td:nth-child(6) { width: 60px; } /* Ações */
+      
       .amount {
-        font-size: 12px !important;
+        font-size: 10px !important;
         word-break: break-all;
+      }
+      
+      .delete-btn {
+        padding: 4px 6px;
+        font-size: 9px;
+        white-space: nowrap;
+        min-width: 50px;
       }
     }
     
     /* iOS específico - corrigir problema de centralização */
     @supports (-webkit-touch-callout: none) {
+      html {
+        width: 100%;
+        overflow-x: hidden;
+      }
+      
       body {
-        width: 100vw;
+        width: 100%;
         max-width: 100%;
         margin: 0;
         padding: 0;
+        overflow-x: hidden;
+        position: relative;
       }
       
       .container {
-        width: 100%;
-        max-width: 100%;
+        width: calc(100% - 16px);
+        max-width: calc(100% - 16px);
         margin: 0 auto;
-        padding: 12px;
+        padding: 8px;
         box-sizing: border-box;
       }
       
@@ -193,90 +235,179 @@
         width: 100%;
         margin: 0;
         padding: 0;
+        overflow-x: hidden;
       }
       
       header .row {
-        width: 100%;
-        max-width: 100%;
+        width: calc(100% - 16px);
+        max-width: calc(100% - 16px);
         margin: 0 auto;
-        padding: 10px 16px;
+        padding: 10px 8px;
         box-sizing: border-box;
+      }
+      
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 4px;
+        width: 100%;
+      }
+      
+      .pill {
+        min-width: 0;
+        padding: 6px 2px;
+        overflow: hidden;
+      }
+      
+      .pill h4 {
+        font-size: 9px;
+        margin: 0 0 2px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .pill .value {
+        font-size: 11px;
+        line-height: 1.2;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+      }
+      
+      /* Tabela com scroll horizontal forçado no iOS */
+      .card .content {
+        padding: 4px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+      }
+      
+      table {
+        min-width: 500px;
+        width: auto;
+        font-size: 9px;
+      }
+      
+      th, td {
+        padding: 6px 2px;
+        font-size: 9px;
+        white-space: nowrap;
+      }
+      
+      .delete-btn {
+        padding: 3px 5px;
+        font-size: 8px;
+        white-space: nowrap;
+        min-width: 45px;
+        overflow: visible;
       }
     }
     
     /* Para telas muito pequenas */
     @media (max-width: 480px) {
+      .container {
+        padding: 8px;
+        width: calc(100% - 16px);
+      }
+      
       .stats {
-        grid-template-columns: 1fr;
-        gap: 6px;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 3px;
+      }
+      
+      .pill {
+        padding: 4px 1px;
+        min-width: 0;
       }
       
       .pill .value {
-        font-size: 14px;
+        font-size: 10px;
+        line-height: 1.1;
+      }
+      
+      .pill h4 {
+        font-size: 8px;
+        margin: 0 0 1px 0;
       }
       
       .brand {
-        font-size: 14px;
+        font-size: 12px;
       }
       
       .month-nav {
         flex-wrap: wrap;
-        gap: 4px;
+        gap: 2px;
       }
       
       .chip {
-        padding: 6px 8px;
-        font-size: 12px;
+        padding: 4px 6px;
+        font-size: 10px;
       }
       
       header .row {
         flex-direction: column;
-        gap: 8px;
-        padding: 8px 12px;
+        gap: 6px;
+        padding: 6px 8px;
+        width: calc(100% - 16px);
+      }
+      
+      /* Tabela otimizada para telas pequenas */
+      .card .content {
+        padding: 2px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
       
       table {
-        font-size: 10px;
+        font-size: 8px;
+        min-width: 480px;
       }
       
       th, td {
-        padding: 4px 2px;
-        font-size: 10px;
+        padding: 4px 1px;
+        font-size: 8px;
+      }
+      
+      .delete-btn {
+        padding: 2px 4px;
+        font-size: 7px;
+        min-width: 40px;
+        white-space: nowrap;
       }
       
       /* Modal ainda mais otimizado para telas pequenas */
       dialog {
-        width: 100vw;
-        height: 100vh;
-        max-height: 100vh;
-        border-radius: 0;
-        margin: 0;
+        width: calc(100vw - 16px);
+        height: auto;
+        max-height: 90vh;
+        border-radius: 12px;
+        margin: 8px;
       }
       
       .modal-head {
-        padding: 12px 16px;
-        font-size: 16px;
+        padding: 8px 12px;
+        font-size: 14px;
       }
       
       .modal-body {
-        padding: 12px 16px;
-        gap: 12px;
+        padding: 8px 12px;
+        gap: 8px;
       }
       
       .modal-actions {
-        padding: 12px 16px;
-        gap: 8px;
+        padding: 8px 12px;
+        gap: 6px;
       }
       
       .modal-body input,
       .modal-body select {
-        padding: 16px 12px;
+        padding: 12px 8px;
         font-size: 16px;
       }
       
       .btn {
-        padding: 16px 20px;
-        font-size: 16px;
+        padding: 12px 16px;
+        font-size: 14px;
       }
     }
 
