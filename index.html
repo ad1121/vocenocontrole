@@ -271,19 +271,7 @@
 
     <section class="card">
       <div class="head">
-        <div>Transações</div>
-        <div class="controls">
-          <input id="searchInput" class="search" placeholder="Buscar por descrição ou categoria…" />
-          <select id="typeFilter">
-            <option value="">Todas</option>
-            <option value="income">Receitas</option>
-            <option value="expense">Despesas</option>
-          </select>
-          <button id="exportBtn" class="btn secondary">Exportar</button>
-          <label for="importFile" class="btn secondary" style="cursor:pointer">Importar</label>
-          <input id="importFile" type="file" accept="application/json" class="sr-only" />
-          <button id="clearBtn" class="btn danger">Zerar tudo</button>
-        </div>
+        <div>Transações do Mês</div>
       </div>
       <div class="content">
         <table>
@@ -378,9 +366,7 @@
     const STORAGE_KEY = 'financeData.v1';
     const state = {
       txns: [], // {id, type: 'income'|'expense', amount, date: 'YYYY-MM-DD', category, description, seriesId?, seriesIndex?, seriesCount?}
-      selectedYM: ymOf(new Date()),
-      search: '',
-      filterType: ''
+      selectedYM: ymOf(new Date())
     };
 
     // Load
@@ -402,9 +388,6 @@
     const tbody = $('#txnTbody');
     const emptyState = $('#emptyState');
 
-    const searchInput = $('#searchInput');
-    const typeFilter = $('#typeFilter');
-
     const dialog = $('#txnDialog');
     const form = $('#txnForm');
     const dialogTitle = $('#dialogTitle');
@@ -418,19 +401,27 @@
     const descEl = $('#description');
 
     // Events
-    $('#prevMonthBtn').addEventListener('click', () => { state.selectedYM = addMonthsYM(state.selectedYM, -1); render(); });
-    $('#nextMonthBtn').addEventListener('click', () => { state.selectedYM = addMonthsYM(state.selectedYM, 1); render(); });
-    $('#todayBtn').addEventListener('click', () => { state.selectedYM = ymOf(new Date()); render(); });
+    $('#prevMonthBtn').addEventListener('click', () => { 
+      state.selectedYM = addMonthsYM(state.selectedYM, -1); 
+      checkAutoCleanup();
+      render(); 
+    });
+    $('#nextMonthBtn').addEventListener('click', () => { 
+      state.selectedYM = addMonthsYM(state.selectedYM, 1); 
+      checkAutoCleanup();
+      render(); 
+    });
+    $('#todayBtn').addEventListener('click', () => { 
+      state.selectedYM = ymOf(new Date()); 
+      checkAutoCleanup();
+      render(); 
+    });
     $('#newTxnBtn').addEventListener('click', () => openNewDialog());
 
-    searchInput.addEventListener('input', e => { state.search = e.target.value.toLowerCase(); renderTable(); });
-    typeFilter.addEventListener('change', e => { state.filterType = e.target.value; renderTable(); });
-
-    $('#exportBtn').addEventListener('click', exportData);
-    $('#importFile').addEventListener('change', importData);
-    $('#clearBtn').addEventListener('click', () => {
-      if (confirm('Tem certeza que deseja apagar TODOS os dados? Esta ação não pode ser desfeita.')) {
-        state.txns = []; persist(); render();
+    // Fechar modal clicando fora
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) {
+        dialog.close();
       }
     });
 
@@ -462,6 +453,23 @@
     }
     function firstDayOfYM(ym){ const [y,m] = ym.split('-').map(Number); return new Date(y, m-1, 1); }
     function lastDayOfYM(ym){ const [y,m] = ym.split('-').map(Number); return new Date(y, m, 0); }
+
+    // Limpeza automática de dados antigos (manter apenas últimos 12 meses)
+    function checkAutoCleanup(){
+      const currentDate = new Date();
+      const cutoffDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 12, 1);
+      
+      const initialCount = state.txns.length;
+      state.txns = state.txns.filter(txn => {
+        const txnDate = new Date(txn.date);
+        return txnDate >= cutoffDate;
+      });
+      
+      if (state.txns.length !== initialCount) {
+        persist();
+        console.log(`Limpeza automática: ${initialCount - state.txns.length} transações antigas removidas`);
+      }
+    }
 
     function openNewDialog(){
       dialogTitle.textContent = 'Nova transação';
@@ -535,39 +543,6 @@
       return new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
     }
 
-    function exportData(){
-      const data = JSON.stringify({ txns: state.txns }, null, 2);
-      const blob = new Blob([data], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'controle-financeiro.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function importData(e){
-      const file = e.target.files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const parsed = JSON.parse(reader.result);
-          if (parsed && Array.isArray(parsed.txns)){
-            if (confirm('Substituir os dados atuais pelos dados importados?')){
-              state.txns = parsed.txns;
-              persist(); render();
-            }
-          } else alert('Arquivo inválido.');
-        } catch(err){ alert('Falha ao importar: ' + err.message); }
-      };
-      reader.readAsText(file);
-      // reset input to allow re-import
-      e.target.value = '';
-    }
-
     function removeTxn(id){
       const t = state.txns.find(x=>x.id===id);
       if (!t) return;
@@ -612,19 +587,11 @@
     function filteredTxns(){
       const ym = state.selectedYM;
       const [y,m] = ym.split('-').map(Number);
-      const search = state.search;
-      const typeFilter = state.filterType;
       return state.txns
         .filter(t => {
           const d = new Date(t.date);
           const inMonth = d.getFullYear() === y && (d.getMonth()+1) === m;
-          if (!inMonth) return false;
-          if (typeFilter && t.type !== typeFilter) return false;
-          if (search){
-            const hay = ((t.description||'') + ' ' + (t.category||'')).toLowerCase();
-            if (!hay.includes(search)) return false;
-          }
-          return true;
+          return inMonth;
         })
         .sort((a,b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
     }
@@ -671,6 +638,7 @@
     }
 
     // Kickoff
+    checkAutoCleanup(); // Executar limpeza automática na inicialização
     render();
   })();
   </script>
