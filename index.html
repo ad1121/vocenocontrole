@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
   <title>Controle Financeiro — Local</title>
   <meta name="color-scheme" content="light dark">
   
@@ -202,6 +202,41 @@
       th, td {
         padding: 4px 2px;
         font-size: 10px;
+      }
+      
+      /* Modal ainda mais otimizado para telas pequenas */
+      dialog {
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+      }
+      
+      .modal-head {
+        padding: 12px 16px;
+        font-size: 16px;
+      }
+      
+      .modal-body {
+        padding: 12px 16px;
+        gap: 12px;
+      }
+      
+      .modal-actions {
+        padding: 12px 16px;
+        gap: 8px;
+      }
+      
+      .modal-body input,
+      .modal-body select {
+        padding: 16px 12px;
+        font-size: 16px;
+      }
+      
+      .btn {
+        padding: 16px 20px;
+        font-size: 16px;
       }
     }
 
@@ -423,6 +458,81 @@
     .small{font-size:12px; color:var(--muted)}
     .series{font-size:12px; color:var(--muted)}
     .link{background:none; border:none; padding:0; color:var(--accent-2); cursor:pointer}
+    
+    /* Dropdown menu para ações */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-btn {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .dropdown-btn:hover {
+      background: rgba(255,255,255,.06);
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-width: 100px;
+      box-shadow: var(--shadow);
+      z-index: 1000;
+      margin-top: 2px;
+    }
+    
+    .dropdown-content.show {
+      display: block;
+    }
+    
+    .dropdown-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text);
+      width: 100%;
+      text-align: left;
+      font-size: 12px;
+      border-radius: 0;
+    }
+    
+    .dropdown-item:hover {
+      background: rgba(255,255,255,.06);
+    }
+    
+    .dropdown-item:first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    
+    .dropdown-item:last-child {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+    
+    .dropdown-item.danger {
+      color: var(--red);
+    }
+    
+    .dropdown-item.danger:hover {
+      background: rgba(255,107,107,.1);
+    }
   </style>
 </head>
 <body>
@@ -617,6 +727,15 @@
       }
     });
 
+    // Fechar dropdowns ao clicar fora
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown-content.show').forEach(dropdown => {
+          dropdown.classList.remove('show');
+        });
+      }
+    });
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       handleSave();
@@ -805,17 +924,47 @@
         amt.textContent = fmt.format(t.amount);
         amt.classList.add('amount', t.type === 'income' ? 'income' : 'expense');
 
-        const actions = document.createElement('div');
+        // Criar dropdown de ações
+        const actionsContainer = tr.querySelector('.actions');
+        const dropdown = document.createElement('div');
+        dropdown.className = 'dropdown';
+        
+        const dropdownBtn = document.createElement('button');
+        dropdownBtn.className = 'dropdown-btn';
+        dropdownBtn.innerHTML = '⋮';
+        dropdownBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Fechar outros dropdowns
+          document.querySelectorAll('.dropdown-content.show').forEach(d => {
+            if (d !== dropdownContent) d.classList.remove('show');
+          });
+          dropdownContent.classList.toggle('show');
+        });
+        
+        const dropdownContent = document.createElement('div');
+        dropdownContent.className = 'dropdown-content';
+        
         const editBtn = document.createElement('button');
-        editBtn.className = 'chip ghost';
-        editBtn.textContent = 'Editar';
-        editBtn.addEventListener('click', () => openEditDialog(t));
-        const delBtn = document.createElement('button');
-        delBtn.className = 'chip ghost';
-        delBtn.textContent = 'Excluir';
-        delBtn.addEventListener('click', () => removeTxn(t.id));
-        actions.append(editBtn, delBtn);
-        tr.querySelector('.actions').append(actions);
+        editBtn.className = 'dropdown-item';
+        editBtn.textContent = '✏️ Editar';
+        editBtn.addEventListener('click', () => {
+          dropdownContent.classList.remove('show');
+          openEditDialog(t);
+        });
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'dropdown-item danger';
+        deleteBtn.textContent = '🗑️ Excluir';
+        deleteBtn.addEventListener('click', () => {
+          dropdownContent.classList.remove('show');
+          removeTxn(t.id);
+        });
+        
+        dropdownContent.appendChild(editBtn);
+        dropdownContent.appendChild(deleteBtn);
+        dropdown.appendChild(dropdownBtn);
+        dropdown.appendChild(dropdownContent);
+        actionsContainer.appendChild(dropdown);
 
         tbody.appendChild(tr);
       }
