@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Controle Financeiro — Local</title>
   <meta name="color-scheme" content="light dark">
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#4dabf7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Controle Financeiro">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Controle Financeiro">
+  <meta name="msapplication-TileColor" content="#4dabf7">
+  <meta name="description" content="Controle suas finanças de forma simples e offline">
+  
+  <!-- Manifest -->
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ29udHJvbGUgRmluYW5jZWlybyIsInNob3J0X25hbWUiOiJGaW5hbsOnYXMiLCJkZXNjcmlwdGlvbiI6IkNvbnRyb2xlIHN1YXMgZmluYW7Dp2FzIGRlIGZvcm1hIHNpbXBsZXMgZSBvZmZsaW5lIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwYjBmMTQiLCJ0aGVtZV9jb2xvciI6IiM0ZGFiZjciLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRJNElpQm9aV2xuYUhROUlqRXlPQ0lnZG1sbGQwSnZlRDBpTUNBd0lERXlPQ0F4TWpnaUlIaHRiRzV6UFNKB2RIUndPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1EQXdMMk4yWnlJK1BHTnBjbU5zWlNCamVEMGlOalFpSUdONVBTSTJOQ0lnY2owaU5EZ2lJR1pwYkd3OUlpTTBaR0ZpWmpjaVBqeHZjR0YwYVhSNUlHWnBiR3c5SWlNd05qRXlNV1lpUGp3dmIzQmhkR2wwZVQ0OEwyTnBjbU5zWlQ0OEwzTjJaejQ9IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwiLCJzaXplcyI6IjEyOHgxMjgifV19">
+  
   <style>
     :root{
       --bg: #0b0f14;
@@ -26,54 +40,114 @@
       margin:0;
       font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
       background: 
-        radial-gradient(circle at 20% 50%, rgba(77,171,247,.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(130,207,255,.12) 0%, transparent 50%),
-        radial-gradient(circle at 40% 70%, rgba(46,204,113,.08) 0%, transparent 50%),
         radial-gradient(1200px 800px at 10% -10%, #152135 0%, transparent 50%),
         radial-gradient(1000px 800px at 110% 10%, #132034 0%, transparent 45%),
         var(--bg);
-      background-size: 400px 400px, 600px 600px, 500px 500px, 1200px 800px, 1000px 800px;
-      animation: backgroundMove 20s ease-in-out infinite;
       color:var(--text);
       line-height:1.45;
       position: relative;
-      overflow-x: hidden;
     }
-    
-    @keyframes backgroundMove {
-      0%, 100% {
-        background-position: 0% 0%, 100% 0%, 0% 100%, 10% -10%, 110% 10%;
+
+    /* Media query para detectar dispositivos móveis */
+    @media (hover: none) and (pointer: coarse) {
+      body {
+        /* Fundo estático para mobile */
+        background: var(--bg);
+        background-image: 
+          radial-gradient(circle at 20% 50%, rgba(77,171,247,.08) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(130,207,255,.06) 0%, transparent 50%);
       }
-      25% {
-        background-position: 100% 0%, 0% 100%, 100% 0%, 20% 0%, 90% 20%;
+      
+      /* Remover animações em mobile */
+      *, *::before, *::after {
+        animation-duration: 0s !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.1s !important;
       }
-      50% {
-        background-position: 100% 100%, 0% 0%, 100% 100%, 0% 10%, 100% 0%;
+      
+      /* Otimizações para mobile */
+      .container {
+        padding: 12px;
+        gap: 12px;
       }
-      75% {
-        background-position: 0% 100%, 100% 0%, 0% 0%, -10% 20%, 120% -10%;
+      
+      .card {
+        border-radius: 12px;
+      }
+      
+      .new-transaction-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+      
+      .stats {
+        gap: 8px;
+      }
+      
+      .pill {
+        padding: 8px 10px;
+      }
+      
+      .pill .value {
+        font-size: 18px;
+      }
+      
+      /* Melhorar toque em mobile */
+      .chip, .btn {
+        min-height: 44px;
+        min-width: 44px;
       }
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        linear-gradient(45deg, transparent 48%, rgba(77,171,247,.02) 50%, transparent 52%),
-        linear-gradient(-45deg, transparent 48%, rgba(130,207,255,.015) 50%, transparent 52%);
-      background-size: 60px 60px, 80px 80px;
-      animation: patternMove 30s linear infinite;
-      pointer-events: none;
-      z-index: -1;
-    }
+    /* Animações apenas para desktop */
+    @media (hover: hover) and (pointer: fine) {
+      body {
+        background: 
+          radial-gradient(circle at 20% 50%, rgba(77,171,247,.15) 0%, transparent 50%),
+          radial-gradient(circle at 80% 20%, rgba(130,207,255,.12) 0%, transparent 50%),
+          radial-gradient(circle at 40% 70%, rgba(46,204,113,.08) 0%, transparent 50%),
+          radial-gradient(1200px 800px at 10% -10%, #152135 0%, transparent 50%),
+          radial-gradient(1000px 800px at 110% 10%, #132034 0%, transparent 45%),
+          var(--bg);
+        background-size: 400px 400px, 600px 600px, 500px 500px, 1200px 800px, 1000px 800px;
+        animation: backgroundMove 20s ease-in-out infinite;
+      }
 
-    @keyframes patternMove {
-      0% { background-position: 0 0, 0 0; }
-      100% { background-position: 60px 60px, -80px 80px; }
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+          linear-gradient(45deg, transparent 48%, rgba(77,171,247,.02) 50%, transparent 52%),
+          linear-gradient(-45deg, transparent 48%, rgba(130,207,255,.015) 50%, transparent 52%);
+        background-size: 60px 60px, 80px 80px;
+        animation: patternMove 30s linear infinite;
+        pointer-events: none;
+        z-index: -1;
+      }
+      
+      @keyframes backgroundMove {
+        0%, 100% {
+          background-position: 0% 0%, 100% 0%, 0% 100%, 10% -10%, 110% 10%;
+        }
+        25% {
+          background-position: 100% 0%, 0% 100%, 100% 0%, 20% 0%, 90% 20%;
+        }
+        50% {
+          background-position: 100% 100%, 0% 0%, 100% 100%, 0% 10%, 100% 0%;
+        }
+        75% {
+          background-position: 0% 100%, 100% 0%, 0% 0%, -10% 20%, 120% -10%;
+        }
+      }
+
+      @keyframes patternMove {
+        0% { background-position: 0 0, 0 0; }
+        100% { background-position: 60px 60px, -80px 80px; }
+      }
     }
 
     .container{
@@ -639,6 +713,94 @@
 
     // Kickoff
     checkAutoCleanup(); // Executar limpeza automática na inicialização
+    
+    // PWA - Prompt de instalação
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Mostrar prompt após 3 segundos
+      setTimeout(() => {
+        if (deferredPrompt && !window.matchMedia('(display-mode: standalone)').matches) {
+          showInstallPrompt();
+        }
+      }, 3000);
+    });
+
+    function showInstallPrompt() {
+      const installBanner = document.createElement('div');
+      installBanner.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #06121f;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        font-size: 14px;
+        font-weight: 600;
+      `;
+      
+      installBanner.innerHTML = `
+        <div>📱 Instale o app para acesso rápido!</div>
+        <div>
+          <button id="installBtn" style="
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #06121f;
+            padding: 6px 12px;
+            border-radius: 6px;
+            margin-right: 8px;
+            font-weight: 600;
+            cursor: pointer;
+          ">Instalar</button>
+          <button id="dismissBtn" style="
+            background: none;
+            border: none;
+            color: #06121f;
+            padding: 6px;
+            cursor: pointer;
+            font-size: 16px;
+          ">✕</button>
+        </div>
+      `;
+      
+      document.body.appendChild(installBanner);
+      
+      // Ajustar padding do corpo para compensar banner
+      document.body.style.paddingTop = '60px';
+      
+      installBanner.querySelector('#installBtn').addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          removeBanner();
+        }
+      });
+      
+      installBanner.querySelector('#dismissBtn').addEventListener('click', removeBanner);
+      
+      function removeBanner() {
+        installBanner.remove();
+        document.body.style.paddingTop = '0';
+      }
+      
+      // Auto remover após 10 segundos
+      setTimeout(removeBanner, 10000);
+    }
+
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('data:application/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZnVuY3Rpb24oZXZlbnQpIHsKICBzZWxmLnNraXBXYWl0aW5nKCk7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdhY3RpdmF0ZScsIGZ1bmN0aW9uKGV2ZW50KSB7CiAgZXZlbnQud2FpdFVudGlsKHNlbGYuY2xpZW50cy5jbGFpbSgpKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZnVuY3Rpb24oZXZlbnQpIHsKICBldmVudC5yZXNwb25kV2l0aChmZXRjaChldmVudC5yZXF1ZXN0KSk7Cn0pOw==');
+    }
+    
     render();
   })();
   </script>
