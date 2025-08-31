@@ -25,18 +25,65 @@
     body{
       margin:0;
       font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 800px at 10% -10%, #152135 0%, transparent 50%),
-                  radial-gradient(1000px 800px at 110% 10%, #132034 0%, transparent 45%),
-                  var(--bg);
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(77,171,247,.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(130,207,255,.12) 0%, transparent 50%),
+        radial-gradient(circle at 40% 70%, rgba(46,204,113,.08) 0%, transparent 50%),
+        radial-gradient(1200px 800px at 10% -10%, #152135 0%, transparent 50%),
+        radial-gradient(1000px 800px at 110% 10%, #132034 0%, transparent 45%),
+        var(--bg);
+      background-size: 400px 400px, 600px 600px, 500px 500px, 1200px 800px, 1000px 800px;
+      animation: backgroundMove 20s ease-in-out infinite;
       color:var(--text);
       line-height:1.45;
+      position: relative;
+      overflow-x: hidden;
     }
+    
+    @keyframes backgroundMove {
+      0%, 100% {
+        background-position: 0% 0%, 100% 0%, 0% 100%, 10% -10%, 110% 10%;
+      }
+      25% {
+        background-position: 100% 0%, 0% 100%, 100% 0%, 20% 0%, 90% 20%;
+      }
+      50% {
+        background-position: 100% 100%, 0% 0%, 100% 100%, 0% 10%, 100% 0%;
+      }
+      75% {
+        background-position: 0% 100%, 100% 0%, 0% 0%, -10% 20%, 120% -10%;
+      }
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(45deg, transparent 48%, rgba(77,171,247,.02) 50%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(130,207,255,.015) 50%, transparent 52%);
+      background-size: 60px 60px, 80px 80px;
+      animation: patternMove 30s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes patternMove {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 60px 60px, -80px 80px; }
+    }
+
     .container{
       max-width:1100px;
       margin-inline:auto;
       padding:16px;
       display:grid;
       gap:16px;
+      position: relative;
+      z-index: 1;
     }
     header.appbar{
       position:sticky;
@@ -65,6 +112,7 @@
     .chip{
       border:none; background:transparent; color:var(--text);
       padding:8px 10px; border-radius:999px; cursor:pointer; font-weight:600;
+      transition: all 0.2s ease;
     }
     .chip:hover{background:rgba(255,255,255,.06)}
     .chip.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#06121f}
@@ -82,6 +130,7 @@
       border:1px solid var(--border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
     }
     .card .head{padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between}
     .card .content{padding:14px 16px}
@@ -89,14 +138,48 @@
     .pill{
       background:rgba(255,255,255,.03); border:1px solid var(--border);
       padding:10px 12px; border-radius:var(--radius-sm);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
     }
     .pill h4{margin:0 0 6px 0; font-size:12px; color:var(--muted); font-weight:600}
     .pill .value{font-size:20px; font-weight:800}
     .value.positive{color:var(--green)} .value.negative{color:var(--red)}
     .toolbar{display:flex; gap:8px; flex-wrap:wrap}
+    
+    .new-transaction-section {
+      display: flex;
+      justify-content: center;
+      margin: 16px 0;
+    }
+    
+    .new-transaction-btn {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border: none;
+      color: #06121f;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(77,171,247,.3);
+    }
+    
+    .new-transaction-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(77,171,247,.4);
+    }
+    
     input, select, textarea{
       width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border);
       background:rgba(255,255,255,.02); color:var(--text); outline:none;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
     }
     input[type="date"], input[type="number"]{appearance:none}
     label{font-size:12px; color:var(--muted); display:block; margin-bottom:6px; font-weight:600}
@@ -105,9 +188,16 @@
     .btn{
       appearance:none; border:none; padding:10px 14px; border-radius:12px; font-weight:700; cursor:pointer;
       background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#06121f;
+      transition: all 0.2s ease;
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(77,171,247,.3);
     }
     .btn.secondary{background:rgba(255,255,255,.03); color:var(--text); border:1px solid var(--border)}
+    .btn.secondary:hover{background:rgba(255,255,255,.06)}
     .btn.danger{background:linear-gradient(135deg,#ff8787,#ff6b6b); color:#2b0b0b}
+    .btn.danger:hover{box-shadow: 0 4px 15px rgba(255,107,107,.3);}
     .btn.block{width:100%}
     table{width:100%; border-collapse:collapse}
     th, td{padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; font-size:14px}
@@ -123,6 +213,7 @@
       background:linear-gradient(180deg, rgba(16,22,30,.98), rgba(16,22,30,.96));
       color:var(--text);
       box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
     }
     dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter: blur(2px)}
     .modal-head{display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--border)}
@@ -146,9 +237,7 @@
         <button class="chip ghost nowrap" id="nextMonthBtn" title="Próximo mês">▶</button>
         <button class="chip ghost nowrap" id="todayBtn" title="Voltar para o mês atual">Hoje</button>
       </div>
-      <div class="toolbar">
-        <button id="newTxnBtn" class="chip primary nowrap">+ Nova transação</button>
-      </div>
+      <div></div>
     </div>
   </header>
 
@@ -161,11 +250,11 @@
       <div class="content">
         <div class="stats">
           <div class="pill">
-            <h4>Entradas</h4>
+            <h4>Receitas</h4>
             <div class="value positive" id="incomeTotal">R$ 0,00</div>
           </div>
           <div class="pill">
-            <h4>Saídas</h4>
+            <h4>Despesas</h4>
             <div class="value negative" id="expenseTotal">R$ 0,00</div>
           </div>
           <div class="pill">
@@ -176,6 +265,10 @@
       </div>
     </section>
 
+    <div class="new-transaction-section">
+      <button id="newTxnBtn" class="new-transaction-btn">+ Nova transação</button>
+    </div>
+
     <section class="card">
       <div class="head">
         <div>Transações</div>
@@ -183,8 +276,8 @@
           <input id="searchInput" class="search" placeholder="Buscar por descrição ou categoria…" />
           <select id="typeFilter">
             <option value="">Todas</option>
-            <option value="income">Entradas</option>
-            <option value="expense">Saídas</option>
+            <option value="income">Receitas</option>
+            <option value="expense">Despesas</option>
           </select>
           <button id="exportBtn" class="btn secondary">Exportar</button>
           <label for="importFile" class="btn secondary" style="cursor:pointer">Importar</label>
@@ -224,8 +317,8 @@
           <div>
             <label for="type">Tipo</label>
             <select id="type" required>
-              <option value="income">Entrada</option>
-              <option value="expense">Saída</option>
+              <option value="income">Receita</option>
+              <option value="expense">Despesa</option>
             </select>
           </div>
           <div>
@@ -551,7 +644,7 @@
         tr.querySelector('.date').textContent = dayFmt.format(new Date(t.date));
         tr.querySelector('.desc').textContent = t.description || '—';
         tr.querySelector('.cat').innerHTML = t.category ? `<span class="tag">${escapeHtml(t.category)}</span>` : '—';
-        tr.querySelector('.type').textContent = t.type === 'income' ? 'Entrada' : 'Saída';
+        tr.querySelector('.type').textContent = t.type === 'income' ? 'Receita' : 'Despesa';
         tr.querySelector('.install').textContent = t.seriesId ? `${t.seriesIndex}/${t.seriesCount}` : '—';
         const amt = tr.querySelector('.amt');
         amt.textContent = fmt.format(t.amount);
