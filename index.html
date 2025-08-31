@@ -102,6 +102,41 @@
         min-width: 44px;
       }
       
+      /* Otimizar modal para mobile */
+      dialog {
+        width: 95vw;
+        max-width: none;
+        border-radius: 16px;
+        max-height: 85vh;
+      }
+      
+      .modal-head {
+        padding: 16px;
+        font-size: 18px;
+      }
+      
+      .modal-body {
+        padding: 16px;
+        gap: 16px;
+      }
+      
+      .modal-actions {
+        padding: 16px;
+        gap: 12px;
+      }
+      
+      .modal-body input,
+      .modal-body select {
+        padding: 12px;
+        font-size: 16px; /* Evita zoom no iOS */
+        border-radius: 8px;
+      }
+      
+      .modal-body label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      
       /* Tabela responsiva */
       table {
         font-size: 12px;
@@ -375,6 +410,8 @@
       color:var(--text);
       box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
+      max-height: 90vh;
+      overflow-y: auto;
     }
     dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter: blur(2px)}
     .modal-head{display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--border)}
@@ -487,12 +524,8 @@
         </div>
         <div class="row">
           <div>
-            <label for="category">Categoria</label>
-            <input id="category" placeholder="Ex.: Salário, Aluguel, Mercado…" />
-          </div>
-          <div>
             <label for="description">Descrição</label>
-            <input id="description" placeholder="Nota ou identificação" />
+            <input id="description" placeholder="Ex.: Salário, Aluguel, Mercado, Compras..." />
           </div>
         </div>
         <div class="small">Dica: use <strong>Parcelas</strong> para repetir o mesmo valor por vários meses (1 por mês). Cada parcela fica vinculada como uma série.</div>
@@ -508,7 +541,6 @@
     <tr>
       <td class="date"></td>
       <td class="desc"></td>
-      <td class="cat"></td>
       <td class="type"></td>
       <td class="install"></td>
       <td class="amt"></td>
@@ -558,7 +590,6 @@
     const amountEl = $('#amount');
     const dateEl = $('#date');
     const installmentsEl = $('#installments');
-    const catEl = $('#category');
     const descEl = $('#description');
 
     // Events
@@ -641,7 +672,6 @@
       const d = new Date();
       dateEl.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
       installmentsEl.value = 1;
-      catEl.value = '';
       descEl.value = '';
       dialog.showModal();
     }
@@ -654,7 +684,6 @@
       amountEl.value = txn.amount;
       dateEl.value = txn.date;
       installmentsEl.value = txn.seriesCount || 1;
-      catEl.value = txn.category || '';
       descEl.value = txn.description || '';
       dialog.showModal();
     }
@@ -663,7 +692,6 @@
       const type = typeEl.value;
       const amount = Number(amountEl.value);
       const date = dateEl.value;
-      const category = catEl.value.trim();
       const description = descEl.value.trim();
       const installments = Math.max(1, parseInt(installmentsEl.value || '1', 10));
 
@@ -675,12 +703,12 @@
         if (idx >= 0){
           const old = state.txns[idx];
           // Se fazia parte de série e mudou qtd parcelas, aplicamos somente nesta transação
-          state.txns[idx] = { ...old, type, amount, date, category, description };
+          state.txns[idx] = { ...old, type, amount, date, description };
         }
       } else {
         if (installments === 1){
           state.txns.push({
-            id: uid(), type, amount, date, category, description
+            id: uid(), type, amount, date, description
           });
         } else {
           const seriesId = uid();
@@ -689,7 +717,7 @@
             const di = addMonths(d0, i);
             const dt = `${di.getFullYear()}-${pad(di.getMonth()+1)}-${pad(Math.min(d0.getDate(), daysInMonth(di)))}`;
             state.txns.push({
-              id: uid(), type, amount, date: dt, category, description,
+              id: uid(), type, amount, date: dt, description,
               seriesId, seriesIndex: i+1, seriesCount: installments
             });
           }
@@ -771,7 +799,6 @@
         const tr = tpl.content.firstElementChild.cloneNode(true);
         tr.querySelector('.date').textContent = dayFmt.format(new Date(t.date));
         tr.querySelector('.desc').textContent = t.description || '—';
-        tr.querySelector('.cat').innerHTML = t.category ? `<span class="tag">${escapeHtml(t.category)}</span>` : '—';
         tr.querySelector('.type').textContent = t.type === 'income' ? 'Receita' : 'Despesa';
         tr.querySelector('.install').textContent = t.seriesId ? `${t.seriesIndex}/${t.seriesCount}` : '—';
         const amt = tr.querySelector('.amt');
