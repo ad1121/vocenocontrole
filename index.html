@@ -35,7 +35,7 @@
       --radius-sm: 12px;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%;overflow-x:hidden;}
     body{
       margin:0;
       font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";
@@ -46,6 +46,8 @@
       color:var(--text);
       line-height:1.45;
       position: relative;
+      width: 100%;
+      min-width: 320px;
     }
 
     /* Media query para detectar dispositivos móveis */
@@ -69,10 +71,15 @@
       .container {
         padding: 12px;
         gap: 12px;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
       }
       
       .card {
         border-radius: 12px;
+        width: 100%;
+        box-sizing: border-box;
       }
       
       .new-transaction-btn {
@@ -143,6 +150,7 @@
         overflow-x: auto;
         display: block;
         white-space: nowrap;
+        width: 100%;
       }
       
       thead, tbody {
@@ -161,6 +169,38 @@
       .amount {
         font-size: 12px !important;
         word-break: break-all;
+      }
+    }
+    
+    /* iOS específico - corrigir problema de centralização */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        width: 100vw;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 12px;
+        box-sizing: border-box;
+      }
+      
+      header.appbar {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      
+      header .row {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 10px 16px;
+        box-sizing: border-box;
       }
     }
     
@@ -299,6 +339,8 @@
       gap:16px;
       position: relative;
       z-index: 1;
+      width: 100%;
+      box-sizing: border-box;
     }
     header.appbar{
       position:sticky;
@@ -307,11 +349,14 @@
       backdrop-filter:saturate(140%) blur(8px);
       background:linear-gradient(180deg, rgba(16,22,30,.85), rgba(16,22,30,.65));
       border-bottom:1px solid var(--border);
+      width: 100%;
     }
     header .row{
       display:flex; align-items:center; justify-content:space-between;
       gap:8px; padding:10px 16px;
       max-width:1100px; margin-inline:auto;
+      width: 100%;
+      box-sizing: border-box;
     }
     .brand{
       display:flex; align-items:center; gap:10px; font-weight:700;
@@ -346,6 +391,8 @@
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
+      width: 100%;
+      box-sizing: border-box;
     }
     .card .head{padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between}
     .card .content{padding:14px 16px}
@@ -375,6 +422,7 @@
       display: flex;
       justify-content: center;
       margin: 16px 0;
+      width: 100%;
     }
     
     .new-transaction-btn {
@@ -399,6 +447,7 @@
       width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--border);
       background:rgba(255,255,255,.02); color:var(--text); outline:none;
       transition: border-color 0.2s ease;
+      box-sizing: border-box;
     }
     input:focus, select:focus, textarea:focus {
       border-color: var(--accent);
@@ -459,79 +508,21 @@
     .series{font-size:12px; color:var(--muted)}
     .link{background:none; border:none; padding:0; color:var(--accent-2); cursor:pointer}
     
-    /* Dropdown menu para ações */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .dropdown-btn {
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 6px 10px;
+    /* Botão de exclusão simplificado */
+    .delete-btn {
+      background: rgba(255,107,107,.1);
+      border: 1px solid rgba(255,107,107,.3);
+      color: var(--red);
+      padding: 4px 8px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      transition: all 0.2s ease;
     }
     
-    .dropdown-btn:hover {
-      background: rgba(255,255,255,.06);
-    }
-    
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: 100%;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      min-width: 100px;
-      box-shadow: var(--shadow);
-      z-index: 1000;
-      margin-top: 2px;
-    }
-    
-    .dropdown-content.show {
-      display: block;
-    }
-    
-    .dropdown-item {
-      padding: 8px 12px;
-      cursor: pointer;
-      border: none;
-      background: none;
-      color: var(--text);
-      width: 100%;
-      text-align: left;
-      font-size: 12px;
-      border-radius: 0;
-    }
-    
-    .dropdown-item:hover {
-      background: rgba(255,255,255,.06);
-    }
-    
-    .dropdown-item:first-child {
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-    
-    .dropdown-item:last-child {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-    }
-    
-    .dropdown-item.danger {
-      color: var(--red);
-    }
-    
-    .dropdown-item.danger:hover {
-      background: rgba(255,107,107,.1);
+    .delete-btn:hover {
+      background: rgba(255,107,107,.2);
+      border-color: rgba(255,107,107,.5);
     }
   </style>
 </head>
@@ -587,7 +578,6 @@
             <tr>
               <th>Data</th>
               <th>Descrição</th>
-              <th>Categoria</th>
               <th>Tipo</th>
               <th>Parcela</th>
               <th>Valor</th>
@@ -727,15 +717,6 @@
       }
     });
 
-    // Fechar dropdowns ao clicar fora
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown-content.show').forEach(dropdown => {
-          dropdown.classList.remove('show');
-        });
-      }
-    });
-
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       handleSave();
@@ -795,18 +776,6 @@
       dialog.showModal();
     }
 
-    function openEditDialog(txn){
-      dialogTitle.textContent = 'Editar transação';
-      form.dataset.mode = 'edit';
-      form.dataset.id = txn.id;
-      typeEl.value = txn.type;
-      amountEl.value = txn.amount;
-      dateEl.value = txn.date;
-      installmentsEl.value = txn.seriesCount || 1;
-      descEl.value = txn.description || '';
-      dialog.showModal();
-    }
-
     function handleSave(){
       const type = typeEl.value;
       const amount = Number(amountEl.value);
@@ -816,30 +785,20 @@
 
       if (!date || isNaN(amount)) return;
 
-      if (form.dataset.mode === 'edit'){
-        const id = form.dataset.id;
-        const idx = state.txns.findIndex(t => t.id === id);
-        if (idx >= 0){
-          const old = state.txns[idx];
-          // Se fazia parte de série e mudou qtd parcelas, aplicamos somente nesta transação
-          state.txns[idx] = { ...old, type, amount, date, description };
-        }
+      if (installments === 1){
+        state.txns.push({
+          id: uid(), type, amount, date, description
+        });
       } else {
-        if (installments === 1){
+        const seriesId = uid();
+        const d0 = new Date(date);
+        for (let i=0;i<installments;i++){
+          const di = addMonths(d0, i);
+          const dt = `${di.getFullYear()}-${pad(di.getMonth()+1)}-${pad(Math.min(d0.getDate(), daysInMonth(di)))}`;
           state.txns.push({
-            id: uid(), type, amount, date, description
+            id: uid(), type, amount, date: dt, description,
+            seriesId, seriesIndex: i+1, seriesCount: installments
           });
-        } else {
-          const seriesId = uid();
-          const d0 = new Date(date);
-          for (let i=0;i<installments;i++){
-            const di = addMonths(d0, i);
-            const dt = `${di.getFullYear()}-${pad(di.getMonth()+1)}-${pad(Math.min(d0.getDate(), daysInMonth(di)))}`;
-            state.txns.push({
-              id: uid(), type, amount, date: dt, description,
-              seriesId, seriesIndex: i+1, seriesCount: installments
-            });
-          }
         }
       }
       persist();
@@ -924,48 +883,16 @@
         amt.textContent = fmt.format(t.amount);
         amt.classList.add('amount', t.type === 'income' ? 'income' : 'expense');
 
-        // Criar dropdown de ações
+        // Criar botão de exclusão simplificado
         const actionsContainer = tr.querySelector('.actions');
-        const dropdown = document.createElement('div');
-        dropdown.className = 'dropdown';
-        
-        const dropdownBtn = document.createElement('button');
-        dropdownBtn.className = 'dropdown-btn';
-        dropdownBtn.innerHTML = '⋮';
-        dropdownBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          // Fechar outros dropdowns
-          document.querySelectorAll('.dropdown-content.show').forEach(d => {
-            if (d !== dropdownContent) d.classList.remove('show');
-          });
-          dropdownContent.classList.toggle('show');
-        });
-        
-        const dropdownContent = document.createElement('div');
-        dropdownContent.className = 'dropdown-content';
-        
-        const editBtn = document.createElement('button');
-        editBtn.className = 'dropdown-item';
-        editBtn.textContent = '✏️ Editar';
-        editBtn.addEventListener('click', () => {
-          dropdownContent.classList.remove('show');
-          openEditDialog(t);
-        });
-        
         const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'dropdown-item danger';
-        deleteBtn.textContent = '🗑️ Excluir';
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '🗑️ Excluir';
         deleteBtn.addEventListener('click', () => {
-          dropdownContent.classList.remove('show');
           removeTxn(t.id);
         });
         
-        dropdownContent.appendChild(editBtn);
-        dropdownContent.appendChild(deleteBtn);
-        dropdown.appendChild(dropdownBtn);
-        dropdown.appendChild(dropdownContent);
-        actionsContainer.appendChild(dropdown);
-
+        actionsContainer.appendChild(deleteBtn);
         tbody.appendChild(tr);
       }
     }
