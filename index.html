@@ -82,20 +82,91 @@
       
       .stats {
         gap: 8px;
+        grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
       }
       
       .pill {
         padding: 8px 10px;
+        text-align: center; /* Centraliza em mobile */
       }
       
       .pill .value {
-        font-size: 18px;
+        font-size: 16px; /* Menor em mobile */
+        word-break: break-all;
+        overflow-wrap: break-word;
       }
       
       /* Melhorar toque em mobile */
       .chip, .btn {
         min-height: 44px;
         min-width: 44px;
+      }
+      
+      /* Tabela responsiva */
+      table {
+        font-size: 12px;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+      
+      thead, tbody {
+        display: table;
+        width: 100%;
+      }
+      
+      th, td {
+        padding: 6px 4px;
+        font-size: 12px;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .amount {
+        font-size: 12px !important;
+        word-break: break-all;
+      }
+    }
+    
+    /* Para telas muito pequenas */
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      
+      .pill .value {
+        font-size: 14px;
+      }
+      
+      .brand {
+        font-size: 14px;
+      }
+      
+      .month-nav {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      
+      .chip {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+      
+      header .row {
+        flex-direction: column;
+        gap: 8px;
+        padding: 8px 12px;
+      }
+      
+      table {
+        font-size: 10px;
+      }
+      
+      th, td {
+        padding: 4px 2px;
+        font-size: 10px;
       }
     }
 
@@ -213,13 +284,20 @@
       background:rgba(255,255,255,.03); border:1px solid var(--border);
       padding:10px 12px; border-radius:var(--radius-sm);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      min-width: 0; /* Permite shrinking */
+      overflow: hidden; /* Previne overflow */
     }
     .pill:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 20px rgba(0,0,0,.3);
     }
     .pill h4{margin:0 0 6px 0; font-size:12px; color:var(--muted); font-weight:600}
-    .pill .value{font-size:20px; font-weight:800}
+    .pill .value{
+      font-size:20px; 
+      font-weight:800;
+      word-break: break-all; /* Quebra números longos */
+      line-height: 1.2;
+    }
     .value.positive{color:var(--green)} .value.negative{color:var(--red)}
     .toolbar{display:flex; gap:8px; flex-wrap:wrap}
     
@@ -273,13 +351,22 @@
     .btn.danger{background:linear-gradient(135deg,#ff8787,#ff6b6b); color:#2b0b0b}
     .btn.danger:hover{box-shadow: 0 4px 15px rgba(255,107,107,.3);}
     .btn.block{width:100%}
-    table{width:100%; border-collapse:collapse}
-    th, td{padding:10px 8px; border-bottom:1px solid var(--border); text-align:left; vertical-align:top; font-size:14px}
+    table{width:100%; border-collapse:collapse; table-layout: fixed;}
+    th, td{
+      padding:10px 8px; 
+      border-bottom:1px solid var(--border); 
+      text-align:left; 
+      vertical-align:top; 
+      font-size:14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     th{color:var(--muted); font-weight:700}
     tr:hover td{background:rgba(255,255,255,.02)}
     .tag{font-size:12px; border:1px solid var(--border); padding:4px 8px; border-radius:999px; color:var(--muted)}
-    .amount.income{color:var(--green); font-weight:800}
-    .amount.expense{color:var(--red); font-weight:800}
+    .amount.income{color:var(--green); font-weight:800; word-break: break-all;}
+    .amount.expense{color:var(--red); font-weight:800; word-break: break-all;}
     .empty{padding:20px; color:var(--muted); text-align:center}
     .footer{padding:16px; text-align:center; color:var(--muted); font-size:12px}
     dialog{
