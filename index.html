@@ -768,7 +768,7 @@
       $('#incomeTotal').textContent = fmt.format(income);
       $('#expenseTotal').textContent = fmt.format(expense);
       const balance = income - expense;
-      const balEl = $('#balanceTotal');
+      const balEl = $('#balanceTotal2');
       balEl.textContent = fmt.format(balance);
       balEl.classList.toggle('positive', balance >= 0);
       balEl.classList.toggle('negative', balance < 0);
