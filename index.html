@@ -170,8 +170,8 @@
       padding:16px 20px; 
       border-bottom:1px solid var(--border); 
       display:flex; align-items:center; justify-content:space-between;
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 700;
     }
     
     .card .content{padding:20px}
@@ -181,12 +181,6 @@
       grid-template-columns:1fr 1fr; 
       gap:16px;
       margin-bottom: 20px;
-    }
-    
-    .balance-section {
-      margin-top: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border);
     }
     
     .pill{
@@ -222,6 +216,7 @@
       border: 2px solid var(--border);
       padding: 20px;
       text-align: center;
+      border-radius: var(--radius-sm);
     }
     
     .balance-pill h4 {
@@ -461,6 +456,10 @@
         padding: 16px 20px;
         font-size: 16px;
       }
+      
+      .card .head {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
@@ -494,12 +493,6 @@
             <div class="value negative" id="expenseTotal">R$ 0,00</div>
           </div>
         </div>
-        <div class="balance-section">
-          <div class="balance-pill">
-            <h4>Saldo do Mês</h4>
-            <div class="value" id="balanceTotal">R$ 0,00</div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -524,6 +517,18 @@
           <tbody id="txnTbody"></tbody>
         </table>
         <div id="emptyState" class="empty" style="display:none">Nenhuma transação neste mês.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="head">
+        <div>Saldo do Mês</div>
+      </div>
+      <div class="content">
+        <div class="balance-pill">
+          <h4>Saldo Final</h4>
+          <div class="value" id="balanceTotal">R$ 0,00</div>
+        </div>
       </div>
     </section>
     
@@ -768,7 +773,7 @@
       $('#incomeTotal').textContent = fmt.format(income);
       $('#expenseTotal').textContent = fmt.format(expense);
       const balance = income - expense;
-      const balEl = $('#balanceTotal2');
+      const balEl = $('#balanceTotal');
       balEl.textContent = fmt.format(balance);
       balEl.classList.toggle('positive', balance >= 0);
       balEl.classList.toggle('negative', balance < 0);
