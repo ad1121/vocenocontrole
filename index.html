@@ -1164,10 +1164,7 @@
             console.log('App foi instalado com sucesso!');
             document.getElementById('install-prompt').style.display = 'none';
         });
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        let userName = localStorage.getItem('userName') || '';
-        let expenseChart;
-
+        
         // Categorias específicas para cada tipo
         const categories = {
             expense: {
