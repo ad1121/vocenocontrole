@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle Financeiro</title>
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNvbnRyb2xlIEZpbmFuY2Vpcm8iLAogICJzaG9ydF9uYW1lIjogIkZpbmFuw6dhcyIsCiAgImRlc2NyaXB0aW9uIjogIkdlcmVuY2llIHN1YXMgZmluYW7Dp2FzIGRlIGZvcm1hIGludGVsaWdlbnRlIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMEQ0QUEiLAogICJ0aGVtZV9jb2xvciI6ICIjMDBENEFBIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiLAogICJjYXRlZ29yaWVzIjogWyJmaW5hbmNlIiwgInByb2R1Y3Rpdml0eSJdLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSXhNakFpSUdobGFXZG9kRDBpTVRJd0lqNDhZMmx5WTJ4bElHTjRQU0kyTUNJZ1kzazlJall3SWlCeVBTSTFNQ0lnWm1sc2JEMGlJekF3UkRSQlFTSXZQanh3WVhSb0lHUTlJazB6TUNBMk1XZ3pNR013TFRFdU5qVXRNUzR6TlMxemJDMHpMall6TFRNek1TNTJNeTB4TGpnM2JEVTNMak15SURJMExqWTBZakUyTGprd0lERXVOVEVnTXpFdU5qZ3RJRFV1TVRVdE1qZ2dNUzQzTlNBeExqa3dJRE11TVRrZ01TNHpNaUEyTlM0NE5pQXlPUzR5TVhvaUlHWnBiR3c5SW1acVptWWlMejQ4TDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiMTIweDEyMCIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owcVlXNTBJSGRwWkhSb1BTSXhPVElpSUdobGFXZG9kRDBpTVRreUlqNDhZMmx5WTJ4bElHTjRQU0k1TmlJZ1kzazlJamt5SWlCeVBTSTRNQ0lnWm1sc2JEMGlJekF3UkRSQlFTSXZQanh3WVhSb0lHUTlJazB6TUNBMk1XZ3pNR013TFRFdU5qVXRNUzR6TlMxemJDMHpMall6TFRNek1TNTJNUzQzTlMxMExqZ3pkRFV1TVRVdE1qZ2dNUzQzTlNBeExqa3dJRE11TVRrZ01TNHpNaUEyTlM0NE5pQXlPUzR5TVZ0eGRHa2VMejQ4TDNOMlp6ND0iLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiCiAgICB9LAogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owcWFIUjBjRG92TDNkM2R5NTNNeTUyTURFaUlIZHBaR1VwT21JQlQzT2lJR2hsYVdkb2REMGlOVEV5SWo0OFkySnlaRFlpUXljeTFrVkNRU0lnWm1sc2JEMGlJekF3UkVSQlFTSGpQanh3WVhSb0lHUTlJazA2VEVSQlhRSXBkRUZCU0lHQlE1aXdvSm1OQlFTSWpOdUVOU0JNUkJhOFJPQXRoQkFNa3J5ZDF6QVplZDFZSTRnVGNNenNXU1QzeVNEM3kyOSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    <meta name="theme-color" content="#00D4AA">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Finanças">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIj48Y2lyY2xlIGN4PSI2MCIgY3k9IjYwIiByPSI1MCIgZmlsbD0iIzAwRDRBQSIvPjxwYXRoIGQ9Ik0zMCA2MWgzMGMwLTEuNjUtMS4zNS1zYy0zLjYzLTMzMS52My0xLjg3bDU3LjMyIDI0LjY0YjE2LjkwIDEuNTEgMzEuNjgtIDUuMTUtMjggMS43NSAxLjkwIDMuMTkgMS4zMiA2NS44NiAyOS4yMVoiIGZpbGw9ImZmZiIvPjwvc3ZnPg==">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTQiIGZpbGw9IiMwMEQ0QUEiLz48dGV4dCB4PSIxNiIgeT0iMjIiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjE4IiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+8J+SsDwvdGV4dD48L3N2Zz4=">
     <style>
         :root {
             --primary-positive: #00D4AA;
@@ -609,8 +619,82 @@
             align-items: center;
         }
 
-        .hidden {
-            display: none !important;
+        .install-prompt {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-positive), #0EA5E9);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-strong);
+            z-index: 999;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .install-prompt-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .install-prompt-text {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .install-prompt h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .install-prompt p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .install-prompt-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .install-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .install-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .install-btn.dismiss {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         /* Animações */
@@ -960,8 +1044,127 @@
         </div>
     </div>
 
+    <!-- Prompt de Instalação -->
+    <div id="install-prompt" class="install-prompt">
+        <div class="install-prompt-content">
+            <div class="install-prompt-text">
+                <h4>📱 Instalar Controle Financeiro</h4>
+                <p>Instale o app para acesso rápido e uso offline!</p>
+            </div>
+            <div class="install-prompt-buttons">
+                <button class="install-btn dismiss" onclick="dismissInstallPrompt()">Depois</button>
+                <button class="install-btn" onclick="installApp()">Instalar</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let userName = localStorage.getItem('userName') || '';
+        let expenseChart;
+        let deferredPrompt; // Para guardar o evento de instalação
+
+        // PWA - Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swContent = `
+                    const CACHE_NAME = 'controle-financeiro-v1';
+                    const urlsToCache = [
+                        '/',
+                        'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js'
+                    ];
+
+                    self.addEventListener('install', event => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                    });
+
+                    self.addEventListener('fetch', event => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swContent], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA - Capturar evento de instalação
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevenir o prompt automático do Chrome
+            e.preventDefault();
+            // Guardar o evento para usar depois
+            deferredPrompt = e;
+            // Mostrar nosso prompt customizado
+            showInstallPrompt();
+        });
+
+        // Mostrar prompt de instalação personalizado
+        function showInstallPrompt() {
+            const installPrompt = document.getElementById('install-prompt');
+            const isInstallPromptDismissed = localStorage.getItem('installPromptDismissed');
+            
+            // Só mostrar se não foi dispensado e se não está instalado
+            if (!isInstallPromptDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
+                setTimeout(() => {
+                    installPrompt.style.display = 'block';
+                }, 3000); // Mostrar após 3 segundos
+            }
+        }
+
+        // Instalar o app
+        async function installApp() {
+            if (deferredPrompt) {
+                // Mostrar o prompt de instalação
+                deferredPrompt.prompt();
+                
+                // Aguardar resposta do usuário
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('Usuário aceitou instalar o app');
+                } else {
+                    console.log('Usuário recusou instalar o app');
+                }
+                
+                // Limpar o prompt
+                deferredPrompt = null;
+            }
+            
+            // Esconder nosso prompt
+            document.getElementById('install-prompt').style.display = 'none';
+        }
+
+        // Dispensar prompt de instalação
+        function dismissInstallPrompt() {
+            document.getElementById('install-prompt').style.display = 'none';
+            localStorage.setItem('installPromptDismissed', 'true');
+            
+            // Mostrar novamente após 7 dias
+            setTimeout(() => {
+                localStorage.removeItem('installPromptDismissed');
+            }, 7 * 24 * 60 * 60 * 1000);
+        }
+
+        // Detectar quando o app é instalado
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('App foi instalado com sucesso!');
+            document.getElementById('install-prompt').style.display = 'none';
+        });
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         let userName = localStorage.getItem('userName') || '';
         let expenseChart;
