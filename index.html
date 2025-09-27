@@ -44,9 +44,9 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.3) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 40% 40%, rgba(0, 212, 170, 0.2) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -357,7 +357,7 @@
             width: 100%;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
-            padding: 15px 0 25px 0;
+            padding: 8px 0 15px 0;
             border-top: 1px solid var(--glass-border);
             z-index: 100;
         }
@@ -374,7 +374,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 12px;
+            padding: 6px 8px;
             cursor: pointer;
             transition: var(--transition);
             color: rgba(255, 255, 255, 0.6);
@@ -395,10 +395,10 @@
             background: linear-gradient(135deg, var(--primary-positive), #0EA5E9);
             color: white;
             border: none;
-            width: 56px;
-            height: 56px;
-            border-radius: 18px;
-            font-size: 28px;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            font-size: 24px;
             cursor: pointer;
             box-shadow: var(--shadow-soft);
             transition: var(--transition);
@@ -412,7 +412,7 @@
 
         .tab-content {
             display: none;
-            padding-bottom: 120px;
+            padding-bottom: 80px;
             min-height: calc(100vh - 80px);
             overflow-y: auto;
         }
@@ -542,7 +542,7 @@
         }
 
         .prediction-card {
-            background: linear-gradient(135deg, var(--primary-neutral), #8B5CF6);
+            background: linear-gradient(135deg, #0EA5E9, #00D4AA);
             color: white;
             margin: 25px;
             padding: 30px;
@@ -647,20 +647,180 @@
             --primary-color: var(--primary-warning);
         }
 
-        /* Responsividade */
-        @media (max-width: 480px) {
-            .stats-grid {
-                gap: 15px;
-                margin: 20px;
+        /* Responsividade para celular */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .username {
+                font-size: 24px;
             }
             
             .balance-card, .expense-tracker, .chart-container {
                 margin: 20px 15px;
-                padding: 25px;
+                padding: 25px 20px;
+            }
+            
+            .balance-amount {
+                font-size: 32px;
+            }
+            
+            .stats-grid {
+                gap: 15px;
+                margin: 20px 15px;
+            }
+            
+            .stat-card {
+                padding: 20px 15px;
+            }
+            
+            .stat-value {
+                font-size: 24px;
             }
             
             .welcome-form {
                 padding: 30px 25px;
+                margin: 0 15px;
+            }
+            
+            .welcome-title {
+                font-size: 32px;
+            }
+            
+            .form-group input, .form-group select {
+                padding: 16px 18px;
+                font-size: 16px;
+            }
+            
+            .btn {
+                padding: 16px;
+                font-size: 16px;
+            }
+            
+            .transaction-item, .account-item {
+                padding: 18px;
+                margin-bottom: 10px;
+            }
+            
+            .transaction-icon, .account-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+            }
+            
+            .nav-items {
+                max-width: 100%;
+                padding: 0 20px;
+            }
+            
+            .add-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 25px;
+            }
+            
+            .chart-container {
+                min-height: 280px;
+            }
+            
+            .chart {
+                height: 220px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .balance-card, .expense-tracker, .chart-container {
+                margin: 15px 10px;
+                padding: 20px 15px;
+            }
+            
+            .balance-amount {
+                font-size: 28px;
+            }
+            
+            .stats-grid {
+                gap: 12px;
+                margin: 15px 10px;
+            }
+            
+            .stat-card {
+                padding: 18px 12px;
+            }
+            
+            .stat-value {
+                font-size: 22px;
+            }
+            
+            .welcome-content {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+            
+            .welcome-form {
+                padding: 25px 20px;
+            }
+            
+            .welcome-title {
+                font-size: 28px;
+            }
+            
+            .welcome-subtitle {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .transaction-item {
+                padding: 15px;
+            }
+            
+            .transaction-details h4 {
+                font-size: 15px;
+            }
+            
+            .transaction-details p {
+                font-size: 12px;
+            }
+            
+            .transaction-amount {
+                font-size: 15px;
+            }
+            
+            .prediction-card {
+                margin: 15px 10px;
+                padding: 25px 20px;
+            }
+        }
+
+        /* Otimizações para touch */
+        @media (hover: none) and (pointer: coarse) {
+            .nav-item, .transaction-item, .account-item, .stat-card {
+                transition: transform 0.2s ease;
+            }
+            
+            .nav-item:active, .transaction-item:active, 
+            .account-item:active, .stat-card:active {
+                transform: translateY(-1px);
+            }
+            
+            .btn:active, .welcome-btn:active, .add-btn:active {
+                transform: translateY(-1px) scale(0.98);
+            }
+            
+            .delete-btn:active {
+                transform: scale(1.05);
             }
         }
     </style>
@@ -739,7 +899,7 @@
                 <form id="transaction-form">
                     <div class="form-group">
                         <label>Tipo</label>
-                        <select id="transaction-type">
+                        <select id="transaction-type" onchange="updateCategoryOptions()">
                             <option value="income">💰 Receita</option>
                             <option value="expense">💸 Despesa</option>
                         </select>
@@ -758,13 +918,7 @@
                     <div class="form-group">
                         <label>Categoria</label>
                         <select id="transaction-category">
-                            <option value="alimentacao">🍽️ Alimentação</option>
-                            <option value="transporte">🚗 Transporte</option>
-                            <option value="saude">🏥 Saúde</option>
-                            <option value="lazer">🎮 Lazer</option>
-                            <option value="educacao">📚 Educação</option>
-                            <option value="moradia">🏠 Moradia</option>
-                            <option value="outros">📦 Outros</option>
+                            <!-- Categorias serão atualizadas dinamicamente -->
                         </select>
                     </div>
 
@@ -791,16 +945,16 @@
         <div class="navigation">
             <div class="nav-items">
                 <div class="nav-item active" onclick="switchTab('reports-tab', this)">
-                    <span style="font-size: 24px;">🏠</span>
-                    <small style="margin-top: 4px; font-weight: 600;">Início</small>
+                    <span style="font-size: 20px;">🏠</span>
+                    <small style="margin-top: 2px; font-weight: 600; font-size: 11px;">Início</small>
                 </div>
                 <div class="nav-item" onclick="switchTab('add-tab', this)">
                     <button class="add-btn">+</button>
-                    <small style="margin-top: 4px; font-weight: 600;">Adicionar</small>
+                    <small style="margin-top: 2px; font-weight: 600; font-size: 11px;">Adicionar</small>
                 </div>
                 <div class="nav-item" onclick="switchTab('history-tab', this)">
-                    <span style="font-size: 24px;">📋</span>
-                    <small style="margin-top: 4px; font-weight: 600;">Histórico</small>
+                    <span style="font-size: 20px;">📋</span>
+                    <small style="margin-top: 2px; font-weight: 600; font-size: 11px;">Histórico</small>
                 </div>
             </div>
         </div>
@@ -811,6 +965,55 @@
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         let userName = localStorage.getItem('userName') || '';
         let expenseChart;
+
+        // Categorias específicas para cada tipo
+        const categories = {
+            expense: {
+                'cartao': { name: 'Cartão de Crédito', icon: '💳' },
+                'emprestimo': { name: 'Empréstimo', icon: '🏦' },
+                'luz': { name: 'Conta de Luz', icon: '💡' },
+                'agua': { name: 'Conta de Água', icon: '💧' },
+                'internet': { name: 'Internet/TV', icon: '📶' },
+                'carro': { name: 'Carro/Combustível', icon: '⛽' },
+                'moradia': { name: 'Aluguel/Financiamento', icon: '🏠' },
+                'alimentacao': { name: 'Alimentação', icon: '🍽️' },
+                'saude': { name: 'Saúde', icon: '🏥' },
+                'lazer': { name: 'Lazer', icon: '🎮' },
+                'educacao': { name: 'Educação', icon: '📚' },
+                'roupas': { name: 'Roupas', icon: '👕' },
+                'outros': { name: 'Outros', icon: '📦' }
+            },
+            income: {
+                'salario': { name: 'Salário', icon: '💼' },
+                'freelance': { name: 'Freelance', icon: '💻' },
+                'investimento': { name: 'Investimentos', icon: '📈' },
+                'bonus': { name: 'Bônus', icon: '🎯' },
+                'vendas': { name: 'Vendas', icon: '🛒' },
+                'aposentadoria': { name: 'Aposentadoria', icon: '👴' },
+                'pensao': { name: 'Pensão', icon: '👥' },
+                'alugueis': { name: 'Aluguéis', icon: '🏢' },
+                'outros': { name: 'Outros', icon: '💰' }
+            }
+        };
+
+        // Função para atualizar opções de categoria
+        function updateCategoryOptions() {
+            const typeSelect = document.getElementById('transaction-type');
+            const categorySelect = document.getElementById('transaction-category');
+            const selectedType = typeSelect.value;
+            
+            // Limpar opções existentes
+            categorySelect.innerHTML = '';
+            
+            // Adicionar novas opções baseadas no tipo
+            const categoryList = categories[selectedType];
+            for (const [key, value] of Object.entries(categoryList)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = `${value.icon} ${value.name}`;
+                categorySelect.appendChild(option);
+            }
+        }
 
         function saveUserName() {
             const nameInput = document.getElementById('user-name-input');
@@ -881,7 +1084,7 @@
                     header.style.background = 'linear-gradient(135deg, #0EA5E9, #00D4AA)';
                     balanceCard.style.setProperty('--before-bg', '#0EA5E9');
                     balanceAmount.style.color = '#0EA5E9';
-                    predictionCard.style.background = 'linear-gradient(135deg, #0EA5E9, #6366F1)';
+                    predictionCard.style.background = 'linear-gradient(135deg, #0EA5E9, #00D4AA)';
                 } else {
                     // Atenção necessária - Amarelo/Laranja
                     body.classList.add('financial-warning');
@@ -944,9 +1147,9 @@
             // Calcular limite de gastos essenciais (50% da receita total)
             const essentialLimit = totalIncome * 0.5;
             
-            // Atualizar gastos essenciais
+            // Atualizar gastos essenciais (agora incluindo mais categorias essenciais)
             const essentialExpenses = transactions
-                .filter(t => t.type === 'expense' && ['alimentacao', 'moradia', 'transporte', 'saude'].includes(t.category))
+                .filter(t => t.type === 'expense' && ['alimentacao', 'moradia', 'luz', 'agua', 'internet', 'carro', 'saude'].includes(t.category))
                 .reduce((sum, t) => sum + t.amount, 0);
                 
             document.getElementById('current-expenses').textContent = `R$ ${essentialExpenses.toFixed(2).replace('.', ',')}`;
@@ -1031,26 +1234,6 @@
                 const item = document.createElement('div');
                 item.className = 'transaction-item';
                 
-                const categoryIcons = {
-                    'alimentacao': '🍽️',
-                    'transporte': '🚗',
-                    'saude': '🏥',
-                    'lazer': '🎮',
-                    'educacao': '📚',
-                    'moradia': '🏠',
-                    'outros': '📦'
-                };
-                
-                const categoryNames = {
-                    'alimentacao': 'Alimentação',
-                    'transporte': 'Transporte',
-                    'saude': 'Saúde',
-                    'lazer': 'Lazer',
-                    'educacao': 'Educação',
-                    'moradia': 'Moradia',
-                    'outros': 'Outros'
-                };
-                
                 const date = new Date(transaction.date);
                 const formattedDate = date.toLocaleDateString('pt-BR', { 
                     day: '2-digit', 
@@ -1058,14 +1241,17 @@
                     year: 'numeric'
                 });
                 
+                // Obter informações da categoria
+                const categoryInfo = categories[transaction.type][transaction.category] || { name: 'Outros', icon: '📦' };
+                
                 item.innerHTML = `
                     <div style="display: flex; align-items: center; flex: 1;">
                         <div class="transaction-icon ${transaction.type}">
-                            ${transaction.type === 'income' ? '💰' : categoryIcons[transaction.category]}
+                            ${transaction.type === 'income' ? '💰' : categoryInfo.icon}
                         </div>
                         <div class="transaction-details" style="margin-left: 15px;">
                             <h4>${transaction.description}</h4>
-                            <p>${categoryNames[transaction.category] || 'Outros'} • ${formattedDate}</p>
+                            <p>${categoryInfo.name} • ${formattedDate}</p>
                         </div>
                     </div>
                     <div class="transaction-actions">
@@ -1115,19 +1301,15 @@
             }
             canvas.style.display = 'block';
             
-            const categoryNames = {
-                'alimentacao': 'Alimentação',
-                'transporte': 'Transporte',
-                'saude': 'Saúde',
-                'lazer': 'Lazer',
-                'educacao': 'Educação',
-                'moradia': 'Moradia',
-                'outros': 'Outros'
-            };
+            // Criar labels usando as novas categorias
+            const chartLabels = Object.keys(expensesByCategory).map(categoryKey => {
+                const categoryInfo = categories.expense[categoryKey];
+                return categoryInfo ? categoryInfo.name : 'Outros';
+            });
             
             const colors = [
-                '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', 
-                '#FECA57', '#FF9FF3', '#54A0FF', '#5F27CD'
+                '#FF6B6B', '#00D4AA', '#0EA5E9', '#FFB800', 
+                '#FF8C00', '#4ECDC4', '#96CEB4', '#54A0FF'
             ];
             
             const gradientColors = colors.map(color => {
@@ -1140,7 +1322,7 @@
             expenseChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: Object.keys(expensesByCategory).map(k => categoryNames[k]),
+                    labels: chartLabels,
                     datasets: [{
                         data: Object.values(expensesByCategory),
                         backgroundColor: gradientColors,
@@ -1240,6 +1422,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             setupWelcomeEvents();
             checkUserName();
+            updateCategoryOptions(); // Inicializar categorias
             updateUI();
             
             // Adicionar efeitos de hover suaves
