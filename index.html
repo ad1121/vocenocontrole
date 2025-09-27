@@ -1,4 +1,33 @@
-<!DOCTYPE html>
+.delete-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #ee5a24;
+        }
+
+        .transaction-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+        }        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px;
+        }
+
+        .chart-container {
+            min-height: 250px;
+        }<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -482,8 +511,8 @@
     </div>
 
     <div class="container">
-        <!-- Aba Principal -->
-        <div id="home-tab" class="tab-content active">
+        <!-- Aba Principal (Relatórios) -->
+        <div id="reports-tab" class="tab-content active">
             <div class="header">
                 <div class="greeting" id="greeting-text">Bom dia</div>
                 <div class="username" id="user-display">Usuário!</div>
@@ -494,29 +523,14 @@
                 <div class="balance-amount" id="total-balance">R$ 0,00</div>
             </div>
 
-            <div class="accounts-section">
-                <h3 class="section-title">Meus saldos</h3>
-                
-                <div class="account-item">
-                    <div class="account-info">
-                        <div class="account-icon">🏦</div>
-                        <div class="account-details">
-                            <h4>Conta Bancária</h4>
-                            <p>Principal</p>
-                        </div>
-                    </div>
-                    <div class="account-balance" id="bank-account">R$ 0,00</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-income" style="color: #4CAF50;">R$ 0</div>
+                    <div class="stat-label">Total Receitas</div>
                 </div>
-
-                <div class="account-item">
-                    <div class="account-info">
-                        <div class="account-icon">💸</div>
-                        <div class="account-details">
-                            <h4>Poupança</h4>
-                            <p>Reserva</p>
-                        </div>
-                    </div>
-                    <div class="account-balance" id="savings-account">R$ 0,00</div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-expenses" style="color: #ff6b6b;">R$ 0</div>
+                    <div class="stat-label">Total Despesas</div>
                 </div>
             </div>
 
@@ -533,6 +547,16 @@
                     <span id="expense-percentage">0%</span> da sua receita mensal
                 </div>
             </div>
+
+            <div class="chart-container">
+                <h3>Gastos por Categoria</h3>
+                <canvas id="expense-chart" class="chart"></canvas>
+            </div>
+
+            <div class="prediction-card">
+                <h3>Previsão Próximo Mês</h3>
+                <p id="prediction-text">Com base nos seus gastos atuais, você terá um resultado positivo no próximo mês! 📈</p>
+            </div>
         </div>
 
         <!-- Aba Adicionar -->
@@ -543,14 +567,6 @@
 
             <div style="margin: 15px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 <form id="transaction-form">
-                    <div class="form-group">
-                        <label>Conta</label>
-                        <select id="transaction-account">
-                            <option value="bank">Conta Bancária</option>
-                            <option value="savings">Poupança</option>
-                        </select>
-                    </div>
-
                     <div class="form-group">
                         <label>Tipo</label>
                         <select id="transaction-type">
@@ -602,38 +618,10 @@
             </div>
         </div>
 
-        <!-- Aba Relatórios -->
-        <div id="reports-tab" class="tab-content">
-            <div class="header">
-                <div class="username">Relatórios</div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="total-income" style="color: #4CAF50;">R$ 0</div>
-                    <div class="stat-label">Total Receitas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="total-expenses" style="color: #ff6b6b;">R$ 0</div>
-                    <div class="stat-label">Total Despesas</div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3>Gastos por Categoria</h3>
-                <canvas id="expense-chart" class="chart"></canvas>
-            </div>
-
-            <div class="prediction-card">
-                <h3>Previsão Próximo Mês</h3>
-                <p id="prediction-text">Com base nos seus gastos atuais, você terá um resultado positivo no próximo mês! 📈</p>
-            </div>
-        </div>
-
         <!-- Navegação -->
         <div class="navigation">
             <div class="nav-items">
-                <div class="nav-item active" onclick="switchTab('home-tab', this)">
+                <div class="nav-item active" onclick="switchTab('reports-tab', this)">
                     <span style="font-size: 20px;">🏠</span>
                     <small>Início</small>
                 </div>
@@ -644,10 +632,6 @@
                 <div class="nav-item" onclick="switchTab('history-tab', this)">
                     <span style="font-size: 20px;">📋</span>
                     <small>Histórico</small>
-                </div>
-                <div class="nav-item" onclick="switchTab('reports-tab', this)">
-                    <span style="font-size: 20px;">📊</span>
-                    <small>Relatórios</small>
                 </div>
             </div>
         </div>
@@ -736,32 +720,24 @@
         }
 
         function updateUI() {
-            const bankTransactions = transactions.filter(t => t.account === 'bank');
-            const savingsTransactions = transactions.filter(t => t.account === 'savings');
+            const totalIncome = transactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalExpenses = transactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const balance = totalIncome - totalExpenses;
             
-            // Calcular saldos por conta
-            const bankIncome = bankTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const bankExpenses = bankTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const bankBalance = bankIncome - bankExpenses;
-            
-            const savingsIncome = savingsTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const savingsExpenses = savingsTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const savingsBalance = savingsIncome - savingsExpenses;
-            
-            const totalBalance = bankBalance + savingsBalance;
-            const totalIncome = bankIncome + savingsIncome;
-            const totalExpenses = bankExpenses + savingsExpenses;
-            
-            // Atualizar saldos
-            document.getElementById('total-balance').textContent = `R$ ${totalBalance.toFixed(2).replace('.', ',')}`;
-            document.getElementById('bank-account').textContent = `R$ ${bankBalance.toFixed(2).replace('.', ',')}`;
-            document.getElementById('savings-account').textContent = `R$ ${savingsBalance.toFixed(2).replace('.', ',')}`;
+            // Atualizar saldo total
+            document.getElementById('total-balance').textContent = `R$ ${balance.toFixed(2).replace('.', ',')}`;
             
             // Calcular limite de gastos essenciais (50% da receita total)
             const essentialLimit = totalIncome * 0.5;
             
-            // Atualizar gastos essenciais (apenas da conta bancária)
-            const essentialExpenses = bankTransactions
+            // Atualizar gastos essenciais
+            const essentialExpenses = transactions
                 .filter(t => t.type === 'expense' && ['alimentacao', 'moradia', 'transporte', 'saude'].includes(t.category))
                 .reduce((sum, t) => sum + t.amount, 0);
                 
@@ -793,14 +769,12 @@
             let prediction = "Adicione mais transações para uma previsão mais precisa! 📊";
             
             if (totalIncome > 0 && totalExpenses > 0) {
-                const savingsRate = savingsBalance > 0 ? (savingsBalance / totalIncome) * 100 : 0;
-                
-                if (actualPercentage <= 30 && savingsRate >= 10) {
-                    prediction = "Excelente! Gastos controlados e poupando bem. Você está no caminho certo! 🎉";
+                if (actualPercentage <= 30) {
+                    prediction = "Excelente! Seus gastos essenciais estão muito controlados. Continue assim! 🎉";
                 } else if (actualPercentage <= 50) {
-                    prediction = "Bom controle! Considere aumentar a poupança para garantir mais segurança financeira. 👍";
+                    prediction = "Bom controle! Seus gastos essenciais estão dentro do recomendado. 👍";
                 } else {
-                    prediction = "Atenção! Gastos essenciais altos. Foque em reduzir alimentação, transporte e moradia. 📉";
+                    prediction = "Atenção! Seus gastos essenciais estão altos. Considere revisar alimentação, transporte e moradia. 📉";
                 }
             }
                 
@@ -862,11 +836,6 @@
                     'outros': 'Outros'
                 };
                 
-                const accountNames = {
-                    'bank': 'Conta Bancária',
-                    'savings': 'Poupança'
-                };
-                
                 item.innerHTML = `
                     <div style="display: flex; align-items: center; flex: 1;">
                         <div class="transaction-icon ${transaction.type}">
@@ -874,7 +843,7 @@
                         </div>
                         <div class="transaction-details" style="margin-left: 12px;">
                             <h4>${transaction.description}</h4>
-                            <p>${categoryNames[transaction.category] || 'Outros'} • ${accountNames[transaction.account] || 'Conta Bancária'}</p>
+                            <p>${categoryNames[transaction.category] || 'Outros'}</p>
                         </div>
                     </div>
                     <div class="transaction-actions">
@@ -971,7 +940,6 @@
         document.getElementById('transaction-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const account = document.getElementById('transaction-account').value;
             const type = document.getElementById('transaction-type').value;
             const description = document.getElementById('transaction-description').value;
             const amount = parseFloat(document.getElementById('transaction-amount').value);
@@ -979,7 +947,6 @@
             
             const transaction = {
                 id: Date.now(),
-                account,
                 type,
                 description,
                 amount,
@@ -995,7 +962,7 @@
             document.getElementById('transaction-form').reset();
             
             // Voltar para a aba inicial
-            switchTab('home-tab', document.querySelector('.nav-item'));
+            switchTab('reports-tab', document.querySelector('.nav-item'));
         });
 
         // Inicializar aplicação
