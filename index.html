@@ -1109,8 +1109,7 @@
             e.preventDefault();
             // Guardar o evento para usar depois
             deferredPrompt = e;
-            // Mostrar nosso prompt customizado
-            showInstallPrompt();
+            // Não mostrar automaticamente - só após configuração inicial
         });
 
         // Mostrar prompt de instalação personalizado
@@ -1118,11 +1117,11 @@
             const installPrompt = document.getElementById('install-prompt');
             const isInstallPromptDismissed = localStorage.getItem('installPromptDismissed');
             
-            // Só mostrar se não foi dispensado e se não está instalado
-            if (!isInstallPromptDismissed && !window.matchMedia('(display-mode: standalone)').matches) {
-                setTimeout(() => {
-                    installPrompt.style.display = 'block';
-                }, 3000); // Mostrar após 3 segundos
+            // Só mostrar se não foi dispensado, se não está instalado e se tem nome cadastrado
+            if (!isInstallPromptDismissed && 
+                !window.matchMedia('(display-mode: standalone)').matches && 
+                userName) {
+                installPrompt.style.display = 'block';
             }
         }
 
@@ -1623,9 +1622,18 @@
 
         // Inicializar aplicação
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('App carregado');
+            
+            // Configurar eventos da tela de boas-vindas
             setupWelcomeEvents();
+            
+            // Verificar se já tem nome salvo
             checkUserName();
-            updateCategoryOptions(); // Inicializar categorias
+            
+            // Inicializar categorias
+            updateCategoryOptions();
+            
+            // Atualizar interface
             updateUI();
             
             // Adicionar efeitos de hover suaves
