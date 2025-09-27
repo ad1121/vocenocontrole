@@ -1,4 +1,4 @@
-       <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -499,24 +499,24 @@
                 
                 <div class="account-item">
                     <div class="account-info">
-                        <div class="account-icon">💰</div>
+                        <div class="account-icon">🏦</div>
                         <div class="account-details">
-                            <h4>Conta inicial</h4>
+                            <h4>Conta Bancária</h4>
                             <p>Principal</p>
                         </div>
                     </div>
-                    <div class="account-balance" id="main-account">R$ 0,00</div>
+                    <div class="account-balance" id="bank-account">R$ 0,00</div>
                 </div>
 
                 <div class="account-item">
                     <div class="account-info">
-                        <div class="account-icon">💳</div>
+                        <div class="account-icon">💸</div>
                         <div class="account-details">
-                            <h4>Carteira</h4>
-                            <p>Dinheiro</p>
+                            <h4>Poupança</h4>
+                            <p>Reserva</p>
                         </div>
                     </div>
-                    <div class="account-balance" id="wallet-account">R$ 0,00</div>
+                    <div class="account-balance" id="savings-account">R$ 0,00</div>
                 </div>
             </div>
 
@@ -526,8 +526,11 @@
                     <div class="expense-fill" id="expense-bar" style="width: 0%"></div>
                 </div>
                 <div class="expense-info">
-                    <span class="expense-limit">Limite recomendado R$ 500,00</span>
+                    <span class="expense-limit" id="expense-limit-text">Limite recomendado R$ 0,00</span>
                     <span class="expense-current" id="current-expenses">R$ 0,00</span>
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 8px; text-align: center;">
+                    <span id="expense-percentage">0%</span> da sua receita mensal
                 </div>
             </div>
         </div>
@@ -540,6 +543,14 @@
 
             <div style="margin: 15px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
                 <form id="transaction-form">
+                    <div class="form-group">
+                        <label>Conta</label>
+                        <select id="transaction-account">
+                            <option value="bank">Conta Bancária</option>
+                            <option value="savings">Poupança</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>Tipo</label>
                         <select id="transaction-type">
@@ -725,44 +736,85 @@
         }
 
         function updateUI() {
-            const totalIncome = transactions
-                .filter(t => t.type === 'income')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const totalExpenses = transactions
-                .filter(t => t.type === 'expense')
-                .reduce((sum, t) => sum + t.amount, 0);
-                
-            const balance = totalIncome - totalExpenses;
+            const bankTransactions = transactions.filter(t => t.account === 'bank');
+            const savingsTransactions = transactions.filter(t => t.account === 'savings');
             
-            // Atualizar saldo total
-            document.getElementById('total-balance').textContent = `R$ ${balance.toFixed(2).replace('.', ',')}`;
-            document.getElementById('main-account').textContent = `R$ ${balance.toFixed(2).replace('.', ',')}`;
+            // Calcular saldos por conta
+            const bankIncome = bankTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const bankExpenses = bankTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const bankBalance = bankIncome - bankExpenses;
             
-            // Atualizar gastos essenciais
-            const essentialExpenses = transactions
+            const savingsIncome = savingsTransactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const savingsExpenses = savingsTransactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const savingsBalance = savingsIncome - savingsExpenses;
+            
+            const totalBalance = bankBalance + savingsBalance;
+            const totalIncome = bankIncome + savingsIncome;
+            const totalExpenses = bankExpenses + savingsExpenses;
+            
+            // Atualizar saldos
+            document.getElementById('total-balance').textContent = `R$ ${totalBalance.toFixed(2).replace('.', ',')}`;
+            document.getElementById('bank-account').textContent = `R$ ${bankBalance.toFixed(2).replace('.', ',')}`;
+            document.getElementById('savings-account').textContent = `R$ ${savingsBalance.toFixed(2).replace('.', ',')}`;
+            
+            // Calcular limite de gastos essenciais (50% da receita total)
+            const essentialLimit = totalIncome * 0.5;
+            
+            // Atualizar gastos essenciais (apenas da conta bancária)
+            const essentialExpenses = bankTransactions
                 .filter(t => t.type === 'expense' && ['alimentacao', 'moradia', 'transporte', 'saude'].includes(t.category))
                 .reduce((sum, t) => sum + t.amount, 0);
                 
             document.getElementById('current-expenses').textContent = `R$ ${essentialExpenses.toFixed(2).replace('.', ',')}`;
+            document.getElementById('expense-limit-text').textContent = `Limite recomendado R$ ${essentialLimit.toFixed(2).replace('.', ',')}`;
             
-            const expensePercentage = Math.min((essentialExpenses / 500) * 100, 100);
+            // Calcular porcentagem dos gastos essenciais
+            const expensePercentage = totalIncome > 0 ? Math.min((essentialExpenses / essentialLimit) * 100, 100) : 0;
+            const actualPercentage = totalIncome > 0 ? (essentialExpenses / totalIncome) * 100 : 0;
+            
             document.getElementById('expense-bar').style.width = `${expensePercentage}%`;
+            document.getElementById('expense-percentage').textContent = `${actualPercentage.toFixed(1)}%`;
+            
+            // Mudar cor da barra baseado na porcentagem
+            const expenseBar = document.getElementById('expense-bar');
+            if (actualPercentage <= 30) {
+                expenseBar.style.background = 'linear-gradient(90deg, #4CAF50, #45a049)'; // Verde
+            } else if (actualPercentage <= 50) {
+                expenseBar.style.background = 'linear-gradient(90deg, #FFA726, #FF9800)'; // Laranja
+            } else {
+                expenseBar.style.background = 'linear-gradient(90deg, #ff6b6b, #ee5a24)'; // Vermelho
+            }
             
             // Atualizar estatísticas
             document.getElementById('total-income').textContent = `R$ ${totalIncome.toFixed(0)}`;
             document.getElementById('total-expenses').textContent = `R$ ${totalExpenses.toFixed(0)}`;
             
             // Atualizar previsão
-            const avgMonthlyExpenses = totalExpenses;
-            const avgMonthlyIncome = totalIncome;
-            const prediction = avgMonthlyIncome > avgMonthlyExpenses ? 
-                "Com base nos seus gastos atuais, você terá um resultado positivo no próximo mês! 📈" :
-                "Atenção! Suas despesas estão maiores que as receitas. Considere revisar seus gastos. 📉";
+            let prediction = "Adicione mais transações para uma previsão mais precisa! 📊";
+            
+            if (totalIncome > 0 && totalExpenses > 0) {
+                const savingsRate = savingsBalance > 0 ? (savingsBalance / totalIncome) * 100 : 0;
+                
+                if (actualPercentage <= 30 && savingsRate >= 10) {
+                    prediction = "Excelente! Gastos controlados e poupando bem. Você está no caminho certo! 🎉";
+                } else if (actualPercentage <= 50) {
+                    prediction = "Bom controle! Considere aumentar a poupança para garantir mais segurança financeira. 👍";
+                } else {
+                    prediction = "Atenção! Gastos essenciais altos. Foque em reduzir alimentação, transporte e moradia. 📉";
+                }
+            }
                 
             document.getElementById('prediction-text').textContent = prediction;
             
             updateTransactionList();
+        }
+
+        function deleteTransaction(transactionId) {
+            if (confirm('Tem certeza que deseja excluir esta transação?')) {
+                transactions = transactions.filter(t => t.id !== transactionId);
+                saveTransactions();
+                updateUI();
+            }
         }
 
         function updateTransactionList() {
@@ -810,18 +862,26 @@
                     'outros': 'Outros'
                 };
                 
+                const accountNames = {
+                    'bank': 'Conta Bancária',
+                    'savings': 'Poupança'
+                };
+                
                 item.innerHTML = `
-                    <div style="display: flex; align-items: center;">
+                    <div style="display: flex; align-items: center; flex: 1;">
                         <div class="transaction-icon ${transaction.type}">
                             ${transaction.type === 'income' ? '💰' : categoryIcons[transaction.category]}
                         </div>
                         <div class="transaction-details" style="margin-left: 12px;">
                             <h4>${transaction.description}</h4>
-                            <p>${categoryNames[transaction.category] || 'Outros'}</p>
+                            <p>${categoryNames[transaction.category] || 'Outros'} • ${accountNames[transaction.account] || 'Conta Bancária'}</p>
                         </div>
                     </div>
-                    <div class="transaction-amount ${transaction.type}">
-                        ${transaction.type === 'income' ? '+' : '-'}R$ ${transaction.amount.toFixed(2).replace('.', ',')}
+                    <div class="transaction-actions">
+                        <div class="transaction-amount ${transaction.type}">
+                            ${transaction.type === 'income' ? '+' : '-'}R$ ${transaction.amount.toFixed(2).replace('.', ',')}
+                        </div>
+                        <button class="delete-btn" onclick="deleteTransaction(${transaction.id})">🗑️</button>
                     </div>
                 `;
                 
@@ -911,6 +971,7 @@
         document.getElementById('transaction-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            const account = document.getElementById('transaction-account').value;
             const type = document.getElementById('transaction-type').value;
             const description = document.getElementById('transaction-description').value;
             const amount = parseFloat(document.getElementById('transaction-amount').value);
@@ -918,6 +979,7 @@
             
             const transaction = {
                 id: Date.now(),
+                account,
                 type,
                 description,
                 amount,
