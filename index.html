@@ -175,13 +175,13 @@
     }
 
     .transacao-icone {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
+        font-size: 16px;
         flex-shrink: 0;
     }
 
@@ -618,7 +618,7 @@
             <p>Gerencie suas receitas e despesas</p>
         </div>
 
-```
+
     <div class="dashboard">
         <div class="card saldo">
             <h2>Saldo Atual</h2>
@@ -812,6 +812,11 @@
         renderizar();
         els.formulario.reset();
         els.modal.classList.remove('ativo');
+        tipoAtual = 'receita';
+        els.tipoButtons.forEach(b => b.classList.remove('ativo'));
+        els.tipoButtons[0].classList.add('ativo');
+        atualizarOpcoes();
+        atualizarLabelData();
     });
 
     function calcularSaldos() {
@@ -860,6 +865,9 @@
             renderizar();
         }
     }
+
+    window.alternarStatusDespesa = alternarStatusDespesa;
+    window.deletarTransacao = deletarTransacao;
 
     function renderizar() {
         const saldos = calcularSaldos();
@@ -921,6 +929,9 @@
 
     atualizarOpcoes();
     carregarDoLocalStorage();
+    
+    // Verificar saldo inicial
+    renderizar();
 </script>
 
 
