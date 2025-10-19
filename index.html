@@ -13,7 +13,7 @@
             box-sizing: border-box;
         }
 
-
+```
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -605,7 +605,7 @@
         }
     }
 </style>
-
+```
 
 </head>
 <body>
@@ -618,7 +618,7 @@
             <p>Gerencie suas receitas e despesas</p>
         </div>
 
-
+```
     <div class="dashboard">
         <div class="card saldo">
             <h2>Saldo Atual</h2>
@@ -920,8 +920,21 @@
                             </button>` : ''}
                             <button class="btn-acao delete" onclick="deletarTransacao(${t.id})" title="Deletar">
                                 <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
+                        <div class="transacao-acoes">
+                        ${t.tipo === 'despesa' ? `<button class="btn-acao" onclick="alternarStatusDespesa(${t.id})" title="Toggle">
+                            <i class="fas fa-${t.status === 'pendente' ? 'check' : 'undo'}"></i>
+                        </button>` : ''}
+                        <button class="btn-acao delete" onclick="deletarTransacao(${t.id})" title="Deletar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('')}</div>`;
+    }
+
+    carregarDoLocalStorage();
+    atualizarOpcoes();
+    renderizar();    </div>
                     </div>
                 </div>
             `).join('')}</div>`;
@@ -933,7 +946,7 @@
     // Verificar saldo inicial
     renderizar();
 </script>
-
+```
 
 </body>
 </html>
