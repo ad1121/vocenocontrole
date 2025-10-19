@@ -1,18 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle Financeiro Pessoal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
+```
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -49,17 +50,13 @@
     }
 
     .header h1 {
-        font-size: 28px;
+        font-size: 32px;
         margin-bottom: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 12px;
         font-weight: 700;
-    }
-
-    .header h1 i {
-        font-size: 22px;
     }
 
     .header p {
@@ -106,7 +103,7 @@
     }
 
     .card.saldo .valor {
-        font-size: 34px;
+        font-size: 36px;
         font-weight: 700;
         line-height: 1;
     }
@@ -118,18 +115,10 @@
         margin-bottom: 12px;
         font-weight: 600;
         letter-spacing: 0.5px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .card h3 i {
-        font-size: 14px;
-        color: #555;
     }
 
     .card .valor {
-        font-size: 24px;
+        font-size: 26px;
         font-weight: 700;
         color: #333;
     }
@@ -153,17 +142,13 @@
     .transacoes h2 {
         font-size: 16px;
         color: #333;
-        padding: 18px;
+        padding: 20px;
         margin: 0;
         font-weight: 600;
         border-bottom: 1px solid #f0f0f0;
         display: flex;
         align-items: center;
-        gap: 8px;
-    }
-
-    .transacoes h2 i {
-        font-size: 14px;
+        gap: 10px;
     }
 
     .lista-transacoes {
@@ -174,10 +159,14 @@
     .transacao {
         display: flex;
         align-items: center;
-        gap: 10px;
-        padding: 14px 18px;
+        gap: 12px;
+        padding: 15px 20px;
         border-bottom: 1px solid #f5f5f5;
         transition: all 0.3s ease;
+    }
+
+    .transacao:last-child {
+        border-bottom: none;
     }
 
     .transacao:hover {
@@ -185,13 +174,13 @@
     }
 
     .transacao-icone {
-        width: 22px;
-        height: 22px;
+        width: 28px;
+        height: 28px;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 10px;
+        font-size: 12px;
         flex-shrink: 0;
     }
 
@@ -214,7 +203,7 @@
     }
 
     .transacao-desc {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 600;
         color: #1f2937;
         white-space: nowrap;
@@ -222,21 +211,28 @@
     }
 
     .transacao-meta {
-        font-size: 10px;
+        font-size: 11px;
         color: #9ca3af;
         display: flex;
-        gap: 10px;
+        gap: 16px;
         white-space: nowrap;
+    }
+
+    .transacao-meta span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
     .status-badge {
         display: inline-flex;
         align-items: center;
-        padding: 3px 8px;
+        padding: 4px 10px;
         border-radius: 20px;
-        font-size: 9px;
+        font-size: 11px;
         font-weight: 600;
         text-transform: uppercase;
+        white-space: nowrap;
     }
 
     .status-badge.receita {
@@ -257,14 +253,14 @@
     .transacao-direita {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
         flex-shrink: 0;
     }
 
     .transacao-valor {
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 700;
-        min-width: 80px;
+        min-width: 100px;
         text-align: right;
         white-space: nowrap;
     }
@@ -277,14 +273,19 @@
         color: #ef4444;
     }
 
+    .transacao-acoes {
+        display: flex;
+        gap: 8px;
+    }
+
     .btn-acao {
         border: none;
         background: none;
         cursor: pointer;
-        font-size: 13px;
+        font-size: 14px;
         color: #d1d5db;
         transition: all 0.3s ease;
-        padding: 4px 6px;
+        padding: 6px 8px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -292,7 +293,7 @@
 
     .btn-acao:hover {
         color: #667eea;
-        transform: scale(1.1);
+        transform: scale(1.2);
     }
 
     .btn-acao.delete:hover {
@@ -306,29 +307,200 @@
     }
 
     .lista-vazia i {
-        font-size: 40px;
+        font-size: 48px;
         color: #e5e7eb;
         margin-bottom: 12px;
         display: block;
     }
 
     .lista-vazia p {
-        font-size: 13px;
+        font-size: 14px;
         color: #9ca3af;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: flex-end;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal.ativo {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-conteudo {
+        background: white;
+        width: 100%;
+        max-width: 550px;
+        border-radius: 20px 20px 0 0;
+        padding: 25px;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+        animation: slideUp 0.3s ease;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+        color: #1f2937;
+        font-weight: 600;
+    }
+
+    .btn-fechar {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #d1d5db;
+        transition: color 0.3s ease;
+        padding: 0;
+    }
+
+    .btn-fechar:hover {
+        color: #667eea;
+    }
+
+    .tipo-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .tipo-btn {
+        padding: 12px;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        background: white;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: #9ca3af;
+    }
+
+    .tipo-btn.receita.ativo {
+        border-color: #10b981;
+        background: #ecfdf5;
+        color: #10b981;
+    }
+
+    .tipo-btn.despesa.ativo {
+        border-color: #ef4444;
+        background: #fef2f2;
+        color: #ef4444;
+    }
+
+    .tipo-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .form-group {
+        margin-bottom: 16px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 14px;
+        font-family: inherit;
+        transition: all 0.3s ease;
+        background: white;
+        color: #1f2937;
+    }
+
+    .form-group input::placeholder {
+        color: #d1d5db;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
     }
 
     .fab {
         position: fixed;
-        bottom: 25px;
-        right: 25px;
-        width: 55px;
-        height: 55px;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
         border-radius: 50%;
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         border: none;
         cursor: pointer;
         box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-        font-size: 22px;
+        font-size: 24px;
         color: white;
         transition: all 0.3s ease;
         display: flex;
@@ -339,272 +511,417 @@
 
     .fab:hover {
         transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
     }
 
+    .fab:active {
+        transform: scale(0.95);
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 12px;
+        }
+
+        .container {
+            margin-top: 10px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            gap: 8px;
+        }
+
+        .header p {
+            font-size: 13px;
+        }
+
+        .dashboard {
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            padding: 16px;
+        }
+
+        .card.saldo {
+            padding: 20px 16px;
+        }
+
+        .card.saldo .valor {
+            font-size: 28px;
+        }
+
+        .card .valor {
+            font-size: 22px;
+        }
+
+        .transacao {
+            gap: 12px;
+            padding: 12px 16px;
+        }
+
+        .transacao-icone {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+        }
+
+        .transacao-desc {
+            font-size: 13px;
+        }
+
+        .transacao-valor {
+            font-size: 15px;
+            min-width: 90px;
+        }
+
+        .transacao-meta {
+            font-size: 11px;
+            gap: 8px;
+        }
+
+        .modal-conteudo {
+            padding: 20px;
+        }
+
+        .fab {
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            font-size: 22px;
+        }
+    }
 </style>
+```
+
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-wallet"></i>Controle Financeiro</h1>
+            <h1>
+                <i class="fas fa-wallet"></i>
+                Controle Financeiro
+            </h1>
             <p>Gerencie suas receitas e despesas</p>
         </div>
 
-        <div class="dashboard">
-            <div class="card saldo">
-                <h2>Saldo Atual</h2>
-                <div class="valor" id="saldoAtual">R$ 0,00</div>
-            </div>
-
-            <div class="card receita">
-                <h3><i class="fas fa-arrow-up"></i> Receitas</h3>
-                <div class="valor" id="totalReceitas">R$ 0,00</div>
-            </div>
-
-            <div class="card despesa">
-                <h3><i class="fas fa-arrow-down"></i> Pendentes</h3>
-                <div class="valor" id="despesasPendentes">R$ 0,00</div>
-            </div>
+```
+    <div class="dashboard">
+        <div class="card saldo">
+            <h2>Saldo Atual</h2>
+            <div class="valor" id="saldoAtual">R$ 0,00</div>
         </div>
 
-        <div class="transacoes">
-            <h2><i class="fas fa-history"></i> Histórico de Transações</h2>
-            <div id="listaTransacoes" class="lista-vazia">
-                <i class="fas fa-inbox"></i>
-                <p>Nenhuma transação registrada</p>
-            </div>
+        <div class="card receita">
+            <h3><i class="fas fa-arrow-up"></i> Receitas</h3>
+            <div class="valor" id="totalReceitas">R$ 0,00</div>
+        </div>
+
+        <div class="card despesa">
+            <h3><i class="fas fa-arrow-down"></i> Pendentes</h3>
+            <div class="valor" id="despesasPendentes">R$ 0,00</div>
         </div>
     </div>
 
-    <button class="fab" id="btnAdicionar" title="Adicionar Transação">
-        <i class="fas fa-plus"></i>
-    </button>
-
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-conteudo">
-            <div class="modal-header">
-                <h2><i class="fas fa-plus-circle"></i> Adicionar Transação</h2>
-                <button class="btn-fechar" id="btnFechar">&times;</button>
-            </div>
-            <div class="tipo-selector">
-                <button class="tipo-btn receita ativo" data-tipo="receita"><i class="fas fa-plus"></i> Receita</button>
-                <button class="tipo-btn despesa" data-tipo="despesa"><i class="fas fa-minus"></i> Despesa</button>
-            </div>
-            <form id="formulario">
-                <div class="form-group">
-                    <label for="descricao">Descrição</label>
-                    <input type="text" id="descricao" placeholder="Ex: Salário, Aluguel..." required>
-                </div>
-                <div class="form-group">
-                    <label for="valor">Valor (R$)</label>
-                    <input type="number" id="valor" placeholder="0,00" step="0.01" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label for="grupo">Categoria</label>
-                    <select id="grupo" required>
-                        <option value="">Selecione uma categoria</option>
-                        <optgroup label="Receitas">
-                            <option value="Salário">Salário</option>
-                            <option value="Freelance">Freelance</option>
-                            <option value="Investimento">Investimento</option>
-                            <option value="Outro">Outro</option>
-                        </optgroup>
-                        <optgroup label="Despesas">
-                            <option value="Aluguel">Aluguel</option>
-                            <option value="Alimentação">Alimentação</option>
-                            <option value="Transporte">Transporte</option>
-                            <option value="Carro">Carro</option>
-                            <option value="Compras">Compras</option>
-                            <option value="Lazer">Lazer</option>
-                            <option value="Saúde">Saúde</option>
-                            <option value="Outro">Outro</option>
-                        </optgroup>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="dataPagamento" id="labelData">Data de Pagamento</label>
-                    <input type="date" id="dataPagamento" required>
-                </div>
-                <button type="submit" class="btn-submit"><i class="fas fa-check-circle"></i> Adicionar</button>
-            </form>
-        </div>
-    </div>
-
-<script>
-let tipoAtual = 'receita';
-let transacoes = [];
-
-const els = {
-    formulario: document.getElementById('formulario'),
-    descricao: document.getElementById('descricao'),
-    valor: document.getElementById('valor'),
-    grupo: document.getElementById('grupo'),
-    dataPagamento: document.getElementById('dataPagamento'),
-    labelData: document.getElementById('labelData'),
-    listaTransacoes: document.getElementById('listaTransacoes'),
-    saldoAtual: document.getElementById('saldoAtual'),
-    totalReceitas: document.getElementById('totalReceitas'),
-    despesasPendentes: document.getElementById('despesasPendentes'),
-    tipoButtons: document.querySelectorAll('.tipo-btn'),
-    modal: document.getElementById('modal'),
-    btnAdicionar: document.getElementById('btnAdicionar'),
-    btnFechar: document.getElementById('btnFechar')
-};
-
-els.btnAdicionar.onclick = () => els.modal.classList.add('ativo');
-els.btnFechar.onclick = () => els.modal.classList.remove('ativo');
-els.modal.onclick = (e) => { if (e.target === els.modal) els.modal.classList.remove('ativo'); };
-
-function carregarDoLocalStorage() {
-    const dados = localStorage.getItem('transacoes');
-    if (dados) transacoes = JSON.parse(dados);
-    renderizar();
-}
-
-function salvarNoLocalStorage() {
-    localStorage.setItem('transacoes', JSON.stringify(transacoes));
-}
-
-els.tipoButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        els.tipoButtons.forEach(b => b.classList.remove('ativo'));
-        btn.classList.add('ativo');
-        tipoAtual = btn.dataset.tipo;
-        atualizarOpcoes();
-        atualizarLabelData();
-    });
-});
-
-function atualizarLabelData() {
-    els.labelData.textContent = tipoAtual === 'receita' ? 'Data de Recebimento' : 'Data de Pagamento';
-}
-
-function atualizarOpcoes() {
-    const optgroups = els.grupo.querySelectorAll('optgroup');
-    optgroups.forEach(og => og.style.display = 'none');
-    optgroups[tipoAtual === 'receita' ? 0 : 1].style.display = 'block';
-}
-
-els.formulario.onsubmit = e => {
-    e.preventDefault();
-    if (!els.descricao.value || !els.valor.value || !els.grupo.value || !els.dataPagamento.value) {
-        alert('Preencha todos os campos!');
-        return;
-    }
-
-    const transacao = {
-        id: Date.now(),
-        descricao: els.descricao.value,
-        valor: parseFloat(els.valor.value),
-        grupo: els.grupo.value,
-        tipo: tipoAtual,
-        status: tipoAtual === 'receita' ? 'recebida' : 'pendente',
-        data: new Date(els.dataPagamento.value).toLocaleDateString('pt-BR')
-    };
-
-    transacoes.push(transacao);
-    salvarNoLocalStorage();
-    renderizar();
-    els.formulario.reset();
-    els.modal.classList.remove('ativo');
-};
-
-function calcularSaldos() {
-    const totalReceitas = transacoes.filter(t => t.tipo === 'receita').reduce((a, t) => a + t.valor, 0);
-    const totalDespesasPagas = transacoes.filter(t => t.tipo === 'despesa' && t.status === 'paga').reduce((a, t) => a + t.valor, 0);
-    const totalDespesasPendentes = transacoes.filter(t => t.tipo === 'despesa' && t.status === 'pendente').reduce((a, t) => a + t.valor, 0);
-    return { saldo: totalReceitas - totalDespesasPagas, totalReceitas, totalDespesasPendentes };
-}
-
-function formatarValor(v) {
-    return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
-
-function alternarStatusDespesa(id) {
-    const t = transacoes.find(x => x.id === id);
-    if (t && t.tipo === 'despesa') {
-        t.status = t.status === 'pendente' ? 'paga' : 'pendente';
-        salvarNoLocalStorage();
-        renderizar();
-    }
-}
-
-function deletarTransacao(id) {
-    if (confirm('Deseja deletar esta transação?')) {
-                transacoes = transacoes.filter(t => t.id !== id);
-        salvarNoLocalStorage();
-        renderizar();
-    }
-}
-
-function renderizar() {
-    const { saldo, totalReceitas, totalDespesasPendentes } = calcularSaldos();
-
-    els.saldoAtual.textContent = formatarValor(saldo);
-    els.totalReceitas.textContent = formatarValor(totalReceitas);
-    els.despesasPendentes.textContent = formatarValor(totalDespesasPendentes);
-
-    atualizarCorDoFundo(saldo);
-
-    if (transacoes.length === 0) {
-        els.listaTransacoes.classList.add('lista-vazia');
-        els.listaTransacoes.innerHTML = `
+    <div class="transacoes">
+        <h2><i class="fas fa-history"></i> Histórico de Transações</h2>
+        <div id="listaTransacoes" class="lista-vazia">
             <i class="fas fa-inbox"></i>
             <p>Nenhuma transação registrada</p>
-        `;
-        return;
+        </div>
+    </div>
+</div>
+
+<button class="fab" id="btnAdicionar" title="Adicionar Transação">
+    <i class="fas fa-plus"></i>
+</button>
+
+<div class="modal" id="modal">
+    <div class="modal-conteudo">
+        <div class="modal-header">
+            <h2><i class="fas fa-plus-circle"></i> Adicionar Transação</h2>
+            <button class="btn-fechar" id="btnFechar">&times;</button>
+        </div>
+
+        <div class="tipo-selector">
+            <button class="tipo-btn receita ativo" data-tipo="receita">
+                <i class="fas fa-plus"></i> Receita
+            </button>
+            <button class="tipo-btn despesa" data-tipo="despesa">
+                <i class="fas fa-minus"></i> Despesa
+            </button>
+        </div>
+
+        <form id="formulario">
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <input type="text" id="descricao" placeholder="Ex: Salário, Aluguel..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="valor">Valor (R$)</label>
+                <input type="number" id="valor" placeholder="0,00" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="grupo">Categoria</label>
+                <select id="grupo" required>
+                    <option value="">Selecione uma categoria</option>
+                    <optgroup label="Receitas">
+                        <option value="Salário">Salário</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Investimento">Investimento</option>
+                        <option value="Outro">Outro</option>
+                    </optgroup>
+                    <optgroup label="Despesas">
+                        <option value="Aluguel">Aluguel</option>
+                        <option value="Alimentação">Alimentação</option>
+                        <option value="Transporte">Transporte</option>
+                        <option value="Carro">Carro</option>
+                        <option value="Compras">Compras</option>
+                        <option value="Lazer">Lazer</option>
+                        <option value="Saúde">Saúde</option>
+                        <option value="Outro">Outro</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dataPagamento" id="labelData">Data de Pagamento</label>
+                <input type="date" id="dataPagamento" required>
+            </div>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-check-circle"></i>
+                Adicionar
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let tipoAtual = 'receita';
+    let transacoes = [];
+
+    const els = {
+        formulario: document.getElementById('formulario'),
+        descricao: document.getElementById('descricao'),
+        valor: document.getElementById('valor'),
+        grupo: document.getElementById('grupo'),
+        dataPagamento: document.getElementById('dataPagamento'),
+        labelData: document.getElementById('labelData'),
+        listaTransacoes: document.getElementById('listaTransacoes'),
+        saldoAtual: document.getElementById('saldoAtual'),
+        totalReceitas: document.getElementById('totalReceitas'),
+        despesasPendentes: document.getElementById('despesasPendentes'),
+        tipoButtons: document.querySelectorAll('.tipo-btn'),
+        modal: document.getElementById('modal'),
+        btnAdicionar: document.getElementById('btnAdicionar'),
+        btnFechar: document.getElementById('btnFechar')
+    };
+
+    els.btnAdicionar.addEventListener('click', () => {
+        els.modal.classList.add('ativo');
+    });
+
+    els.btnFechar.addEventListener('click', () => {
+        els.modal.classList.remove('ativo');
+    });
+
+    els.modal.addEventListener('click', (e) => {
+        if (e.target === els.modal) {
+            els.modal.classList.remove('ativo');
+        }
+    });
+
+    function carregarDoLocalStorage() {
+        const dados = localStorage.getItem('transacoes');
+        if (dados) {
+            transacoes = JSON.parse(dados);
+        }
+        renderizar();
     }
 
-    els.listaTransacoes.classList.remove('lista-vazia');
+    function salvarNoLocalStorage() {
+        localStorage.setItem('transacoes', JSON.stringify(transacoes));
+    }
 
-    els.listaTransacoes.innerHTML = transacoes
-        .sort((a, b) => b.id - a.id)
-        .map(t => `
-            <div class="transacao ${t.tipo}">
-                <div class="transacao-icone">
-                    <i class="fas ${t.tipo === 'receita' ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
-                </div>
-                <div class="transacao-info">
-                    <div class="transacao-desc">${t.descricao}</div>
-                    <div class="transacao-meta">
-                        <span>${t.grupo}</span> • <span>${t.data}</span>
+    els.tipoButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            els.tipoButtons.forEach(b => b.classList.remove('ativo'));
+            btn.classList.add('ativo');
+            tipoAtual = btn.dataset.tipo;
+            els.grupo.value = '';
+            atualizarOpcoes();
+            atualizarLabelData();
+        });
+    });
+
+    function atualizarLabelData() {
+        if (tipoAtual === 'receita') {
+            els.labelData.textContent = 'Data de Recebimento';
+        } else {
+            els.labelData.textContent = 'Data de Pagamento';
+        }
+    }
+
+    function atualizarOpcoes() {
+        const optgroups = els.grupo.querySelectorAll('optgroup');
+        optgroups.forEach(og => og.style.display = 'none');
+        if (tipoAtual === 'receita') {
+            optgroups[0].style.display = 'block';
+        } else {
+            optgroups[1].style.display = 'block';
+        }
+    }
+
+    els.formulario.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        if (!els.descricao.value || !els.valor.value || !els.grupo.value || !els.dataPagamento.value) {
+            alert('Preencha todos os campos!');
+            return;
+        }
+
+        const transacao = {
+            id: Date.now(),
+            descricao: els.descricao.value,
+            valor: parseFloat(els.valor.value),
+            grupo: els.grupo.value,
+            tipo: tipoAtual,
+            status: tipoAtual === 'receita' ? 'recebida' : 'pendente',
+            data: new Date(els.dataPagamento.value).toLocaleDateString('pt-BR'),
+            dataOriginal: els.dataPagamento.value
+        };
+
+        transacoes.push(transacao);
+        salvarNoLocalStorage();
+        renderizar();
+        els.formulario.reset();
+        els.modal.classList.remove('ativo');
+    });
+
+    function calcularSaldos() {
+        const totalReceitas = transacoes
+            .filter(t => t.tipo === 'receita')
+            .reduce((acc, t) => acc + t.valor, 0);
+
+        const totalDespesasPagas = transacoes
+            .filter(t => t.tipo === 'despesa' && t.status === 'paga')
+            .reduce((acc, t) => acc + t.valor, 0);
+
+        const totalDespesasPendentes = transacoes
+            .filter(t => t.tipo === 'despesa' && t.status === 'pendente')
+            .reduce((acc, t) => acc + t.valor, 0);
+
+        const saldo = totalReceitas - totalDespesasPagas;
+
+        return {
+            saldo,
+            totalReceitas,
+            totalDespesasPendentes,
+            totalDespesasPagas
+        };
+    }
+
+    function formatarValor(valor) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(valor);
+    }
+
+    function alternarStatusDespesa(id) {
+        const transacao = transacoes.find(t => t.id === id);
+        if (transacao && transacao.tipo === 'despesa') {
+            transacao.status = transacao.status === 'pendente' ? 'paga' : 'pendente';
+            salvarNoLocalStorage();
+            renderizar();
+        }
+    }
+
+    function deletarTransacao(id) {
+        if (confirm('Deseja deletar esta transação?')) {
+            transacoes = transacoes.filter(t => t.id !== id);
+            salvarNoLocalStorage();
+            renderizar();
+        }
+    }
+
+    function renderizar() {
+        const saldos = calcularSaldos();
+        els.saldoAtual.textContent = formatarValor(saldos.saldo);
+        els.totalReceitas.textContent = formatarValor(saldos.totalReceitas);
+        els.despesasPendentes.textContent = formatarValor(saldos.totalDespesasPendentes);
+
+        // Atualizar cor de fundo baseado no saldo
+        document.body.classList.remove('saldo-critico', 'saldo-alerta', 'saldo-confortavel');
+        if (saldos.saldo < 100) {
+            document.body.classList.add('saldo-critico');
+        } else if (saldos.saldo < 300) {
+            document.body.classList.add('saldo-alerta');
+        } else {
+            document.body.classList.add('saldo-confortavel');
+        }
+
+        if (transacoes.length === 0) {
+            els.listaTransacoes.innerHTML = '<div class="lista-vazia"><i class="fas fa-inbox"></i><p>Nenhuma transação registrada</p></div>';
+            return;
+        }
+
+        const icones = {
+            'Salário': 'fa-briefcase',
+            'Freelance': 'fa-laptop',
+            'Investimento': 'fa-chart-line',
+            'Aluguel': 'fa-home',
+            'Alimentação': 'fa-utensils',
+            'Transporte': 'fa-car',
+            'Carro': 'fa-gas-pump',
+            'Compras': 'fa-shopping-bag',
+            'Lazer': 'fa-gamepad',
+            'Saúde': 'fa-heart',
+            'Outro': 'fa-circle'
+        };
+
+        els.listaTransacoes.innerHTML = `<div class="lista-transacoes">${transacoes
+            .slice()
+            .reverse()
+            .map(t => `
+                <div class="transacao ${t.tipo} ${t.status}">
+                    <div class="transacao-icone">
+                        <i class="fas ${icones[t.grupo] || 'fa-circle'}"></i>
+                    </div>
+                    <div class="transacao-info">
+                        <div class="transacao-desc">${t.descricao}</div>
+                        <div class="transacao-meta">
+                            <span>${t.data}</span>
+                            <span class="status-badge ${t.tipo === 'receita' ? 'receita' : (t.status === 'paga' ? 'paga' : 'pendente')}">
+                                ${t.tipo === 'receita' ? 'Receita' : (t.status === 'paga' ? 'Despesa Paga' : 'Despesa Pendente')}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="transacao-direita">
+                        <div class="transacao-valor">${t.tipo === 'receita' ? '+' : '-'}${formatarValor(t.valor)}</div>
+                        <div class="transacao-acoes">
+                            ${t.tipo === 'despesa' ? `<button class="btn-acao" onclick="alternarStatusDespesa(${t.id})" title="Toggle">
+                                <i class="fas fa-${t.status === 'pendente' ? 'check' : 'undo'}"></i>
+                            </button>` : ''}
+                            <button class="btn-acao delete" onclick="deletarTransacao(${t.id})" title="Deletar">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="transacao-direita">
-                    <span class="status-badge ${t.tipo === 'receita' ? 'receita' : t.status}">
-                        ${t.tipo === 'receita' ? 'Recebida' : t.status === 'paga' ? 'Paga' : 'Pendente'}
-                    </span>
-                    <span class="transacao-valor">${formatarValor(t.valor)}</span>
-                    ${t.tipo === 'despesa' ? `
-                        <button class="btn-acao" title="Marcar como paga/pendente" onclick="alternarStatusDespesa(${t.id})">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>` : ''
-                    }
-                    <button class="btn-acao delete" title="Excluir" onclick="deletarTransacao(${t.id})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `).join('');
-}
-
-function atualizarCorDoFundo(saldo) {
-    document.body.classList.remove('saldo-critico', 'saldo-alerta', 'saldo-confortavel');
-
-    if (saldo < 0) {
-        document.body.classList.add('saldo-critico');
-    } else if (saldo >= 0 && saldo <= 500) {
-        document.body.classList.add('saldo-alerta');
-    } else {
-        document.body.classList.add('saldo-confortavel');
+            `).join('')}</div>`;
     }
-}
 
-// Inicialização
-carregarDoLocalStorage();
-atualizarOpcoes();
-atualizarLabelData();
+    atualizarOpcoes();
+    carregarDoLocalStorage();
 </script>
+```
+
 </body>
 </html>
