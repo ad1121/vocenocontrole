@@ -157,13 +157,13 @@
     }
 
     .transacao {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 15px 16px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 15px;
+        padding: 15px 20px;
         border-bottom: 1px solid #f5f5f5;
         transition: all 0.3s ease;
-        flex-wrap: wrap;
     }
 
     .transacao:last-child {
@@ -175,13 +175,13 @@
     }
 
     .transacao-icone {
-        width: 36px;
-        height: 36px;
-        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 18px;
         flex-shrink: 0;
     }
 
@@ -200,8 +200,6 @@
         flex-direction: column;
         gap: 6px;
         min-width: 0;
-        flex: 1;
-        min-width: 150px;
     }
 
     .transacao-desc {
@@ -209,9 +207,6 @@
         font-weight: 600;
         color: #1f2937;
         word-break: break-word;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
     .transacao-meta {
@@ -227,8 +222,6 @@
         align-items: center;
         gap: 4px;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
     .status-badge {
@@ -240,7 +233,6 @@
         font-weight: 600;
         text-transform: uppercase;
         white-space: nowrap;
-        flex-shrink: 0;
     }
 
     .status-badge.receita {
@@ -263,7 +255,6 @@
         align-items: center;
         gap: 12px;
         flex-shrink: 0;
-        margin-left: auto;
     }
 
     .transacao-valor {
@@ -271,7 +262,6 @@
         font-weight: 700;
         min-width: 100px;
         text-align: right;
-        flex-shrink: 0;
     }
 
     .transacao.receita .transacao-valor {
@@ -285,7 +275,6 @@
     .transacao-acoes {
         display: flex;
         gap: 8px;
-        flex-shrink: 0;
     }
 
     .btn-acao {
@@ -812,11 +801,6 @@
         renderizar();
         els.formulario.reset();
         els.modal.classList.remove('ativo');
-        tipoAtual = 'receita';
-        els.tipoButtons.forEach(b => b.classList.remove('ativo'));
-        els.tipoButtons[0].classList.add('ativo');
-        atualizarOpcoes();
-        atualizarLabelData();
     });
 
     function calcularSaldos() {
@@ -866,14 +850,21 @@
         }
     }
 
-    window.alternarStatusDespesa = alternarStatusDespesa;
-    window.deletarTransacao = deletarTransacao;
-
     function renderizar() {
         const saldos = calcularSaldos();
         els.saldoAtual.textContent = formatarValor(saldos.saldo);
         els.totalReceitas.textContent = formatarValor(saldos.totalReceitas);
         els.despesasPendentes.textContent = formatarValor(saldos.totalDespesasPendentes);
+
+        // Atualizar cor de fundo baseado no saldo
+        document.body.classList.remove('saldo-critico', 'saldo-alerta', 'saldo-confortavel');
+        if (saldos.saldo < 100) {
+            document.body.classList.add('saldo-critico');
+        } else if (saldos.saldo < 300) {
+            document.body.classList.add('saldo-alerta');
+        } else {
+            document.body.classList.add('saldo-confortavel');
+        }
 
         if (transacoes.length === 0) {
             els.listaTransacoes.innerHTML = '<div class="lista-vazia"><i class="fas fa-inbox"></i><p>Nenhuma transação registrada</p></div>';
@@ -905,14 +896,14 @@
                     <div class="transacao-info">
                         <div class="transacao-desc">${t.descricao}</div>
                         <div class="transacao-meta">
-                            <span title="${t.grupo}"><i class="fas fa-tag"></i>${t.grupo}</span>
+                            <span><i class="fas fa-tag"></i>${t.grupo}</span>
                             <span><i class="fas fa-calendar"></i>${t.data}</span>
+                            <span class="status-badge ${t.tipo === 'receita' ? 'receita' : (t.status === 'paga' ? 'paga' : 'pendente')}">
+                                ${t.tipo === 'receita' ? 'Recebida' : (t.status === 'paga' ? 'Paga' : 'Pendente')}
+                            </span>
                         </div>
                     </div>
                     <div class="transacao-direita">
-                        <span class="status-badge ${t.tipo === 'receita' ? 'receita' : (t.status === 'paga' ? 'paga' : 'pendente')}">
-                            ${t.tipo === 'receita' ? 'Recebida' : (t.status === 'paga' ? 'Paga' : 'Pendente')}
-                        </span>
                         <div class="transacao-valor">${t.tipo === 'receita' ? '+' : '-'}${formatarValor(t.valor)}</div>
                         <div class="transacao-acoes">
                             ${t.tipo === 'despesa' ? `<button class="btn-acao" onclick="alternarStatusDespesa(${t.id})" title="Toggle">
@@ -920,21 +911,8 @@
                             </button>` : ''}
                             <button class="btn-acao delete" onclick="deletarTransacao(${t.id})" title="Deletar">
                                 <i class="fas fa-trash"></i>
-                        <div class="transacao-acoes">
-                        ${t.tipo === 'despesa' ? `<button class="btn-acao" onclick="alternarStatusDespesa(${t.id})" title="Toggle">
-                            <i class="fas fa-${t.status === 'pendente' ? 'check' : 'undo'}"></i>
-                        </button>` : ''}
-                        <button class="btn-acao delete" onclick="deletarTransacao(${t.id})" title="Deletar">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('')}</div>`;
-    }
-
-    carregarDoLocalStorage();
-    atualizarOpcoes();
-    renderizar();    </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('')}</div>`;
@@ -942,9 +920,6 @@
 
     atualizarOpcoes();
     carregarDoLocalStorage();
-    
-    // Verificar saldo inicial
-    renderizar();
 </script>
 ```
 
