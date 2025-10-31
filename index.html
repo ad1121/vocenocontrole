@@ -174,13 +174,13 @@
     }
 
     .transacao-icone {
-        width: 28px;
-        height: 28px;
-        border-radius: 6px;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
+        font-size: 16px;
         flex-shrink: 0;
     }
 
@@ -563,9 +563,9 @@
         }
 
         .transacao-icone {
-            width: 36px;
-            height: 36px;
-            font-size: 16px;
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
         }
 
         .transacao-desc {
@@ -607,7 +607,6 @@
             </h1>
             <p>Gerencie suas receitas e despesas</p>
         </div>
-
 
     <div class="dashboard">
         <div class="card saldo">
@@ -857,7 +856,6 @@
         els.totalReceitas.textContent = formatarValor(saldos.totalReceitas);
         els.despesasPendentes.textContent = formatarValor(saldos.totalDespesasPendentes);
 
-        // Atualizar cor de fundo baseado no saldo
         document.body.classList.remove('saldo-critico', 'saldo-alerta', 'saldo-confortavel');
         if (saldos.saldo < 100) {
             document.body.classList.add('saldo-critico');
