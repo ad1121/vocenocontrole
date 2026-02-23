@@ -1021,7 +1021,7 @@ function calcular() {
   document.getElementById('rZero').innerHTML = `${zeroStr}`;
 
   document.getElementById('resultWrap').style.display = 'block';
-  gerarGrafico(bac, horas);
+  gerarGrafico(bac, horas, horaStr);
 
   // Save to history
   const bebidaLabel = document.getElementById('bebida').options[document.getElementById('bebida').selectedIndex].text;
@@ -1033,18 +1033,53 @@ function calcular() {
 }
 
 // ── CHART ──
-function gerarGrafico(bac, horasDecorridas) {
+function gerarGrafico(bac, horasDecorridas, horaStr) {
   const taxa = 0.15;
-  const totalHoras = Math.ceil(bac / taxa) + 1;
+  const totalHoras = bac / taxa;
 
+  // Calcular horário de início real
+  const agora = new Date();
+  let inicioMs;
+  const parsedHora = parseHoraInput(horaStr || '');
+  if (parsedHora) {
+    // Use exact clock time entered by user
+    const inicio = new Date();
+    inicio.setHours(parsedHora.h, parsedHora.m, 0, 0);
+    if (inicio > agora) inicio.setDate(inicio.getDate() - 1);
+    inicioMs = inicio.getTime();
+  } else {
+    // No time entered: start from "now" going backwards 0h (peak = now)
+    inicioMs = agora.getTime();
+  }
+
+  // Gerar pontos a cada 30 minutos do início até o zero
+  const stepMin = 30; // minutos entre pontos
+  const totalMin = Math.ceil(totalHoras * 60);
   const labels = [];
   const valores = [];
-  const atualIdx = Math.min(Math.round(horasDecorridas), totalHoras - 1);
+  let agoraIdx = 0;
 
-  for (let i = 0; i <= totalHoras; i++) {
-    labels.push(i + 'h');
-    let v = bac - taxa * i;
-    valores.push(Math.max(0, v));
+  for (let min = 0; min <= totalMin; min += stepMin) {
+    const t = new Date(inicioMs + min * 60000);
+    const hh = t.getHours().toString().padStart(2, '0');
+    const mm = t.getMinutes().toString().padStart(2, '0');
+    labels.push(`${hh}:${mm}`);
+
+    const h = min / 60;
+    const v = Math.max(0, bac - taxa * h);
+    valores.push(parseFloat(v.toFixed(4)));
+
+    // Índice mais próximo de "agora"
+    if (min <= horasDecorridas * 60) agoraIdx = labels.length - 1;
+  }
+
+  // Garantir ponto final exato em zero
+  const zeroTime = new Date(inicioMs + totalHoras * 3600000);
+  const zhh = zeroTime.getHours().toString().padStart(2, '0');
+  const zmm = zeroTime.getMinutes().toString().padStart(2, '0');
+  if (labels[labels.length - 1] !== `${zhh}:${zmm}`) {
+    labels.push(`${zhh}:${zmm}`);
+    valores.push(0);
   }
 
   if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
@@ -1052,8 +1087,44 @@ function gerarGrafico(bac, horasDecorridas) {
   const ctx = document.getElementById('grafico').getContext('2d');
 
   const gradient = ctx.createLinearGradient(0, 0, 0, 180);
-  gradient.addColorStop(0, 'rgba(232,255,71,0.4)');
+  gradient.addColorStop(0, 'rgba(232,255,71,0.35)');
   gradient.addColorStop(1, 'rgba(232,255,71,0.02)');
+
+  // Pontos especiais: destaque no índice "agora"
+  const pointRadii = valores.map((_, i) => i === agoraIdx ? 6 : 0);
+  const pointColors = valores.map((_, i) => i === agoraIdx ? '#4dffb4' : '#e8ff47');
+
+  // Plugin para linha vertical "AGORA"
+  const agoraLinePlugin = {
+    id: 'agoraLine',
+    afterDraw(chart) {
+      if (horasDecorridas <= 0) return;
+      const { ctx: c, chartArea, scales } = chart;
+      const xPos = scales.x.getPixelForValue(agoraIdx);
+      if (xPos < chartArea.left || xPos > chartArea.right) return;
+
+      c.save();
+      c.setLineDash([4, 3]);
+      c.strokeStyle = '#4dffb4';
+      c.lineWidth = 1.5;
+      c.globalAlpha = 0.8;
+      c.beginPath();
+      c.moveTo(xPos, chartArea.top);
+      c.lineTo(xPos, chartArea.bottom);
+      c.stroke();
+
+      // Label "AGORA"
+      c.globalAlpha = 1;
+      c.setLineDash([]);
+      c.fillStyle = '#4dffb4';
+      c.font = "bold 10px 'IBM Plex Mono'";
+      c.textAlign = 'center';
+      const labelY = chartArea.top + 10;
+      const labelX = xPos + (xPos > chartArea.right - 50 ? -28 : 28);
+      c.fillText('AGORA', labelX, labelY);
+      c.restore();
+    }
+  };
 
   chartInstance = new Chart(ctx, {
     type: 'line',
@@ -1064,7 +1135,8 @@ function gerarGrafico(bac, horasDecorridas) {
         data: valores,
         borderColor: '#e8ff47',
         borderWidth: 2.5,
-        pointRadius: 0,
+        pointRadius: pointRadii,
+        pointBackgroundColor: pointColors,
         pointHoverRadius: 5,
         pointHoverBackgroundColor: '#e8ff47',
         fill: true,
@@ -1072,33 +1144,48 @@ function gerarGrafico(bac, horasDecorridas) {
         tension: 0.3
       }]
     },
+    plugins: [agoraLinePlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: { duration: 600, easing: 'easeInOutQuart' },
+      animation: { duration: 700, easing: 'easeInOutQuart' },
       plugins: {
         legend: { display: false },
         tooltip: {
           backgroundColor: '#1a1a26',
           borderColor: '#2a2a40',
           borderWidth: 1,
-          titleColor: '#6b6b88',
+          titleColor: '#9494b0',
           bodyColor: '#e8ff47',
-          bodyFont: { family: "'IBM Plex Mono'" },
+          bodyFont: { family: "'IBM Plex Mono'", size: 13 },
+          titleFont: { family: "'IBM Plex Mono'", size: 12 },
           callbacks: {
-            label: ctx => `BAC: ${ctx.parsed.y.toFixed(3)} g/L`
+            title: items => items[0].label,
+            label: item => {
+              const idx = item.dataIndex;
+              const extra = idx === agoraIdx ? ' ← agora' : '';
+              return `BAC: ${item.parsed.y.toFixed(3)} g/L${extra}`;
+            }
           }
         }
       },
       scales: {
         x: {
           grid: { color: '#1a1a26' },
-          ticks: { color: '#6b6b88', font: { size: 10, family: "'IBM Plex Mono'" }, maxTicksLimit: 8 }
+          ticks: {
+            color: '#9494b0',
+            font: { size: 10, family: "'IBM Plex Mono'" },
+            maxTicksLimit: 7,
+            maxRotation: 0
+          }
         },
         y: {
           beginAtZero: true,
           grid: { color: '#1a1a26' },
-          ticks: { color: '#6b6b88', font: { size: 10, family: "'IBM Plex Mono'" } }
+          ticks: {
+            color: '#9494b0',
+            font: { size: 10, family: "'IBM Plex Mono'" }
+          }
         }
       }
     }
