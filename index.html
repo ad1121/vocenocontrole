@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AlcoolCalc">
+<meta name="description" content="Estimativa técnica de metabolização do álcool baseada no modelo de Widmark">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>AlcoolCalc</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a26;
+    --card: #13131e;
+    --border: #2a2a40;
+    --accent: #e8ff47;
+    --accent2: #ff4d6d;
+    --accent3: #4dffb4;
+    --text: #f0f0f8;
+    --muted: #6b6b88;
+    --danger: #ff4d6d;
+    --safe: #4dffb4;
+    --warn: #ffb347;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* ── APP SHELL ── */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: relative;
+    z-index: 10;
+  }
+  .logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+  .logo span { color: var(--text); }
+  .user-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: #9494b0;
+    text-align: right;
+  }
+  .user-badge strong { color: var(--accent3); display: block; font-size: 14px; font-weight: 700; }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .tab {
+    flex: 1;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #9494b0;
+    cursor: pointer;
+    border: none;
+    background: none;
+    transition: color .2s, border-color .2s;
+    border-bottom: 3px solid transparent;
+    position: relative;
+  }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--bg2);
+  }
+  .tab .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    position: absolute;
+    top: 8px; right: 12px;
+    display: none;
+  }
+  .tab .dot.show { display: block; }
+
+  /* ── PAGES ── */
+  .pages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .page { display: none; padding: 20px; }
+  .page.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9494b0;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+
+  /* ── FORM ELEMENTS ── */
+  .field {
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #9494b0;
+    margin-bottom: 6px;
+  }
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field input:focus,
+  .field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,255,71,.1);
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b88' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  /* ── GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── BUTTON ── */
+  .btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s, opacity .15s;
+    -webkit-appearance: none;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a0f;
+    box-shadow: 0 4px 20px rgba(232,255,71,.25);
+  }
+  .btn-primary:hover { box-shadow: 0 4px 30px rgba(232,255,71,.4); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+  }
+
+  /* ── BAC GAUGE ── */
+  .gauge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 6px;
+  }
+  .gauge-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9494b0;
+    margin-bottom: 6px;
+  }
+  .gauge-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 52px;
+    font-weight: 500;
+    line-height: 1;
+    transition: color .4s;
+  }
+  .gauge-unit {
+    font-size: 14px;
+    font-weight: 500;
+    color: #9494b0;
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .gauge-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--bg3);
+    border-radius: 3px;
+    margin: 16px 0 8px;
+    overflow: hidden;
+  }
+  .gauge-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width .6s cubic-bezier(.25,.46,.45,.94), background .4s;
+    max-width: 100%;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+    margin-top: 4px;
+  }
+  .status-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .3; }
+  }
+
+  /* ── RESULT GRID ── */
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .result-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .result-item .r-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #9494b0;
+    margin-bottom: 4px;
+  }
+  .result-item .r-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .result-item .r-value small {
+    font-size: 12px;
+    color: #9494b0;
+  }
+
+  /* ── CHART ── */
+  .chart-wrap {
+    position: relative;
+    height: 180px;
+    margin-top: 10px;
+  }
+
+  /* ── HISTORY ── */
+  .history-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .history-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .history-item.safe::before { background: var(--safe); }
+  .history-item.warn::before { background: var(--warn); }
+  .history-item.danger::before { background: var(--danger); }
+  .hi-left .hi-date {
+    font-size: 12px;
+    font-weight: 500;
+    color: #9494b0;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 3px;
+  }
+  .hi-left .hi-drink {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .hi-right {
+    text-align: right;
+  }
+  .hi-right .hi-bac {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 21px;
+    font-weight: 600;
+  }
+  .hi-right .hi-time {
+    font-size: 12px;
+    font-weight: 500;
+    color: #9494b0;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #9494b0;
+  }
+  .empty-state .emoji { font-size: 40px; margin-bottom: 12px; display: block; }
+  .empty-state p { font-size: 15px; font-weight: 500; }
+
+  /* ── PROFILE PAGE ── */
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-row .s-key {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #9494b0;
+    text-transform: uppercase;
+  }
+  .stat-row .s-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    color: var(--accent3);
+    font-weight: 600;
+  }
+
+  /* ── INSTALL BANNER ── */
+  .install-banner {
+    display: none;
+    background: linear-gradient(135deg, var(--bg3), var(--card));
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    align-items: center;
+    gap: 12px;
+  }
+  .install-banner.show { display: flex; }
+  .install-banner .ib-icon { font-size: 28px; flex-shrink: 0; }
+  .install-banner .ib-text { flex: 1; }
+  .install-banner .ib-title { font-size: 15px; font-weight: 700; color: var(--accent); }
+  .install-banner .ib-sub { font-size: 13px; font-weight: 500; color: #9494b0; margin-top: 2px; }
+  .ib-btn {
+    background: var(--accent);
+    color: #0a0a0f;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #9494b0;
+    padding: 16px 10px;
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .disclaimer strong { color: var(--accent2); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--card);
+    border: 1px solid var(--accent3);
+    color: var(--accent3);
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    z-index: 9999;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+    white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── SCROLLBAR ── */
+  .pages::-webkit-scrollbar { width: 3px; }
+  .pages::-webkit-scrollbar-track { background: transparent; }
+  .pages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── IMC indicator ── */
+  .imc-bar {
+    display: flex;
+    gap: 3px;
+    margin-top: 6px;
+  }
+  .imc-seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    transition: background .3s;
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">ÁLCOOL<span>CALC</span></div>
+    <div class="user-badge" id="userBadge">
+      <strong id="badgeName">—</strong>
+      <span id="badgeInfo">sem cadastro</span>
+    </div>
+  </header>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showPage('calc')">
+      ⚗ Calcular
+    </button>
+    <button class="tab" onclick="showPage('history')" id="tabHistory">
+      ◷ Histórico
+      <span class="dot" id="histDot"></span>
+    </button>
+    <button class="tab" onclick="showPage('profile')">
+      ◎ Perfil
+    </button>
+  </div>
+
+  <!-- PAGES -->
+  <div class="pages">
+
+    <!-- ── CALC PAGE ── -->
+    <div class="page active" id="page-calc">
+
+      <!-- Install banner -->
+      <div class="install-banner" id="installBanner">
+        <div class="ib-icon">📲</div>
+        <div class="ib-text">
+          <div class="ib-title">Instalar como App</div>
+          <div class="ib-sub">Funciona offline, sem navegador</div>
+        </div>
+        <button class="ib-btn" id="installBtn">Instalar</button>
+      </div>
+
+      <!-- Profile quick setup -->
+      <div id="noProfileWarn" class="card" style="display:none; border-color: var(--accent2)">
+        <div style="font-size:13px; color:var(--accent2); font-weight:700; margin-bottom:6px;">⚠ CADASTRO NECESSÁRIO</div>
+        <div style="font-size:14px; font-weight:500; color:#9494b0">Preencha seu perfil antes de calcular.</div>
+        <button class="btn btn-secondary" style="margin-top:12px; width:auto; padding:8px 18px; font-size:13px" onclick="showPage('profile')">Ir para Perfil →</button>
+      </div>
+
+      <div class="section-title">Bebida</div>
+      <div class="card">
+        <div class="field">
+          <label>Tipo de Bebida</label>
+          <select id="bebida">
+            <option value="5">🍺 Cerveja (5%)</option>
+            <option value="12">🍷 Vinho (12%)</option>
+            <option value="15">🍶 Vinho Espumante (15%)</option>
+            <option value="40">🥃 Destilado / Whisky (40%)</option>
+            <option value="50">🌵 Cachaça (50%)</option>
+            <option value="custom">⚙ Personalizado</option>
+          </select>
+        </div>
+        <div id="customTeorWrap" class="field" style="display:none">
+          <label>Teor Alcoólico (%)</label>
+          <input type="number" id="customTeor" placeholder="Ex: 6.5" min="1" max="96" inputmode="decimal">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Unidades</label>
+            <input type="number" id="quantidade" placeholder="Ex: 3" min="1" max="50" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label>Volume / unid (ml)</label>
+            <input type="number" id="volume" placeholder="350" value="350" min="10" max="2000" inputmode="numeric">
+          </div>
+        </div>
+        <div class="field">
+          <label>Horário de início (opcional)</label>
+          <input type="text" id="horas" placeholder="Ex: 20:30" inputmode="numeric" maxlength="5" autocomplete="off">
+          <div id="horaHint" style="font-size:12px;color:#9494b0;margin-top:4px;font-weight:500">Deixe vazio para calcular sem tempo decorrido</div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="calcular()">▶ CALCULAR ESTIMATIVA</button>
+
+      <!-- Result (hidden until calculated) -->
+      <div id="resultWrap" style="display:none; margin-top:20px;">
+
+        <div class="section-title">Resultado</div>
+        <div class="card">
+          <div class="gauge-wrap">
+            <div class="gauge-label">BAC no Pico</div>
+            <div class="gauge-value" id="gaugePeak">0.000</div>
+            <div class="gauge-unit">g/L de sangue</div>
+            <div class="gauge-bar">
+              <div class="gauge-fill" id="gaugeFill"></div>
+            </div>
+            <div class="status-badge" id="statusBadge">—</div>
+          </div>
+
+          <div class="result-grid">
+            <div class="result-item">
+              <div class="r-label">BAC Atual (≈)</div>
+              <div class="r-value" id="rBacAtual">— <small>g/L</small></div>
+            </div>
+            <div class="result-item">
+              <div class="r-label">Álcool Total</div>
+              <div class="r-value" id="rAlcool">— <small>g</small></div>
+            </div>
+            <div class="result-item">
+              <div class="r-label">Tempo Médio</div>
+              <div class="r-value" id="rTempoMed">— <small>h</small></div>
+            </div>
+            <div class="result-item">
+              <div class="r-label">Melhor Caso</div>
+              <div class="r-value" id="rTempoMin">— <small>h</small></div>
+            </div>
+            <div class="result-item">
+              <div class="r-label">Pior Caso</div>
+              <div class="r-value" id="rTempoMax">— <small>h</small></div>
+            </div>
+            <div class="result-item">
+              <div class="r-label">Zero Previsto</div>
+              <div class="r-value" id="rZero">— <small></small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">Curva de Metabolização</div>
+        <div class="card">
+          <div class="chart-wrap">
+            <canvas id="grafico"></canvas>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          <strong>⚠ Aviso Legal</strong><br>
+          Estimativa matemática baseada no modelo de Widmark.<br>
+          Não use para decidir dirigir ou realizar atividades de risco.<br>
+          O metabolismo varia significativamente entre indivíduos.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── HISTORY PAGE ── -->
+    <div class="page" id="page-history">
+      <div class="section-title">Histórico de Cálculos</div>
+      <div id="historyList">
+        <div class="empty-state">
+          <span class="emoji">📋</span>
+          <p>Nenhum cálculo salvo ainda.<br>Faça uma simulação primeiro.</p>
+        </div>
+      </div>
+      <button class="btn btn-secondary" onclick="limparHistorico()" style="margin-top:10px">🗑 Limpar Histórico</button>
+    </div>
+
+    <!-- ── PROFILE PAGE ── -->
+    <div class="page" id="page-profile">
+
+      <div class="section-title">Dados Pessoais</div>
+      <div class="card">
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" id="nome" placeholder="Seu primeiro nome" autocomplete="name">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Idade</label>
+            <input type="number" id="idade" placeholder="Ex: 30" min="18" max="100" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label>Sexo</label>
+            <select id="sexo">
+              <option value="0.68">Masculino</option>
+              <option value="0.55">Feminino</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Peso (kg)</label>
+            <input type="number" id="peso" placeholder="Ex: 75" min="30" max="300" inputmode="decimal" step="0.1">
+          </div>
+          <div class="field">
+            <label>Altura (m)</label>
+            <input type="text" id="altura" placeholder="Ex: 175 ou 1,75" inputmode="numeric" maxlength="4" autocomplete="off">
+            <div style="font-size:12px;color:#9494b0;margin-top:4px;font-weight:500">Digite em cm (175) ou metros (1,75)</div>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="salvarCadastro()">💾 SALVAR PERFIL</button>
+      </div>
+
+      <!-- Stats -->
+      <div id="profileStats" style="display:none">
+        <div class="section-title">Análise do Perfil</div>
+        <div class="card" id="statsCard"></div>
+      </div>
+
+      <div class="section-title">Sobre o App</div>
+      <div class="card">
+        <div class="stat-row">
+          <span class="s-key">Versão</span>
+          <span class="s-val">1.0.0</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-key">Modelo</span>
+          <span class="s-val">Widmark</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-key">Armazenamento</span>
+          <span class="s-val">Local (offline)</span>
+        </div>
+        <div class="stat-row">
+          <span class="s-key">Dados enviados</span>
+          <span class="s-val">Nenhum</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+let chartInstance = null;
+let deferredPrompt = null;
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  carregarPerfil();
+  renderHistory();
+  checkHistDot();
+
+  // Custom bebida
+  document.getElementById('bebida').addEventListener('change', function() {
+    document.getElementById('customTeorWrap').style.display = this.value === 'custom' ? 'block' : 'none';
+  });
+
+  // ── ALTURA auto-format ──
+  const alturaInput = document.getElementById('altura');
+  alturaInput.addEventListener('input', function() {
+    let v = this.value.replace(/[^0-9]/g, '');
+    // Auto insert decimal: 175 → 1,75 | 1 → 1 | 17 → 1,7 | 175+ → 1,75
+    if (v.length >= 3) {
+      const formatted = v[0] + ',' + v.slice(1, 3);
+      this.value = formatted;
+    } else {
+      this.value = v;
+    }
+  });
+  alturaInput.addEventListener('blur', function() {
+    const parsed = parseAlturaInput(this.value);
+    if (parsed && parsed >= 1.0 && parsed <= 2.5) {
+      this.value = parsed.toFixed(2).replace('.', ',');
+    }
+  });
+
+  // ── HORA auto-format HH:MM ──
+  const horasInput = document.getElementById('horas');
+  horasInput.addEventListener('input', function(e) {
+    let v = this.value.replace(/[^0-9]/g, '');
+    if (v.length >= 3) {
+      v = v.slice(0, 2) + ':' + v.slice(2, 4);
+    }
+    this.value = v;
+    // Update hint
+    const parsed = parseHoraInput(v);
+    const hint = document.getElementById('horaHint');
+    if (parsed !== null) {
+      const agora = new Date();
+      const inicio = new Date();
+      inicio.setHours(parsed.h, parsed.m, 0, 0);
+      if (inicio > agora) inicio.setDate(inicio.getDate() - 1); // ontem
+      const diffMs = agora - inicio;
+      const diffH = diffMs / 3600000;
+      if (diffH >= 0 && diffH < 72) {
+        hint.textContent = `≈ ${diffH.toFixed(1)}h decorridas desde ${parsed.h.toString().padStart(2,'0')}:${parsed.m.toString().padStart(2,'0')}`;
+        hint.style.color = 'var(--accent3)';
+      } else {
+        hint.textContent = 'Horário inválido ou muito antigo';
+        hint.style.color = 'var(--accent2)';
+      }
+    } else {
+      hint.textContent = 'Deixe vazio para calcular sem tempo decorrido';
+      hint.style.color = '#9494b0';
+    }
+  });
+});
+
+// ── PWA INSTALL ──
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').classList.add('show');
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    document.getElementById('installBanner').classList.remove('show');
+    showToast('✓ Instalado com sucesso!');
+  }
+  deferredPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('installBanner').classList.remove('show');
+});
+
+// ── TABS ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'history') { renderHistory(); checkHistDot(); }
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── HELPERS ──
+function parseAlturaInput(val) {
+  if (!val) return null;
+  const clean = val.replace(',', '.').replace(/[^0-9.]/g, '');
+  const n = parseFloat(clean);
+  if (isNaN(n)) return null;
+  // If entered as cm (e.g. 175)
+  if (n > 3) return n / 100;
+  return n;
+}
+
+function parseHoraInput(val) {
+  if (!val || val.trim() === '') return null;
+  const parts = val.split(':');
+  if (parts.length === 2) {
+    const h = parseInt(parts[0]);
+    const m = parseInt(parts[1]);
+    if (!isNaN(h) && !isNaN(m) && h >= 0 && h <= 23 && m >= 0 && m <= 59) {
+      return { h, m };
+    }
+  }
+  return null;
+}
+
+function calcularHorasDecorridas(horaStr) {
+  const parsed = parseHoraInput(horaStr);
+  if (!parsed) return 0;
+  const agora = new Date();
+  const inicio = new Date();
+  inicio.setHours(parsed.h, parsed.m, 0, 0);
+  if (inicio > agora) inicio.setDate(inicio.getDate() - 1); // início ontem
+  const diffH = (agora - inicio) / 3600000;
+  if (diffH < 0 || diffH > 72) return 0;
+  return diffH;
+}
+
+// ── PROFILE ──
+function salvarCadastro() {
+  const nome = document.getElementById('nome').value.trim();
+  const idade = parseInt(document.getElementById('idade').value);
+  const peso = parseFloat(document.getElementById('peso').value);
+  const alturaRaw = document.getElementById('altura').value;
+  const altura = parseAlturaInput(alturaRaw);
+  const sexo = parseFloat(document.getElementById('sexo').value);
+
+  if (!nome || nome.length < 2) { showToast('⚠ Informe seu nome'); return; }
+  if (!idade || idade < 18) { showToast('⚠ Idade mínima: 18 anos'); return; }
+  if (!peso || peso < 30) { showToast('⚠ Peso inválido'); return; }
+  if (!altura || altura < 1.0 || altura > 2.5) { showToast('⚠ Altura inválida (ex: 175 ou 1,75)'); return; }
+
+  // Show formatted value
+  document.getElementById('altura').value = altura.toFixed(2).replace('.', ',');
+
+  const perfil = { nome, idade, peso, altura, sexo };
+  localStorage.setItem('perfil', JSON.stringify(perfil));
+
+  atualizarBadge(perfil);
+  mostrarStats(perfil);
+  document.getElementById('noProfileWarn').style.display = 'none';
+  showToast('✓ Perfil salvo!');
+}
+
+function carregarPerfil() {
+  const raw = localStorage.getItem('perfil');
+  if (!raw) {
+    document.getElementById('noProfileWarn').style.display = 'block';
+    return;
+  }
+  const p = JSON.parse(raw);
+  document.getElementById('nome').value = p.nome;
+  document.getElementById('idade').value = p.idade;
+  document.getElementById('peso').value = p.peso;
+  document.getElementById('altura').value = p.altura.toFixed(2).replace('.', ',');
+  document.getElementById('sexo').value = p.sexo;
+  atualizarBadge(p);
+  mostrarStats(p);
+}
+
+function atualizarBadge(p) {
+  document.getElementById('badgeName').textContent = p.nome;
+  const imc = (p.peso / (p.altura * p.altura)).toFixed(1);
+  document.getElementById('badgeInfo').textContent = `${p.peso}kg · IMC ${imc}`;
+}
+
+function mostrarStats(p) {
+  const imc = p.peso / (p.altura * p.altura);
+  const bmi = imc.toFixed(1);
+  let imcStatus = '', imcColor = '';
+  if (imc < 18.5) { imcStatus = 'Abaixo do peso'; imcColor = 'var(--warn)'; }
+  else if (imc < 25) { imcStatus = 'Peso ideal'; imcColor = 'var(--safe)'; }
+  else if (imc < 30) { imcStatus = 'Sobrepeso'; imcColor = 'var(--warn)'; }
+  else { imcStatus = 'Obesidade'; imcColor = 'var(--danger)'; }
+
+  const sexoLabel = p.sexo == 0.68 ? 'Masculino' : 'Feminino';
+
+  document.getElementById('statsCard').innerHTML = `
+    <div class="stat-row"><span class="s-key">Nome</span><span class="s-val">${p.nome}</span></div>
+    <div class="stat-row"><span class="s-key">Idade</span><span class="s-val">${p.idade} anos</span></div>
+    <div class="stat-row"><span class="s-key">Sexo</span><span class="s-val">${sexoLabel}</span></div>
+    <div class="stat-row"><span class="s-key">Peso</span><span class="s-val">${p.peso} kg</span></div>
+    <div class="stat-row"><span class="s-key">Altura</span><span class="s-val">${p.altura} m</span></div>
+    <div class="stat-row">
+      <span class="s-key">IMC</span>
+      <span class="s-val" style="color:${imcColor}">${bmi} — ${imcStatus}</span>
+    </div>
+  `;
+  document.getElementById('profileStats').style.display = 'block';
+}
+
+// ── CALCULAR ──
+function calcular() {
+  const raw = localStorage.getItem('perfil');
+  if (!raw) {
+    document.getElementById('noProfileWarn').style.display = 'block';
+    document.getElementById('noProfileWarn').scrollIntoView({ behavior: 'smooth' });
+    showToast('⚠ Preencha seu perfil');
+    return;
+  }
+  const p = JSON.parse(raw);
+
+  let teor;
+  const bebidaSel = document.getElementById('bebida').value;
+  if (bebidaSel === 'custom') {
+    teor = parseFloat(document.getElementById('customTeor').value);
+    if (!teor || teor < 1 || teor > 96) { showToast('⚠ Teor inválido'); return; }
+  } else {
+    teor = parseFloat(bebidaSel);
+  }
+
+  const qtd = parseInt(document.getElementById('quantidade').value);
+  const volume = parseFloat(document.getElementById('volume').value);
+  const horaStr = document.getElementById('horas').value.trim();
+  const horas = calcularHorasDecorridas(horaStr);
+
+  if (!qtd || qtd < 1) { showToast('⚠ Informe a quantidade'); return; }
+  if (!volume || volume < 10) { showToast('⚠ Volume inválido'); return; }
+
+  const densidade = 0.789;
+  const alcoolTotal = qtd * volume * (teor / 100) * densidade;
+  const bac = alcoolTotal / (p.peso * p.sexo);
+
+  const taxaMin = 0.10, taxaMed = 0.15, taxaMax = 0.20;
+  const tempoMin = bac / taxaMax;
+  const tempoMed = bac / taxaMed;
+  const tempoMax = bac / taxaMin;
+
+  let bacAtual = bac - (taxaMed * horas);
+  if (bacAtual < 0) bacAtual = 0;
+
+  // Zero previsto
+  const horasRestantes = bac / taxaMed;
+  const agora = new Date();
+  const zero = new Date(agora.getTime() + (horasRestantes - horas) * 3600000);
+  const zeroStr = horasRestantes > horas
+    ? `~${zero.getHours().toString().padStart(2,'0')}:${zero.getMinutes().toString().padStart(2,'0')}`
+    : 'Zerado';
+
+  // Status
+  let status, statusColor;
+  if (bacAtual === 0) { status = 'ZERADO'; statusColor = 'var(--safe)'; }
+  else if (bacAtual < 0.3) { status = 'BAIXO'; statusColor = 'var(--safe)'; }
+  else if (bacAtual < 0.6) { status = 'MODERADO'; statusColor = 'var(--warn)'; }
+  else if (bacAtual < 1.0) { status = 'ALTO'; statusColor = 'var(--accent2)'; }
+  else { status = 'MUITO ALTO'; statusColor = 'var(--danger)'; }
+
+  // UI update
+  document.getElementById('gaugePeak').textContent = bac.toFixed(3);
+  document.getElementById('gaugePeak').style.color = bacAtual > 0 ? statusColor : 'var(--safe)';
+
+  const pct = Math.min((bac / 3.0) * 100, 100);
+  const fill = document.getElementById('gaugeFill');
+  fill.style.width = pct + '%';
+  fill.style.background = `linear-gradient(90deg, var(--safe), ${statusColor})`;
+
+  const badge = document.getElementById('statusBadge');
+  badge.textContent = status;
+  badge.style.color = statusColor;
+  badge.style.borderColor = statusColor;
+
+  document.getElementById('rBacAtual').innerHTML = `${bacAtual.toFixed(3)} <small>g/L</small>`;
+  document.getElementById('rAlcool').innerHTML = `${alcoolTotal.toFixed(1)} <small>g</small>`;
+  document.getElementById('rTempoMed').innerHTML = `${tempoMed.toFixed(1)} <small>h</small>`;
+  document.getElementById('rTempoMin').innerHTML = `${tempoMin.toFixed(1)} <small>h</small>`;
+  document.getElementById('rTempoMax').innerHTML = `${tempoMax.toFixed(1)} <small>h</small>`;
+  document.getElementById('rZero').innerHTML = `${zeroStr}`;
+
+  document.getElementById('resultWrap').style.display = 'block';
+  gerarGrafico(bac, horas);
+
+  // Save to history
+  const bebidaLabel = document.getElementById('bebida').options[document.getElementById('bebida').selectedIndex].text;
+  salvarHistorico({ bac, bacAtual, alcoolTotal, tempoMed, bebida: bebidaLabel, qtd, volume, teor });
+
+  setTimeout(() => {
+    document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// ── CHART ──
+function gerarGrafico(bac, horasDecorridas) {
+  const taxa = 0.15;
+  const totalHoras = Math.ceil(bac / taxa) + 1;
+
+  const labels = [];
+  const valores = [];
+  const atualIdx = Math.min(Math.round(horasDecorridas), totalHoras - 1);
+
+  for (let i = 0; i <= totalHoras; i++) {
+    labels.push(i + 'h');
+    let v = bac - taxa * i;
+    valores.push(Math.max(0, v));
+  }
+
+  if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
+
+  const ctx = document.getElementById('grafico').getContext('2d');
+
+  const gradient = ctx.createLinearGradient(0, 0, 0, 180);
+  gradient.addColorStop(0, 'rgba(232,255,71,0.4)');
+  gradient.addColorStop(1, 'rgba(232,255,71,0.02)');
+
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'BAC (g/L)',
+        data: valores,
+        borderColor: '#e8ff47',
+        borderWidth: 2.5,
+        pointRadius: 0,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: '#e8ff47',
+        fill: true,
+        backgroundColor: gradient,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 600, easing: 'easeInOutQuart' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a1a26',
+          borderColor: '#2a2a40',
+          borderWidth: 1,
+          titleColor: '#6b6b88',
+          bodyColor: '#e8ff47',
+          bodyFont: { family: "'IBM Plex Mono'" },
+          callbacks: {
+            label: ctx => `BAC: ${ctx.parsed.y.toFixed(3)} g/L`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: '#1a1a26' },
+          ticks: { color: '#6b6b88', font: { size: 10, family: "'IBM Plex Mono'" }, maxTicksLimit: 8 }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: '#1a1a26' },
+          ticks: { color: '#6b6b88', font: { size: 10, family: "'IBM Plex Mono'" } }
+        }
+      }
+    }
+  });
+}
+
+// ── HISTORY ──
+function salvarHistorico(data) {
+  let hist = JSON.parse(localStorage.getItem('historico') || '[]');
+  hist.unshift({
+    ...data,
+    ts: Date.now()
+  });
+  if (hist.length > 50) hist = hist.slice(0, 50);
+  localStorage.setItem('historico', JSON.stringify(hist));
+  checkHistDot();
+}
+
+function renderHistory() {
+  const hist = JSON.parse(localStorage.getItem('historico') || '[]');
+  const el = document.getElementById('historyList');
+
+  if (!hist.length) {
+    el.innerHTML = `<div class="empty-state"><span class="emoji">📋</span><p>Nenhum cálculo salvo ainda.<br>Faça uma simulação primeiro.</p></div>`;
+    return;
+  }
+
+  el.innerHTML = hist.map(h => {
+    const d = new Date(h.ts);
+    const dateStr = d.toLocaleDateString('pt-br', { day:'2-digit', month:'short' }) + ' ' + d.toLocaleTimeString('pt-br', { hour:'2-digit', minute:'2-digit' });
+    let cls = h.bacAtual < 0.3 ? 'safe' : h.bacAtual < 0.6 ? 'warn' : 'danger';
+    return `
+      <div class="history-item ${cls}">
+        <div class="hi-left">
+          <div class="hi-date">${dateStr}</div>
+          <div class="hi-drink">${h.bebida}</div>
+          <div style="font-size:12px;color:#9494b0;font-weight:500;margin-top:2px">${h.qtd}× ${h.volume}ml · ${h.teor}% · ${h.alcoolTotal.toFixed(1)}g</div>
+        </div>
+        <div class="hi-right">
+          <div class="hi-bac" style="color: ${h.bacAtual < 0.3 ? 'var(--safe)' : h.bacAtual < 0.6 ? 'var(--warn)' : 'var(--danger)'}">${h.bac.toFixed(3)}</div>
+          <div class="hi-time">≈${h.tempoMed.toFixed(1)}h</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function checkHistDot() {
+  const hist = JSON.parse(localStorage.getItem('historico') || '[]');
+  document.getElementById('histDot').classList.toggle('show', hist.length > 0);
+}
+
+function limparHistorico() {
+  if (!confirm('Apagar todo o histórico?')) return;
+  localStorage.removeItem('historico');
+  renderHistory();
+  checkHistDot();
+  showToast('🗑 Histórico apagado');
+}
+</script>
+
+<!-- Service Worker registration -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('SW registrado'))
+      .catch(err => console.log('SW erro:', err));
+  });
+}
+</script>
+
+</body>
+</html>
