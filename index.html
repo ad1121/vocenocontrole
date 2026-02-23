@@ -1035,93 +1035,139 @@ function calcular() {
 // ── CHART ──
 function gerarGrafico(bac, horasDecorridas, horaStr) {
   const taxa = 0.15;
-  const totalHoras = bac / taxa;
+  const totalHoras = bac / taxa; // horas do pico até zero
 
-  // Calcular horário de início real
   const agora = new Date();
+
+  // Horário exato de início (quando a pessoa começou a beber)
   let inicioMs;
   const parsedHora = parseHoraInput(horaStr || '');
   if (parsedHora) {
-    // Use exact clock time entered by user
     const inicio = new Date();
     inicio.setHours(parsedHora.h, parsedHora.m, 0, 0);
     if (inicio > agora) inicio.setDate(inicio.getDate() - 1);
     inicioMs = inicio.getTime();
   } else {
-    // No time entered: start from "now" going backwards 0h (peak = now)
+    // Sem hora: considera que começou agora (pico = agora)
     inicioMs = agora.getTime();
   }
 
-  // Gerar pontos a cada 30 minutos do início até o zero
-  const stepMin = 30; // minutos entre pontos
+  // Horário em que o BAC chega a zero
+  const zeroMs = inicioMs + totalHoras * 3600000;
+  const zeroDate = new Date(zeroMs);
+
+  // Estender gráfico 2h após o zero, com pontos a cada 2h
+  // mas primeiro arredondamos para a próxima hora cheia após o zero
+  const primeiraHoraAposZero = new Date(zeroMs);
+  primeiraHoraAposZero.setMinutes(0, 0, 0);
+  primeiraHoraAposZero.setHours(primeiraHoraAposZero.getHours() + 1);
+
+  // Gerar pontos a cada 30 min do início até o zero
+  const stepMin = 30;
   const totalMin = Math.ceil(totalHoras * 60);
   const labels = [];
   const valores = [];
-  let agoraIdx = 0;
+  const bgColors = []; // amarelo até zero, verde após
 
   for (let min = 0; min <= totalMin; min += stepMin) {
     const t = new Date(inicioMs + min * 60000);
-    const hh = t.getHours().toString().padStart(2, '0');
-    const mm = t.getMinutes().toString().padStart(2, '0');
-    labels.push(`${hh}:${mm}`);
-
-    const h = min / 60;
-    const v = Math.max(0, bac - taxa * h);
+    labels.push(fmtHora(t));
+    const v = Math.max(0, bac - taxa * (min / 60));
     valores.push(parseFloat(v.toFixed(4)));
-
-    // Índice mais próximo de "agora"
-    if (min <= horasDecorridas * 60) agoraIdx = labels.length - 1;
+    bgColors.push('#e8ff47');
   }
 
-  // Garantir ponto final exato em zero
-  const zeroTime = new Date(inicioMs + totalHoras * 3600000);
-  const zhh = zeroTime.getHours().toString().padStart(2, '0');
-  const zmm = zeroTime.getMinutes().toString().padStart(2, '0');
-  if (labels[labels.length - 1] !== `${zhh}:${zmm}`) {
-    labels.push(`${zhh}:${zmm}`);
+  // Ponto exato de zero (com horário real)
+  if (labels[labels.length - 1] !== fmtHora(zeroDate)) {
+    labels.push(fmtHora(zeroDate));
     valores.push(0);
+    bgColors.push('#4dffb4');
   }
+
+  // Pontos pós-zero a cada 2 horas (2 pontos extras = +2h e +4h após zero)
+  for (let extraH = 2; extraH <= 4; extraH += 2) {
+    const t = new Date(zeroMs + extraH * 3600000);
+    labels.push(fmtHora(t));
+    valores.push(0);
+    bgColors.push('#4dffb4');
+  }
+
+  // Encontrar índice exato de "agora" com timestamps reais
+  const agoraNow = agora.getTime();
+  const timestamps = [];
+  for (let min = 0; min <= totalMin; min += stepMin) {
+    timestamps.push(inicioMs + min * 60000);
+  }
+  // ponto exato zero
+  timestamps.push(zeroMs);
+  // pontos pós-zero
+  timestamps.push(zeroMs + 2 * 3600000);
+  timestamps.push(zeroMs + 4 * 3600000);
+
+  // Recalcular agoraIdx com timestamps corretos (mesmo tamanho de labels)
+  agoraIdx = 0;
+  let minDiff = Infinity;
+  for (let i = 0; i < Math.min(labels.length, timestamps.length); i++) {
+    const diff = Math.abs(timestamps[i] - agoraNow);
+    if (diff < minDiff) { minDiff = diff; agoraIdx = i; }
+  }
+
+  // Verificar se "agora" está dentro do intervalo do gráfico
+  const agoraNoGrafico = agoraNow >= inicioMs && agoraNow <= timestamps[timestamps.length - 1];
 
   if (chartInstance) { chartInstance.destroy(); chartInstance = null; }
 
   const ctx = document.getElementById('grafico').getContext('2d');
 
+  // Gradiente: amarelo no início, vai sumindo
   const gradient = ctx.createLinearGradient(0, 0, 0, 180);
   gradient.addColorStop(0, 'rgba(232,255,71,0.35)');
   gradient.addColorStop(1, 'rgba(232,255,71,0.02)');
 
-  // Pontos especiais: destaque no índice "agora"
-  const pointRadii = valores.map((_, i) => i === agoraIdx ? 6 : 0);
-  const pointColors = valores.map((_, i) => i === agoraIdx ? '#4dffb4' : '#e8ff47');
+  // Pontos: ponto "agora" em verde, zero em verde, resto invisível
+  const pointRadii = valores.map((_, i) => {
+    if (i === agoraIdx && agoraNoGrafico) return 7;
+    const isZeroPt = timestamps[i] >= zeroMs;
+    if (isZeroPt && i === Math.min(labels.length - 3, labels.length - 1)) return 5;
+    return 0;
+  });
+  const pointBg = valores.map((_, i) => i === agoraIdx ? '#4dffb4' : '#e8ff47');
 
-  // Plugin para linha vertical "AGORA"
+  // Cores da linha: amarela antes do zero, verde após
+  const segmentColor = {
+    borderColor: (ctx2) => {
+      const i = ctx2.p1DataIndex;
+      return timestamps[i] >= zeroMs ? '#4dffb4' : '#e8ff47';
+    }
+  };
+
+  // Plugin linha vertical AGORA
   const agoraLinePlugin = {
     id: 'agoraLine',
     afterDraw(chart) {
-      if (horasDecorridas <= 0) return;
+      if (!agoraNoGrafico) return;
       const { ctx: c, chartArea, scales } = chart;
       const xPos = scales.x.getPixelForValue(agoraIdx);
       if (xPos < chartArea.left || xPos > chartArea.right) return;
 
       c.save();
-      c.setLineDash([4, 3]);
+      c.setLineDash([5, 3]);
       c.strokeStyle = '#4dffb4';
       c.lineWidth = 1.5;
-      c.globalAlpha = 0.8;
+      c.globalAlpha = 0.9;
       c.beginPath();
       c.moveTo(xPos, chartArea.top);
       c.lineTo(xPos, chartArea.bottom);
       c.stroke();
 
-      // Label "AGORA"
       c.globalAlpha = 1;
       c.setLineDash([]);
       c.fillStyle = '#4dffb4';
       c.font = "bold 10px 'IBM Plex Mono'";
+      const labelX = xPos + (xPos > chartArea.right - 55 ? -34 : 34);
       c.textAlign = 'center';
-      const labelY = chartArea.top + 10;
-      const labelX = xPos + (xPos > chartArea.right - 50 ? -28 : 28);
-      c.fillText('AGORA', labelX, labelY);
+      c.fillText('AGORA', labelX, chartArea.top + 11);
+      c.fillText(fmtHora(agora), labelX, chartArea.top + 23);
       c.restore();
     }
   };
@@ -1136,12 +1182,13 @@ function gerarGrafico(bac, horasDecorridas, horaStr) {
         borderColor: '#e8ff47',
         borderWidth: 2.5,
         pointRadius: pointRadii,
-        pointBackgroundColor: pointColors,
+        pointBackgroundColor: pointBg,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: '#e8ff47',
+        pointHoverBackgroundColor: '#4dffb4',
         fill: true,
         backgroundColor: gradient,
-        tension: 0.3
+        tension: 0.2,
+        segment: segmentColor
       }]
     },
     plugins: [agoraLinePlugin],
@@ -1162,9 +1209,11 @@ function gerarGrafico(bac, horasDecorridas, horaStr) {
           callbacks: {
             title: items => items[0].label,
             label: item => {
-              const idx = item.dataIndex;
-              const extra = idx === agoraIdx ? ' ← agora' : '';
-              return `BAC: ${item.parsed.y.toFixed(3)} g/L${extra}`;
+              const i = item.dataIndex;
+              const isAgora = i === agoraIdx && agoraNoGrafico;
+              const isZero = timestamps[i] >= zeroMs;
+              const tag = isAgora ? ' ← você está aqui' : isZero ? ' (zerado)' : '';
+              return `BAC: ${item.parsed.y.toFixed(3)} g/L${tag}`;
             }
           }
         }
@@ -1190,6 +1239,10 @@ function gerarGrafico(bac, horasDecorridas, horaStr) {
       }
     }
   });
+}
+
+function fmtHora(date) {
+  return date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0');
 }
 
 // ── HISTORY ──
