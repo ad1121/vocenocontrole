@@ -1,8 +1,11 @@
-const CACHE_NAME = 'alcoolcalc-v1.0.0';
+const CACHE_NAME = 'alcoolcalc-v1.0.1';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  '/vocenocontrole/',
+  '/vocenocontrole/index.html',
+  '/vocenocontrole/manifest.json',
+  '/vocenocontrole/sw.js',
+  '/vocenocontrole/icon-192.png',
+  '/vocenocontrole/icon-512.png'
 ];
 
 // Install — cache assets
@@ -48,7 +51,7 @@ self.addEventListener('fetch', (event) => {
           if (cached) return cached;
           // Fallback to index.html for navigation requests
           if (event.request.mode === 'navigate') {
-            return caches.match('/index.html');
+            return caches.match('/vocenocontrole/index.html');
           }
         });
       })
